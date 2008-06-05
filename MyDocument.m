@@ -41,10 +41,10 @@
 			[NSNumber numberWithFloat: 1.0], @"diagonalTangentDirection",
 			[NSNumber numberWithFloat: 0.5], @"midPointsDistance",
 			[NSNumber numberWithFloat: 0.2], @"thickness",
-			[NSNumber numberWithFloat: 0.1], @"thickenedCorner",
+			[NSNumber numberWithFloat: 0.01], @"thickenedCorner",
 			[NSColor whiteColor], @"backgroundColor",
 			[NSColor blackColor], @"strokeColor",
-			[NSColor grayColor], @"fillColor",
+			[NSColor lightGrayColor], @"fillColor",
 			[NSNumber numberWithFloat: 5.0], @"strokeThickness",
 			[NSNumber numberWithBool:YES ], @"beSquare",
 			[NSNumber numberWithUnsignedInt: 1 ], @"showHandles",
@@ -200,8 +200,9 @@
 		else {
 			[menuItem setState:NSOffState];
 		}
+		return YES; // menu item is always active
 	}
-	return YES; // menu item is always active
+	return [super validateMenuItem:menuItem];
 }
 
 

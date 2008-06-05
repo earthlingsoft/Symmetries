@@ -33,8 +33,9 @@ typedef struct  {
 	NSTrackingArea * endHandleTA;
 	NSTrackingArea * midPointTA;
 	NSTrackingArea * midHandleTA;
+	NSTrackingArea * widthHandleTA;
+	NSTrackingArea * thickCornerHandleTA;
 	
-	BOOL useCoreAnimation;
 }
 
 @property (retain) MyDocument * theDocument;
@@ -49,6 +50,9 @@ typedef struct  {
 @property (retain) NSTrackingArea * endHandleTA;
 @property (retain) NSTrackingArea * midPointTA;
 @property (retain) NSTrackingArea * midHandleTA;
+@property (retain) NSTrackingArea * widthHandleTA;
+@property (retain) NSTrackingArea * thickCornerHandleTA;
+
 
 @property (readonly) CGFloat shapeRadius;
 @property (readonly) CGFloat canvasRadius;
@@ -59,10 +63,11 @@ typedef struct  {
 @property (readonly) NSPoint endPoint;
 @property (readonly) NSPoint endHandle;
 @property (readonly) NSPoint middle;
+@property (readonly) NSPoint innerEndPoint;
+@property (readonly) NSPoint innerMidmidPoint;
+@property (readonly) BOOL useCoreAnimation;
 
-@property BOOL useCoreAnimation;
-
-- (void) setupTracking;
+// - (void) setupTracking;
 - (NSString*) trackingAreaNameForMouseLocation;
 - (void) drawHandlesForFundamentalPath;
 - (void) drawGuidesForPoint:(NSString *) pointName;

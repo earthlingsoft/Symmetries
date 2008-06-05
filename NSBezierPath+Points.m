@@ -9,7 +9,7 @@
 #import "NSBezierPath+Points.h"
 #define POINTSIZE 5.0
 #define HANDLESIZE 3.0
-#define HANDLELINEWIDTH 1.0
+#define HANDLELINEWIDTH 1.5
 #define DEFAULTLINECOLOR [NSColor redColor]
 #define DEFAULTHANDLECOLOR [NSColor greenColor]
 

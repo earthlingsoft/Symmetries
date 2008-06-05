@@ -17,6 +17,7 @@
 #define POINTSIZE 6.0
 #define LENGTH(point) sqrt(point.x*point.x + point.y*point.y)
 
+
 @implementation RRView
 
 @synthesize theDocument;
@@ -29,14 +30,14 @@
 @synthesize endHandleTA;
 @synthesize midPointTA;
 @synthesize midHandleTA;
-@synthesize useCoreAnimation;
+@synthesize widthHandleTA;
+@synthesize thickCornerHandleTA;
 
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code here.
-		self.useCoreAnimation = YES;
     }
     return self;
 }
@@ -75,7 +76,7 @@
 	// set up layer to display interaction guides for the user
 	newLayer = [CALayer layer];
 	newLayer.name = @"guideLayer";
-	newLayer.opacity = 0.7;
+	newLayer.opacity = 1.0;
 	newLayer.anchorPoint = CGPointMake(0.0, 0.0);
 	[self.mouseLayer addSublayer: newLayer];
 	self.guideLayer = newLayer;
@@ -134,8 +135,8 @@
 	NSLog([pointName stringByAppendingString: @" - mouseEntered"]);
 	[[NSCursor openHandCursor] push];
 	
-	// show point marker - immediately
 /*
+	// show point marker - immediately
 	[CATransaction begin];
 	[CATransaction setValue:[NSNumber numberWithFloat:0.0f]
 					 forKey:kCATransactionAnimationDuration];
@@ -154,7 +155,6 @@
 	NSString * pointName = [(NSDictionary*)[event userData] objectForKey: @"name"];
 	NSLog([pointName stringByAppendingString: @" - mouseExited"]);
 	
-//	self.pointHighlightLayer.opacity = 0.0;
 	self.guideLayer.opacity = 0.0;
 	[NSCursor pop];
 }
@@ -188,16 +188,9 @@
 
 - (void) mouseDown: (NSEvent*) event {
 	NSString * TAName = [self trackingAreaNameForMouseLocation];
-//	if ([POINTNAMES containsObject:TAName]) {
-		// remember the clicked point for dragging;
 		self.clickedPointName = TAName;
 		NSLog([@"Clicked on " stringByAppendingString:(TAName) ? (TAName) : (@"")]);
 		[[NSCursor closedHandCursor] push];
-/*	}
-	else {
-		self.clickedPointName = @"";
-	}
- */
 }
 
 
@@ -234,7 +227,6 @@
 		}
 		else if ([TAName isEqualToString:@"midPoint"]) {
 			NSPoint midTangent = NSMakePoint(self.endPoint.x - self.startPoint.x, self.endPoint.y - self.startPoint.y);
-			// ESPolarPoint startEndPolar = [self polarPointForPoint:self.endPoint origin:self.startPoint];
 			NSAffineTransform * rotator = [NSAffineTransform transform];
 			[rotator rotateByRadians: -pi/theDocument.cornerCount];
 			NSPoint rotatedMouse = [rotator transformPoint:mouseLocation];
@@ -250,7 +242,19 @@
 			theDocument.diagonalTangentLength = MAX(MIN(polar.r / startToEndDistance, 1.0), 0.0);
 			theDocument.diagonalTangentDirection = + polar.phi + pi / theDocument.cornerCount - pi * 0.5;
 		}
-		
+		else if ([TAName isEqualToString:@"widthHandle"]) {
+			ESPolarPoint endPolar = [self polarPointForPoint:self.endPoint origin:self.middle];
+			ESPolarPoint mousePolar = [self polarPointForPoint:realMouseLocation origin:self.middle];
+			theDocument.thickness = MAX(MIN(1.0 - mousePolar.r / endPolar.r, 1.0), 0.0);
+		}
+		else if ([TAName isEqualToString:@"thickCornerHandle"]) {
+			ESPolarPoint polar = [self polarPointForPoint:realMouseLocation	origin:self.middle];
+			theDocument.thickenedCorner = MAX(MIN(2.0 * (1.0 - polar.r / (theDocument.cornerFraction * self.shapeRadius * sqrt(2.0))), 1.0), 0.0);
+			NSLog(@"%f", theDocument.thickenedCorner);
+		}
+		else {
+			return;
+		}
 		[self setNeedsDisplay: YES];
 		// [[NSGarbageCollector defaultCollector] collectIfNeeded]; // doesn't seem to change RAM usage
 	}
@@ -274,7 +278,7 @@
 	if (thePointName) {
 		NSPoint origin = NSMakePoint(0.0, 0.0);
 		CGFloat guideLineWidth = 8.0;
-		NSColor * guideColor = [NSColor blueColor];
+		NSColor * guideColor = [NSColor colorWithCalibratedRed:0.0 green:0.0 blue:1.0 alpha:0.8];
 		NSBezierPath * bP = [NSBezierPath bezierPath];
 		bP.lineCapStyle = NSRoundLineCapStyle;
 		bP.lineWidth = guideLineWidth;
@@ -397,14 +401,41 @@
 			bP.lineCapStyle = NSRoundLineCapStyle;
 			[bP stroke];
 		}
-	
+		else if ([thePointName isEqualToString:@"widthHandle"]) {
+			// draw line from endPoint to the middle
+			bP = [NSBezierPath bezierPath];
+			[bP moveToPoint:self.middle];
+			[bP lineToPoint: self.endPoint];
+			bP.lineWidth = guideLineWidth;
+			bP.lineCapStyle = NSRoundLineCapStyle;
+			[bP stroke];
+		}
+		else if ([thePointName isEqualToString:@"thickCornerHandle"]) {
+			// draw line from midPoint to innerMiddle						
+			ESPolarPoint polar;
+			polar.phi = pi / theDocument.cornerCount;
+			polar.r = theDocument.cornerFraction * self.shapeRadius * sqrt(2.0);
+			NSPoint endPoint = [self pointForPolarPoint:polar origin:self.middle];
+			NSPoint startPoint = NSMakePoint((endPoint.x + self.middle.x) / 2.0,
+											 (endPoint.y + self.middle.y) / 2.0);
+			
+			bP = [NSBezierPath bezierPath];
+			[bP moveToPoint:startPoint];
+			[bP lineToPoint: endPoint];
+			bP.lineWidth = guideLineWidth;
+			bP.lineCapStyle = NSRoundLineCapStyle;
+			[bP stroke];
+		}
+		
+		
+		
 		if (self.useCoreAnimation) {
 			[image unlockFocus];
 			CGImageRef imageRef = [image cgImage];
 			[CATransaction begin];
 			[CATransaction setValue:[NSNumber numberWithFloat:0.0f] forKey:kCATransactionAnimationDuration];
 			self.guideLayer.contents = (id) imageRef;
-			self.guideLayer.opacity = 0.7;
+			self.guideLayer.opacity = 1.0;
 			[CATransaction commit];
 			CGImageRelease(imageRef);
 		}
@@ -432,7 +463,9 @@
 	[self removeTrackingArea:self.midHandleTA];
 	[self removeTrackingArea:self.midPointTA];
 	[self removeTrackingArea:self.endHandleTA];
-	[self removeTrackingArea:self.endPointTA];
+	[self removeTrackingArea:self.endPointTA]; 
+	[self removeTrackingArea:self.widthHandleTA]; 
+	[self removeTrackingArea:self.thickCornerHandleTA]; 
 	NSTrackingAreaOptions TAoptions = (NSTrackingMouseEnteredAndExited|NSTrackingMouseMoved|NSTrackingActiveInActiveApp|NSTrackingEnabledDuringMouseDrag);
 
 
@@ -481,8 +514,47 @@
 	[bP appendBezierPathWithRect:rect];
 	self.endPointTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"endPoint" forKey:@"name"]];
 	[self addTrackingArea:self.endPointTA];
-	
 	[bP fill];
+
+
+	// draw handles for thickness and thickened corner
+	CGFloat lineHandleWidth = 12.0;
+	CGFloat lineHandleThickness = 6.0;
+	CGFloat phi = 0.5 * pi  + 2.0 * pi / self.theDocument.cornerCount;
+	NSPoint lineStart = NSMakePoint(self.innerEndPoint.x - cos(phi) * lineHandleWidth,
+									self.innerEndPoint.y - sin(phi) * lineHandleWidth);
+	NSPoint lineEnd = NSMakePoint(self.innerEndPoint.x + cos(phi) * lineHandleWidth,
+								  self.innerEndPoint.y + sin(phi) * lineHandleWidth);
+	
+	bP = [NSBezierPath bezierPath];
+	[bP moveToPoint:lineStart];
+	[bP lineToPoint:lineEnd];
+	self.widthHandleTA = [[NSTrackingArea alloc] initWithRect:[bP bounds] options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"widthHandle" forKey:@"name"]];
+	[self addTrackingArea:self.widthHandleTA];
+	
+	
+	phi = 0.5 * pi + pi / self.theDocument.cornerCount;
+	NSPoint middleMidmidPoint = NSMakePoint((self.innerMidmidPoint.x + self.midmidPoint.x) / 2.0,
+											(self.innerMidmidPoint.y + self.midmidPoint.y) / 2.0);
+	lineStart = NSMakePoint(middleMidmidPoint.x - cos(phi) * lineHandleWidth,
+							middleMidmidPoint.y - sin(phi) * lineHandleWidth);
+	lineEnd = NSMakePoint(middleMidmidPoint.x + cos(phi) * lineHandleWidth,
+						  middleMidmidPoint.y + sin(phi) * lineHandleWidth);
+
+	NSBezierPath * bP2 = [NSBezierPath bezierPath];
+	[bP2 moveToPoint:lineStart];
+	[bP2 lineToPoint:lineEnd];
+	self.thickCornerHandleTA = [[NSTrackingArea alloc] initWithRect:[bP2 bounds] options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"thickCornerHandle" forKey:@"name"]];
+	[self addTrackingArea:self.thickCornerHandleTA];
+	
+	
+	[bP appendBezierPath:bP2];
+	bP.lineCapStyle = NSRoundLineCapStyle;
+	bP.lineWidth = lineHandleThickness;
+	[handleColor set];
+	[bP stroke];
+	
+	
 	
 	if (self.useCoreAnimation) {
 		[image unlockFocus];
@@ -504,7 +576,7 @@
 	[[NSColor blackColor] set];
 	NSBezierPath * path1 = [self pathWithSize: self.shapeRadius cornerDelta: 0.0];	
 	NSBezierPath * path2 = [self pathWithSize: self.shapeRadius * (1-theDocument.thickness) 
-								  cornerDelta: theDocument.thickenedCorner*.1];
+								  cornerDelta: theDocument.thickenedCorner];
 	
 	// compound path
 	[path1 appendBezierPath:[path2 bezierPathByReversingPath]];
@@ -521,14 +593,19 @@
 	[path1 stroke];
 		
 	// draw handles and guides
-	[self drawGuidesForPoint:self.clickedPointName];
-	if (theDocument.showHandles == 1) {
+	if (theDocument.showHandles != 0) {
+		self.handleLayer.opacity = 1.0;
+		[self drawGuidesForPoint:self.clickedPointName];
+		if (theDocument.showHandles == 2) {
+			[path1 drawPointsInColor:[NSColor grayColor] withHandlesInColor:[NSColor grayColor]];
+		}
 		[self drawHandlesForFundamentalPath];
 	}
-	else if (theDocument.showHandles == 2) {
-		[path1 drawPointsAndHandles];
+	else {
+		self.handleLayer.opacity = 0.0;
 	}
 }
+
 
 - (void) drawPoint: (NSPoint) pt {
 	[[NSColor orangeColor] set];
@@ -621,6 +698,7 @@
 	NSPoint endHandle = NSMakePoint(endPoint.x + endHandleDirectionIn.x, 
 									endPoint.y + endHandleDirectionIn.y);
 	
+	// middle tangents
 	NSPoint midTangent = NSMakePoint((endPoint.x - startPoint.x), 
 									 (endPoint.y - startPoint.y) );
 	NSPoint midTangentDirection = NSMakePoint((endPoint.x - startPoint.x) * dTL, 
@@ -642,12 +720,6 @@
 	NSPoint mid2HandleIn = NSMakePoint(mid2Point.x + mid2HandleDirection.x, mid2Point.y +mid2HandleDirection.y);
 	NSPoint mid2HandleOut = NSMakePoint(mid2Point.x - mid2HandleDirection.x, mid2Point.y -mid2HandleDirection.y);
 	
-	/*	
-	 NSPoint midHandleIn = NSMakePoint(-midTangentDirectionIn.x * dTL * sinPhi + midPoint.x, 
-	 -midTangentDirectionIn.y * dTL * sinPhi + midPoint.y); 
-	 NSPoint midHandleOut = NSMakePoint(midTangentDirectionOut.x * dTL * sinPhi + midPoint.x,
-	 midTangentDirectionOut.y * dTL * sinPhi + midPoint.y); 
-	 */	
 
 	// create resulting bezier path 
 	NSAffineTransform * rotate = [NSAffineTransform transform];	
@@ -673,7 +745,7 @@
 
 #pragma mark TRACKING
 
-
+/*
 - (void) setupTracking {
 	NSRect rect;
 	NSPoint pt;
@@ -708,7 +780,7 @@
 	self.endPointTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"endPoint" forKey:@"name"]];
 	[self addTrackingArea:self.endPointTA];
 }
-
+*/
 
 
 - (NSString*) trackingAreaNameForMouseLocation {
@@ -724,6 +796,12 @@
 	}
 	else if (NSPointInRect(mouseLocation, [self.midHandleTA rect])) {
 		return @"midHandle";											
+	}
+	else if (NSPointInRect(mouseLocation, [self.widthHandleTA rect])) {
+		return @"widthHandle";											
+	}
+	else if (NSPointInRect(mouseLocation, [self.thickCornerHandleTA rect])) {
+		return @"thickCornerHandle";											
 	}
 	return nil;
 }
@@ -772,6 +850,12 @@
 	return MIN(mySize.width, mySize.height) * 0.5 * 0.9;
 }
 
+- (BOOL) useCoreAnimation {
+	return [[[NSUserDefaults standardUserDefaults] valueForKey:@"useCoreAnimation"]boolValue];
+}
+
+# pragma mark POINTS
+
 - (NSPoint) middle {
 	return [self.moveToMiddle transformPoint:NSMakePoint(0.0, 0.0)];
 }
@@ -814,6 +898,41 @@
 	return points[1];	
 }
 
+
+/* points from inner half of the path
+	the path has N = theDocument.cornerCount segments
+	the path has a start point
+	each segment has 3 points
+	the second 
+	the last point of the first segment of the second path is 
+		number = 3 * N + 4
+*/
+- (NSPoint) innerEndPoint {
+	NSPoint points[3];
+	[self.path  elementAtIndex:([self.path elementCount] -6) associatedPoints:points];
+	return points[2];
+}
+
+- (NSPoint) innerMidmidPoint {
+	ESPolarPoint midmidPolar;
+	midmidPolar.phi = pi / (theDocument.cornerCount); 
+	midmidPolar.r = theDocument.cornerFraction * self.shapeRadius * sqrt(2.0) * (1-self.theDocument.thickness) * (1- self.theDocument.thickenedCorner);
+	NSPoint midmidPoint = [self pointForPolarPoint:midmidPolar origin:self.middle];
+	return midmidPoint;
+}
+
+/* this one doesn't actually exist */
+- (NSPoint) innerUncorrectedMidmidPoint {
+	ESPolarPoint midmidPolar;
+	midmidPolar.phi = pi / (theDocument.cornerCount); 
+	midmidPolar.r = theDocument.cornerFraction * self.shapeRadius * sqrt(2.0) * (1-self.theDocument.thickness);
+	NSPoint midmidPoint = [self pointForPolarPoint:midmidPolar origin:self.middle];
+	return midmidPoint;	
+}
+
+
+
+#pragma mark AFFINE TRANSFORMS
 
 - (NSAffineTransform *) moveToMiddle {
 	NSAffineTransform * aT= [NSAffineTransform transform];
