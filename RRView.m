@@ -16,6 +16,8 @@
 #define HANDLESIZE 4.0
 #define POINTSIZE 6.0
 #define LENGTH(point) sqrt(point.x*point.x + point.y*point.y)
+#define STICKYANGLE 0.05
+#define	STICKYLENGTH 4.0
 
 
 @implementation RRView
@@ -213,6 +215,7 @@
 		
 		NSPoint realMouseLocation = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
 		NSPoint mouseLocation = [self.moveFromMiddle transformPoint:realMouseLocation];
+		BOOL stickyValues = !([[NSApp currentEvent] modifierFlags] & NSCommandKeyMask);
 		
 		if ([TAName isEqualToString:@"endPoint"]) {
 			CGFloat length = LENGTH(mouseLocation) / self.canvasRadius;
@@ -221,26 +224,69 @@
 			theDocument.cornerCount = MIN(round( 2 * pi / acos(safeXValue)), MAXCORNERNUMBER);
 		}
 		else if ([TAName isEqualToString:@"endHandle"]) {
-			ESPolarPoint polar = [self polarPointForPoint: realMouseLocation origin: self.endPoint];
-			theDocument.straightTangentLength = MAX(MIN(polar.r / self.shapeRadius, 1.0), 0.0);
-			theDocument.straightTangentDirection = polar.phi + 2.0 * pi / theDocument.cornerCount - pi/2.0;
+			ESPolarPoint polar = [self polarPointForPoint: realMouseLocation origin: self.endPoint];		
+			CGFloat straightTangentLength = MAX(MIN(polar.r / self.shapeRadius, 1.0), 0.0);
+			if (stickyValues && (polar.r < STICKYLENGTH)) {
+				straightTangentLength = 0.0;
+			}
+			self.theDocument.straightTangentLength = straightTangentLength;
+			
+			CGFloat straightTangentDirection = polar.phi + 2.0 * pi / theDocument.cornerCount - pi/2.0;
+			if (stickyValues) {
+				if ( fabs(straightTangentDirection) < STICKYANGLE) {
+					straightTangentDirection = 0.0;
+				}
+				else if (fabs(straightTangentDirection + pi) < STICKYANGLE) {
+					straightTangentDirection = pi;
+				}
+				else if (fabs(straightTangentDirection + pi/2.0) < STICKYANGLE) {
+					straightTangentDirection = - pi/2.0;
+					
+				}
+				else if (fabs(straightTangentDirection - pi/2.0) < STICKYANGLE) {
+					straightTangentDirection = pi/2.0;
+				}
+			}
+			self.theDocument.straightTangentDirection = straightTangentDirection;
 		}
 		else if ([TAName isEqualToString:@"midPoint"]) {
 			NSPoint midTangent = NSMakePoint(self.endPoint.x - self.startPoint.x, self.endPoint.y - self.startPoint.y);
 			NSAffineTransform * rotator = [NSAffineTransform transform];
 			[rotator rotateByRadians: -pi/theDocument.cornerCount];
 			NSPoint rotatedMouse = [rotator transformPoint:mouseLocation];
-			theDocument.cornerFraction = MAX(MIN(rotatedMouse.x / self.shapeRadius / sqrt(2.0), 1.0), -1.0);
-			theDocument.midPointsDistance = MAX(MIN(rotatedMouse.y / LENGTH(midTangent), 1.0),-1.0);
+
+			self.theDocument.cornerFraction = MAX(MIN(rotatedMouse.x / self.shapeRadius / sqrt(2.0), 1.0), -1.0);	
+			CGFloat midPointsDistance =  MAX(MIN(rotatedMouse.y / LENGTH(midTangent), 1.0),-1.0);
+			if (stickyValues) {
+				if (abs(rotatedMouse.y) < STICKYLENGTH) {
+					midPointsDistance = 0.0;
+				}
+			}
+			self.theDocument.midPointsDistance = midPointsDistance;		
 		}
 		else if ([TAName isEqualToString:@"midHandle"]) {
 			ESPolarPoint polar = [self polarPointForPoint: realMouseLocation origin: self.midPoint];
 			
 			NSPoint startToEndVector = NSMakePoint(self.endPoint.x - self.startPoint.x , self.endPoint.y - self.startPoint.y);
 			CGFloat startToEndDistance = LENGTH(startToEndVector);
-			
+
 			theDocument.diagonalTangentLength = MAX(MIN(polar.r / startToEndDistance, 1.0), 0.0);
-			theDocument.diagonalTangentDirection = + polar.phi + pi / theDocument.cornerCount - pi * 0.5;
+			CGFloat diagonalTangentDirection = + polar.phi + pi / theDocument.cornerCount - pi * 0.5;
+			if (stickyValues) {
+				if ( fabs(diagonalTangentDirection) < STICKYANGLE) {
+					diagonalTangentDirection = 0.0;
+				}
+				else if (fabs(diagonalTangentDirection + pi) < STICKYANGLE) {
+					diagonalTangentDirection = pi;
+				}
+				else if (fabs(diagonalTangentDirection + pi/2.0) < STICKYANGLE) {
+					diagonalTangentDirection = - pi/2.0;
+				}
+				else if (fabs(diagonalTangentDirection - pi/2.0) < STICKYANGLE) {
+					diagonalTangentDirection = pi/2.0;
+				}
+			}
+			theDocument.diagonalTangentDirection = diagonalTangentDirection;
 		}
 		else if ([TAName isEqualToString:@"widthHandle"]) {
 			ESPolarPoint endPolar = [self polarPointForPoint:self.endPoint origin:self.middle];
@@ -249,7 +295,21 @@
 		}
 		else if ([TAName isEqualToString:@"thickCornerHandle"]) {
 			ESPolarPoint polar = [self polarPointForPoint:realMouseLocation	origin:self.middle];
-			theDocument.thickenedCorner = MAX(MIN(2.0 * (1.0 - polar.r / (theDocument.cornerFraction * self.shapeRadius * sqrt(2.0))), 1.0), 0.0);
+			CGFloat thickenedCorner = 1.0 - polar.r / (theDocument.cornerFraction * self.shapeRadius *sqrt(2.0) * (1.0 - theDocument.thickness));
+			thickenedCorner = thickenedCorner * 2.0;
+			thickenedCorner = MAX(MIN(thickenedCorner, 1.0), -1.0 );
+			if (stickyValues && 
+				fabs(polar.r - (theDocument.cornerFraction * self.shapeRadius * sqrt(2.0))) < STICKYLENGTH)  {
+				thickenedCorner = 0.0;
+			}
+			
+/*			if (abs(polar.phi + pi/self.theDocument.cornerCount) > pi/2.0) {
+				// we're on the wrong side of the origin => maximum value
+				thickenedCorner = 1.0;
+			}
+*/			
+			theDocument.thickenedCorner =  thickenedCorner;
+			
 			NSLog(@"%f", theDocument.thickenedCorner);
 		}
 		else {
@@ -414,10 +474,10 @@
 			// draw line from midPoint to innerMiddle						
 			ESPolarPoint polar;
 			polar.phi = pi / theDocument.cornerCount;
-			polar.r = theDocument.cornerFraction * self.shapeRadius * sqrt(2.0);
+			polar.r = theDocument.cornerFraction * self.shapeRadius * 2.0 * (1-self.theDocument.thickness);
 			NSPoint endPoint = [self pointForPolarPoint:polar origin:self.middle];
-			NSPoint startPoint = NSMakePoint((endPoint.x + self.middle.x) / 2.0,
-											 (endPoint.y + self.middle.y) / 2.0);
+			polar.r = polar.r / sqrt(8.0);
+			NSPoint startPoint = [self pointForPolarPoint:polar origin:self.middle];
 			
 			bP = [NSBezierPath bezierPath];
 			[bP moveToPoint:startPoint];
@@ -529,7 +589,12 @@
 	bP = [NSBezierPath bezierPath];
 	[bP moveToPoint:lineStart];
 	[bP lineToPoint:lineEnd];
-	self.widthHandleTA = [[NSTrackingArea alloc] initWithRect:[bP bounds] options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"widthHandle" forKey:@"name"]];
+	rect = [bP bounds];
+	rect.origin.x = rect.origin.x - lineHandleThickness * 0.5;
+	rect.origin.y = rect.origin.y - lineHandleThickness * 0.5;
+	rect.size.width = rect.size.width + lineHandleThickness;
+	rect.size.height = rect.size.height + lineHandleThickness;
+	self.widthHandleTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"widthHandle" forKey:@"name"]];
 	[self addTrackingArea:self.widthHandleTA];
 	
 	
@@ -544,7 +609,12 @@
 	NSBezierPath * bP2 = [NSBezierPath bezierPath];
 	[bP2 moveToPoint:lineStart];
 	[bP2 lineToPoint:lineEnd];
-	self.thickCornerHandleTA = [[NSTrackingArea alloc] initWithRect:[bP2 bounds] options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"thickCornerHandle" forKey:@"name"]];
+	rect = [bP2 bounds];
+	rect.origin.x = rect.origin.x - lineHandleThickness * 0.5;
+	rect.origin.y = rect.origin.y - lineHandleThickness * 0.5;
+	rect.size.width = rect.size.width + lineHandleThickness;
+	rect.size.height = rect.size.height + lineHandleThickness;	
+	self.thickCornerHandleTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"thickCornerHandle" forKey:@"name"]];
 	[self addTrackingArea:self.thickCornerHandleTA];
 	
 	
@@ -563,8 +633,22 @@
 		[CATransaction begin];
 		[CATransaction setValue:[NSNumber numberWithFloat:0.0f] forKey:kCATransactionAnimationDuration];
 		self.handleLayer.contents = (id) imageRef;
+		self.handleLayer.opacity = 1.0;
 		[CATransaction commit];
 		CGImageRelease(imageRef);	
+	}	
+	else {
+		self.handleLayer.opacity = 0.0;
+	}
+	// debugging
+	if ([[NSApp currentEvent] modifierFlags] & NSAlphaShiftKeyMask) {
+		[[NSColor orangeColor] set];
+		[NSBezierPath strokeRect:self.endPointTA.rect];
+		[NSBezierPath strokeRect:self.endHandleTA.rect];	
+		[NSBezierPath strokeRect:self.midPointTA.rect];	
+		[NSBezierPath strokeRect:self.midHandleTA.rect];	
+		[NSBezierPath strokeRect:self.widthHandleTA.rect];
+		[NSBezierPath strokeRect:self.thickCornerHandleTA.rect];
 	}
 }
 
@@ -585,7 +669,7 @@
 	
 	// draw
 	[theDocument.backgroundColor set];
-	[NSBezierPath fillRect:self.bounds];
+	NSRectFill(self.bounds);
 	[theDocument.fillColor set];
 	[path1 fill];
 	[theDocument.strokeColor set];

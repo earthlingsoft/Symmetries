@@ -201,7 +201,7 @@
 			[menuItem setState:NSOffState];
 		}
 		return YES; // menu item is always active
-	}
+	} 
 	return [super validateMenuItem:menuItem];
 }
 

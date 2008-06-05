@@ -31,7 +31,11 @@
 
 - (void) setUseCoreAnimation: (BOOL) newValue {
 	[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:newValue] forKey:@"useCoreAnimation"];
+	[[NSUserDefaults standardUserDefaults] synchronize];
 }
+
+
+
 
 - (IBAction) setCoreAnimation:(id) sender {
 	self.useCoreAnimation = !self.useCoreAnimation;

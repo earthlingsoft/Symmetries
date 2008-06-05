@@ -8,8 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="465"/>
-			<integer value="486"/>
+			<integer value="57"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -602,13 +601,12 @@
 			<object class="NSUserDefaultsController" id="883442413">
 				<object class="NSMutableArray" key="NSDeclaredKeys">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>delegate.firstDocument.strokeThickness</string>
-					<string>useCoreAnimation</string>
+					<string>usesCoreAnimation</string>
 				</object>
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
 			<object class="NSCustomView" id="573356474">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">258</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -640,7 +638,6 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{203, 16}</string>
-				<reference key="NSSuperview"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 		</object>
@@ -934,6 +931,22 @@
 						<reference key="destination" ref="484738871"/>
 					</object>
 					<int key="connectionID">490</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: values.usesCoreAnimation</string>
+						<reference key="source" ref="484738871"/>
+						<reference key="destination" ref="883442413"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="484738871"/>
+							<reference key="NSDestination" ref="883442413"/>
+							<string key="NSLabel">value: values.usesCoreAnimation</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">values.usesCoreAnimation</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">496</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1681,7 +1694,9 @@
 						<object class="IBToolTipAttribute" key="NS.object.0">
 							<string key="name">ToolTip</string>
 							<reference key="object" ref="484738871"/>
-							<string key="toolTip">Use Core Animation for drawing: pretty fadeouts but slightly less responsive while using more memory and processing power.</string>
+							<string type="base64-UTF8" key="toolTip">4oCYUHJldHRpZXLigJkgbW9kZSB1c2VzIENvcmVBbmltYXRpb24sIG1vcmUgbWVtb3J5LCBtb3JlIHBy
+b2Nlc3NpbmcgcG93ZXIgYW5kIGlzIGEgYml0IG1vcmUgc2x1Z2dpc2guIEJ1dCBpdCBoYXMgbmljZSBm
+YWRlb3V0cyE</string>
 						</object>
 					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1690,7 +1705,7 @@
 					<reference ref="9"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{43, 533}, {245, 183}}</string>
+					<string>{{43, 534}, {245, 183}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{23, 794}, {245, 183}}</string>
@@ -1744,7 +1759,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">494</int>
+			<int key="maxID">496</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
