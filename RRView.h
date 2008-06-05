@@ -9,9 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #import "MyDocument.h" 
 #import <QuartzCore/QuartzCore.h>
-// #import "ESPolarPoint.h"
 
-typedef struct  {
+typedef struct {
 	CGFloat r;
 	CGFloat phi;
 } ESPolarPoint;
@@ -67,7 +66,6 @@ typedef struct  {
 @property (readonly) NSPoint innerMidmidPoint;
 @property (readonly) BOOL useCoreAnimation;
 
-// - (void) setupTracking;
 - (NSString*) trackingAreaNameForMouseLocation;
 - (void) drawHandlesForFundamentalPath;
 - (void) drawGuidesForPoint:(NSString *) pointName;

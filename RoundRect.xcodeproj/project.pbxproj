@@ -43,7 +43,6 @@
 		6C82F99B0DF7614F005CF008 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6C82F99C0DF7614F005CF008 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		6CBC479B0DEAE2610073B214 /* RRView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RRView.m; sourceTree = "<group>"; };
-		6CBC49210DEAFC060073B214 /* ESPolarPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPolarPoint.h; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* RoundRect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoundRect.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -111,7 +110,6 @@
 				6CBC479B0DEAE2610073B214 /* RRView.m */,
 				6C3BE8290DE8268D0064BCE7 /* NSBezierPath+Points.h */,
 				6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+Points.m */,
-				6CBC49210DEAFC060073B214 /* ESPolarPoint.h */,
 				6C5935030DEA0441000B3428 /* NSImage-Extras.m */,
 				6C59350D0DEA0449000B3428 /* NSImage-Extras.h */,
 			);

@@ -10,7 +10,6 @@
 #import "NSBezierPath+Points.h"
 #import "NSImage-Extras.h"
 
-
 #define MAXCORNERNUMBER 37
 #define HANDLELINEWIDTH 1.5
 #define HANDLESIZE 4.0
@@ -93,7 +92,7 @@
 	
 	// set up sizing stuff
 	[self frameChanged: nil];
-	[self.window setAcceptsMouseMovedEvents:YES];
+//	[self.window setAcceptsMouseMovedEvents:YES];
 }	
 
 
@@ -158,27 +157,27 @@
 	NSLog([pointName stringByAppendingString: @" - mouseExited"]);
 	
 	self.guideLayer.opacity = 0.0;
-	[NSCursor pop];
+//	[NSCursor pop];
 }
 
 /*
- - (void)cursorUpdate:(NSEvent *)event {
- NSString * TAName = [(NSDictionary*)[event userData] objectForKey:@"name"];
- return;
- NSLog(@"cursorUpdate");
- if ([TAName isEqual:@"endPoint"] || [TAName isEqual:@"endHandle"] || [TAName isEqual:@"midPoint"] || [TAName isEqual:@"midHandle"]) {
- [[NSCursor openHandCursor] set];
- }
- else {
- [[NSCursor arrowCursor] set];
- }
- }
- */
-
+- (void)cursorUpdate:(NSEvent *)event {
+	 NSString * TAName = [(NSDictionary*)[event userData] objectForKey:@"name"];
+	 NSLog(@"cursorUpdate - %@", TAName);
+	 if ([TAName isEqual:@"endPoint"] || [TAName isEqual:@"endHandle"] || [TAName isEqual:@"midPoint"] || [TAName isEqual:@"midHandle"] || [TAName isEqual:@"widthHandle"] || [TAName isEqual:@"thickCornerHandle"]) {
+		[[NSCursor openHandCursor] set];
+		 NSLog(@"openHandCursor");
+	 }
+	 else {
+		 [[NSCursor arrowCursor] set];
+		 NSLog(@"arrowCursor");
+	 }
+}
+*/
 
 - (void) mouseMoved: (NSEvent*) event {
 	NSString * TAName = [self trackingAreaNameForMouseLocation];
-	NSLog([NSString stringWithFormat:@"mouseMoved: %@", (TAName) ? (TAName) : (@"")]);
+//	NSLog([NSString stringWithFormat:@"mouseMoved: %@", (TAName) ? (TAName) : (@"")]);
 	if (TAName) {
 		[self setNeedsDisplay:YES];
 	}
@@ -190,9 +189,15 @@
 
 - (void) mouseDown: (NSEvent*) event {
 	NSString * TAName = [self trackingAreaNameForMouseLocation];
+	NSLog([@"Clicked on " stringByAppendingString:(TAName) ? (TAName) : (@"")]);
+	
+	if ([TAName isEqual:@"endPoint"] || [TAName isEqual:@"endHandle"] || [TAName isEqual:@"midPoint"] || [TAName isEqual:@"midHandle"] || [TAName isEqual:@"widthHandle"] || [TAName isEqual:@"thickCornerHandle"]) {
 		self.clickedPointName = TAName;
-		NSLog([@"Clicked on " stringByAppendingString:(TAName) ? (TAName) : (@"")]);
 		[[NSCursor closedHandCursor] push];
+	}
+	else {
+		self.clickedPointName = @"";
+	}
 }
 
 
@@ -271,7 +276,7 @@
 			CGFloat startToEndDistance = LENGTH(startToEndVector);
 
 			theDocument.diagonalTangentLength = MAX(MIN(polar.r / startToEndDistance, 1.0), 0.0);
-			CGFloat diagonalTangentDirection = + polar.phi + pi / theDocument.cornerCount - pi * 0.5;
+			CGFloat diagonalTangentDirection = polar.phi - pi / theDocument.cornerCount + pi * 0.5;
 			if (stickyValues) {
 				if ( fabs(diagonalTangentDirection) < STICKYANGLE) {
 					diagonalTangentDirection = 0.0;
@@ -291,26 +296,27 @@
 		else if ([TAName isEqualToString:@"widthHandle"]) {
 			ESPolarPoint endPolar = [self polarPointForPoint:self.endPoint origin:self.middle];
 			ESPolarPoint mousePolar = [self polarPointForPoint:realMouseLocation origin:self.middle];
-			theDocument.thickness = MAX(MIN(1.0 - mousePolar.r / endPolar.r, 1.0), 0.0);
+			CGFloat thickness = MAX(MIN(1.0 - mousePolar.r / endPolar.r, 1.0), 0.0);
+			if (abs(mousePolar.phi - endPolar.phi) > pi/2.0 ) {
+				// we're on the wrong side of the origin => end value
+				thickness = 1.0;
+			}
+			theDocument.thickness = thickness;
 		}
 		else if ([TAName isEqualToString:@"thickCornerHandle"]) {
-			ESPolarPoint polar = [self polarPointForPoint:realMouseLocation	origin:self.middle];
-			CGFloat thickenedCorner = 1.0 - polar.r / (theDocument.cornerFraction * self.shapeRadius *sqrt(2.0) * (1.0 - theDocument.thickness));
-			thickenedCorner = thickenedCorner * 2.0;
+			ESPolarPoint mousePolar = [self polarPointForPoint:realMouseLocation	origin:self.middle];
+			ESPolarPoint midmidPolar = [self polarPointForPoint:self.midmidPoint origin:self.middle];
+			CGFloat thickenedCorner = 1.0 - 2.0 * mousePolar.r / midmidPolar.r;
 			thickenedCorner = MAX(MIN(thickenedCorner, 1.0), -1.0 );
-			if (stickyValues && 
-				fabs(polar.r - (theDocument.cornerFraction * self.shapeRadius * sqrt(2.0))) < STICKYLENGTH)  {
+			if (stickyValues && fabs(mousePolar.r - midmidPolar.r/2.0 ) < STICKYLENGTH)  {
 				thickenedCorner = 0.0;
 			}
-			
-/*			if (abs(polar.phi + pi/self.theDocument.cornerCount) > pi/2.0) {
+			if (abs(mousePolar.phi - midmidPolar.phi) > pi/2.0 ) {
 				// we're on the wrong side of the origin => maximum value
 				thickenedCorner = 1.0;
 			}
-*/			
-			theDocument.thickenedCorner =  thickenedCorner;
-			
-			NSLog(@"%f", theDocument.thickenedCorner);
+			theDocument.thickenedCorner =  thickenedCorner;			
+			//NSLog(@"%f", theDocument.thickenedCorner);
 		}
 		else {
 			return;
@@ -441,7 +447,7 @@
 			CGFloat startToEndDistance = LENGTH(startToEndVector);
 			
 			polar.r = startToEndDistance;
-			polar.phi = -polar.phi;
+			polar.phi = polar.phi;
 			NSPoint lineStart = [self pointForPolarPoint:polar origin:self.midPoint];
 			polar.phi = pi + polar.phi;
 			NSPoint lineEnd = [self pointForPolarPoint:polar origin:self.midPoint];
@@ -472,12 +478,14 @@
 		}
 		else if ([thePointName isEqualToString:@"thickCornerHandle"]) {
 			// draw line from midPoint to innerMiddle						
-			ESPolarPoint polar;
+/*			ESPolarPoint polar;
 			polar.phi = pi / theDocument.cornerCount;
-			polar.r = theDocument.cornerFraction * self.shapeRadius * 2.0 * (1-self.theDocument.thickness);
+			polar.r = theDocument.cornerFraction * self.shapeRadius * 2.0;
 			NSPoint endPoint = [self pointForPolarPoint:polar origin:self.middle];
 			polar.r = polar.r / sqrt(8.0);
-			NSPoint startPoint = [self pointForPolarPoint:polar origin:self.middle];
+			NSPoint startPoint = [self pointForPolarPoint:polar origin:self.middle]; */
+			NSPoint startPoint = self.middle;
+			NSPoint endPoint = self.midmidPoint;
 			
 			bP = [NSBezierPath bezierPath];
 			[bP moveToPoint:startPoint];
@@ -526,8 +534,10 @@
 	[self removeTrackingArea:self.endPointTA]; 
 	[self removeTrackingArea:self.widthHandleTA]; 
 	[self removeTrackingArea:self.thickCornerHandleTA]; 
-	NSTrackingAreaOptions TAoptions = (NSTrackingMouseEnteredAndExited|NSTrackingMouseMoved|NSTrackingActiveInActiveApp|NSTrackingEnabledDuringMouseDrag);
+	NSTrackingAreaOptions TAoptions = (NSTrackingMouseEnteredAndExited|NSTrackingMouseMoved|NSTrackingActiveInActiveApp|NSTrackingEnabledDuringMouseDrag|NSTrackingCursorUpdate);
 
+//	[self addTrackingArea:[[NSTrackingArea alloc] initWithRect:self.bounds options:TAoptions|NSTrackingInVisibleRect owner:self userInfo:[NSDictionary dictionaryWithObject:@"global" forKey:@"name"]]];
+	
 
 	NSImage * image;
 	if (self.useCoreAnimation) {
@@ -541,8 +551,7 @@
 	[NSBezierPath strokeLineFromPoint:self.midPoint toPoint:self.midHandle];
 	
 	// ... handle control points next...
-	NSRect rect = NSMakeRect(self.endHandle.x - HANDLESIZE * 0.5, self.endHandle.y - HANDLESIZE * 0.5, 
-							 HANDLESIZE, HANDLESIZE);
+	NSRect rect = NSMakeRect(self.endHandle.x - HANDLESIZE * 0.5, self.endHandle.y - HANDLESIZE * 0.5, HANDLESIZE, HANDLESIZE);
 	NSBezierPath * bP = [NSBezierPath bezierPathWithOvalInRect:rect];
 	self.endHandleTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"endHandle" forKey:@"name"]];
 	[self addTrackingArea:self.endHandleTA];
@@ -581,6 +590,7 @@
 	CGFloat lineHandleWidth = 12.0;
 	CGFloat lineHandleThickness = 6.0;
 	CGFloat phi = 0.5 * pi  + 2.0 * pi / self.theDocument.cornerCount;
+	
 	NSPoint lineStart = NSMakePoint(self.innerEndPoint.x - cos(phi) * lineHandleWidth,
 									self.innerEndPoint.y - sin(phi) * lineHandleWidth);
 	NSPoint lineEnd = NSMakePoint(self.innerEndPoint.x + cos(phi) * lineHandleWidth,
@@ -599,8 +609,9 @@
 	
 	
 	phi = 0.5 * pi + pi / self.theDocument.cornerCount;
-	NSPoint middleMidmidPoint = NSMakePoint((self.innerMidmidPoint.x + self.midmidPoint.x) / 2.0,
-											(self.innerMidmidPoint.y + self.midmidPoint.y) / 2.0);
+	ESPolarPoint polar = [self polarPointForPoint:self.midmidPoint origin:self.middle];
+	polar.r = (- self.theDocument.thickenedCorner + 1.0) / 2.0 * polar.r ; 
+	NSPoint middleMidmidPoint = [self pointForPolarPoint:polar origin:self.middle];
 	lineStart = NSMakePoint(middleMidmidPoint.x - cos(phi) * lineHandleWidth,
 							middleMidmidPoint.y - sin(phi) * lineHandleWidth);
 	lineEnd = NSMakePoint(middleMidmidPoint.x + cos(phi) * lineHandleWidth,
@@ -772,7 +783,7 @@
 	NSPoint endHandleDirection = NSMakePoint( sin(phi) * s * sTL , 
 											 -cos(phi) * s * sTL ); 	
 	NSAffineTransform * rotateStartHandle = [NSAffineTransform transform];
-	[rotateStartHandle rotateByRadians: sTD];
+	[rotateStartHandle rotateByRadians: -sTD];
 	NSPoint startHandleDirectionOut = [rotateStartHandle transformPoint:startHandleDirection];
 	[rotateStartHandle invert];
 	NSPoint endHandleDirectionIn = [rotateStartHandle transformPoint:endHandleDirection];
@@ -794,7 +805,7 @@
 									midPoint.y + midTangent.y * midPointsDistance);
 	
 	NSAffineTransform * rotateMidHandle = [NSAffineTransform transform];
-	[rotateMidHandle rotateByRadians:dTD];
+	[rotateMidHandle rotateByRadians:-dTD ];
 	NSPoint mid1HandleDirection = [rotateMidHandle transformPoint:midTangentDirection];
 	NSPoint mid1HandleIn = NSMakePoint(mid1Point.x + mid1HandleDirection.x, mid1Point.y + mid1HandleDirection.y);
 	NSPoint mid1HandleOut = NSMakePoint(mid1Point.x - mid1HandleDirection.x, mid1Point.y -mid1HandleDirection.y);
@@ -1032,15 +1043,16 @@
 }
 
 
-
 #pragma mark POLAR COORDINATES
+
 - (ESPolarPoint) polarPointForPoint: (NSPoint) point origin:(NSPoint) origin {
 	ESPolarPoint polarPoint;
-	NSPoint shiftedPoint = NSMakePoint(point.x - origin.x, point.y - origin.y);
+	NSPoint shiftedPoint = NSMakePoint(point.x - origin.x, 
+									   point.y - origin.y);
 	polarPoint.r = LENGTH(shiftedPoint);
 	if (polarPoint.r != 0) {
 		CGFloat sign = 1.0;
-		if (shiftedPoint.y > 0 ) { sign = -1.0; }
+		if (shiftedPoint.y < 0 ) { sign = -1.0; }
 		polarPoint.phi = sign * acos(shiftedPoint.x / polarPoint.r);
 	}
 	else {
@@ -1049,13 +1061,13 @@
 	return polarPoint;
 }
 
+
 - (NSPoint) pointForPolarPoint: (ESPolarPoint) polar origin:(NSPoint) origin {
 	NSPoint pt;
 	pt.x = origin.x + cos(polar.phi) * polar.r;
 	pt.y = origin.y + sin(polar.phi) * polar.r;
 	return pt;
 }
-
 
 
 
