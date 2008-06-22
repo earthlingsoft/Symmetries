@@ -1,6 +1,6 @@
 //
 //  AppDelegate.h
-//  RoundRect
+//  Symmetry
 //
 //  Created by  Sven on 05.06.08.
 //  Copyright 2008 earthlingsoft. All rights reserved.
@@ -17,4 +17,7 @@
 @property (readwrite) BOOL useCoreAnimation;
 
 - (IBAction) setCoreAnimation: (id) sender;
+- (void) readme:(id) sender;
+- (NSString*) myVersionString;
+
 @end

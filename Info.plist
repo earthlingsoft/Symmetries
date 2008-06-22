@@ -10,7 +10,7 @@
 			<key>CFBundleTypeIconFile</key>
 			<string></string>
 			<key>CFBundleTypeName</key>
-			<string>Round Rect Path</string>
+			<string>Symmetry</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>esRR</string>
@@ -19,10 +19,12 @@
 			<string>Editor</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>net.earthlingsoft.roundrect.document</string>
+				<string>net.earthlingsoft.symmetry.document</string>
 			</array>
 			<key>NSDocumentClass</key>
 			<string>MyDocument</string>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>XML</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
@@ -30,7 +32,7 @@
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string>net.earthlingsoft.roundrect</string>
+	<string>net.earthlingsoft.symmetry</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -40,11 +42,13 @@
 	<key>CFBundleSignature</key>
 	<string>esRR</string>
 	<key>CFBundleVersion</key>
-	<string>6</string>
+	<string>8</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>SUFeedURL</key>
+	<string>http://earthlingsoft.net/Symmetry/appcast.xml</string>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
@@ -53,18 +57,18 @@
 				<string>com.apple.property-list</string>
 			</array>
 			<key>UTTypeDescription</key>
-			<string>Round Rect Path</string>
+			<string>Symmetric Path</string>
 			<key>UTTypeIconFile</key>
 			<string>RoundRectDocument.icns</string>
 			<key>UTTypeIdentifier</key>
-			<string>net.earthlingsoft.roundrect.document</string>
+			<string>net.earthlingsoft.symmetry.document</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>com.apple.ostype</key>
 				<string>esRR</string>
 				<key>public.filename-extension</key>
 				<array>
-					<string>roundRectPath</string>
+					<string>symmetricPath</string>
 				</array>
 			</dict>
 		</dict>
