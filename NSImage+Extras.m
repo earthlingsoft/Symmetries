@@ -4,7 +4,7 @@
 //  Created by Scott Stevenson on 9/28/07.
 //  Source may be reused with virtually no restriction. See License.txt
 
-#import "NSImage-Extras.h"
+#import "NSImage+Extras.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation NSImage (Extras)
