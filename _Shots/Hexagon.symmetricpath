@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>backgroundColor</key>
+	<data>
+	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMDhAJm
+	ZgEBhg==
+	</data>
+	<key>beSquare</key>
+	<integer>1</integer>
+	<key>cornerCount</key>
+	<integer>6</integer>
+	<key>cornerFraction</key>
+	<real>0.70999997854232788</real>
+	<key>diagonalTangentDirection</key>
+	<real>1</real>
+	<key>diagonalTangentLength</key>
+	<real>0.070000000298023224</real>
+	<key>fillColor</key>
+	<data>
+	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMDhAJm
+	ZoOrqio/AYY=
+	</data>
+	<key>midPointsDistance</key>
+	<real>0.5</real>
+	<key>showHandles</key>
+	<integer>1</integer>
+	<key>size</key>
+	<real>0.53871899843215942</real>
+	<key>straightTangentDirection</key>
+	<real>0.0</real>
+	<key>straightTangentLength</key>
+	<real>0.80000001192092896</real>
+	<key>strokeColor</key>
+	<data>
+	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMDhAJm
+	ZgABhg==
+	</data>
+	<key>strokeThickness</key>
+	<real>0.14100000262260437</real>
+	<key>thickenedCorner</key>
+	<real>0.49955245852470398</real>
+	<key>thickness</key>
+	<real>0.20000000298023224</real>
+	<key>twoLines</key>
+	<integer>1</integer>
+	<key>twoMidPoints</key>
+	<integer>1</integer>
+</dict>
+</plist>
