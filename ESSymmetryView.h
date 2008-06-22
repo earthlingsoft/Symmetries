@@ -1,14 +1,14 @@
 //
-//  RRView.h
-//  RoundRect
+//  ESSymmetryView.h
+//  Symmetry
 //
 //  Created by  Sven on 22.05.08.
 //  Copyright 2008 earthlingsoft. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
-#import "MyDocument.h" 
 #import <QuartzCore/QuartzCore.h>
+#import "MyDocument.h" 
 
 typedef struct {
 	CGFloat r;
@@ -16,7 +16,7 @@ typedef struct {
 } ESPolarPoint;
 
 
-@interface RRView : NSView {
+@interface ESSymmetryView : NSView {
 	IBOutlet MyDocument * theDocument;
 
 	NSBezierPath * path;	
@@ -35,6 +35,7 @@ typedef struct {
 	NSTrackingArea * widthHandleTA;
 	NSTrackingArea * thickCornerHandleTA;
 	
+	NSDictionary * oldDocumentValues;	
 }
 
 @property (retain) MyDocument * theDocument;
@@ -51,11 +52,13 @@ typedef struct {
 @property (retain) NSTrackingArea * midHandleTA;
 @property (retain) NSTrackingArea * widthHandleTA;
 @property (retain) NSTrackingArea * thickCornerHandleTA;
+@property (retain) NSDictionary * oldDocumentValues;
 
 
 @property (readonly) CGFloat shapeRadius;
 @property (readonly) CGFloat canvasRadius;
 @property (readonly) NSPoint startPoint;
+@property (readonly) NSPoint otherMidPoint;
 @property (readonly) NSPoint midmidPoint;
 @property (readonly) NSPoint midPoint;
 @property (readonly) NSPoint midHandle;
@@ -70,9 +73,12 @@ typedef struct {
 - (void) drawHandlesForFundamentalPath;
 - (void) drawGuidesForPoint:(NSString *) pointName;
 
-- (NSBezierPath *) pathWithSize: (CGFloat) s  cornerDelta: (CGFloat) cF;
+//- (NSBezierPath *) pathWithSize: (CGFloat) s  cornerDelta: (CGFloat) cF;
 
 - (void) drawPoint: (NSPoint) pt;
+- (void) updateCursor;
+
+- (BOOL) point: (NSPoint) point inRect: (NSRect) rect;
 
 - (ESPolarPoint) polarPointForPoint: (NSPoint) point origin:(NSPoint) origin;
 - (NSPoint) pointForPolarPoint: (ESPolarPoint) polar origin:(NSPoint) origin;
