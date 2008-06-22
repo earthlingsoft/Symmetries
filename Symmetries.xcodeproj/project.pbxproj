@@ -31,9 +31,9 @@
 		6C73CF3A0E0B079C00749440 /* NSBezierPath+ESSymmetry.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */; };
 		6C82F99D0DF7614F005CF008 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C82F99C0DF7614F005CF008 /* AppDelegate.m */; };
 		6CBC479C0DEAE2610073B214 /* ESSymmetryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */; };
-		6CE607270E0BA4A800BFE3F3 /* Symmetry QuickLook.qlgenerator in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CE6071E0E0BA48300BFE3F3 /* Symmetry QuickLook.qlgenerator */; };
 		6CE60E830E0D54C800BFE3F3 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CE60E820E0D54C800BFE3F3 /* Sparkle.framework */; };
 		6CE60E860E0D54D100BFE3F3 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CE60E820E0D54C800BFE3F3 /* Sparkle.framework */; };
+		6CE610BE0E0DBC5B00BFE3F3 /* Symmetries.qlgenerator in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CE610BD0E0DBC4700BFE3F3 /* Symmetries.qlgenerator */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8D15AC310486D014006FF6A4 /* MyDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */; settings = {ATTRIBUTES = (); }; };
@@ -42,19 +42,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		6CE6071D0E0BA48300BFE3F3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 6CE607150E0BA48300BFE3F3 /* Symmetry QuickLook.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8D576316048677EA00EA77CD /* Symmetry QuickLook.qlgenerator */;
-			remoteInfo = "Symmetry QuickLook";
-		};
 		6CE60D570E0D4E1800BFE3F3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8D15AC270486D014006FF6A4 /* RoundRect */;
+			remoteGlobalIDString = 8D15AC270486D014006FF6A4;
 			remoteInfo = RoundRect;
+		};
+		6CE610BC0E0DBC4700BFE3F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6CE607150E0BA48300BFE3F3 /* Symmetries QuickLook.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8D576316048677EA00EA77CD /* Symmetries.qlgenerator */;
+			remoteInfo = Symmetries;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -65,7 +65,7 @@
 			dstPath = Contents/Library/QuickLook;
 			dstSubfolderSpec = 1;
 			files = (
-				6CE607270E0BA4A800BFE3F3 /* Symmetry QuickLook.qlgenerator in CopyFiles */,
+				6CE610BE0E0DBC5B00BFE3F3 /* Symmetries.qlgenerator in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,7 +104,7 @@
 		6C82F99B0DF7614F005CF008 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6C82F99C0DF7614F005CF008 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryView.m; sourceTree = "<group>"; };
-		6CE607150E0BA48300BFE3F3 /* Symmetry QuickLook.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Symmetry QuickLook.xcodeproj"; path = "Symmetry QuickLook/Symmetry QuickLook.xcodeproj"; sourceTree = "<group>"; };
+		6CE607150E0BA48300BFE3F3 /* Symmetries QuickLook.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Symmetries QuickLook.xcodeproj"; path = "QuickLook/Symmetries QuickLook.xcodeproj"; sourceTree = "<group>"; };
 		6CE60E820E0D54C800BFE3F3 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = ../../../Shared/builds/Deployment/Sparkle.framework; sourceTree = SOURCE_ROOT; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* Symmetries.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Symmetries.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -154,7 +154,7 @@
 		2A37F4AAFDCFA73011CA2CEA /* RoundRect */ = {
 			isa = PBXGroup;
 			children = (
-				6CE607150E0BA48300BFE3F3 /* Symmetry QuickLook.xcodeproj */,
+				6CE607150E0BA48300BFE3F3 /* Symmetries QuickLook.xcodeproj */,
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
 				2A37F4AFFDCFA73011CA2CEA /* Other Sources */,
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
@@ -213,10 +213,10 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		6CE607160E0BA48300BFE3F3 /* Products */ = {
+		6CE610B90E0DBC4700BFE3F3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6CE6071E0E0BA48300BFE3F3 /* Symmetry QuickLook.qlgenerator */,
+				6CE610BD0E0DBC4700BFE3F3 /* Symmetries.qlgenerator */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -249,7 +249,7 @@
 /* Begin PBXProject section */
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "RoundRect" */;
+			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "Symmetries" */;
 			compatibilityVersion = "Xcode 3.1";
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -291,8 +291,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 6CE607160E0BA48300BFE3F3 /* Products */;
-					ProjectRef = 6CE607150E0BA48300BFE3F3 /* Symmetry QuickLook.xcodeproj */;
+					ProductGroup = 6CE610B90E0DBC4700BFE3F3 /* Products */;
+					ProjectRef = 6CE607150E0BA48300BFE3F3 /* Symmetries QuickLook.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -304,11 +304,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		6CE6071E0E0BA48300BFE3F3 /* Symmetry QuickLook.qlgenerator */ = {
+		6CE610BD0E0DBC4700BFE3F3 /* Symmetries.qlgenerator */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = "Symmetry QuickLook.qlgenerator";
-			remoteRef = 6CE6071D0E0BA48300BFE3F3 /* PBXContainerItemProxy */;
+			path = Symmetries.qlgenerator;
+			remoteRef = 6CE610BC0E0DBC4700BFE3F3 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -532,7 +532,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "RoundRect" */ = {
+		C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "Symmetries" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C05733CC08A9546B00998B17 /* Debug */,
