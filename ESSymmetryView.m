@@ -35,7 +35,7 @@
 @synthesize widthHandleTA;
 @synthesize thickCornerHandleTA;
 @synthesize oldDocumentValues;
-
+@synthesize introLayer;
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
@@ -49,9 +49,12 @@
 
 - (void) frameChanged: (NSNotification*) notification {
 	NSLog(@"framechange");
+	[CATransaction begin];
+	[CATransaction setValue:[NSNumber numberWithFloat:0.0] forKey:kCATransactionAnimationDuration];
 	self.guideLayer.bounds = NSRectToCGRect(self.bounds);
 	self.handleLayer.bounds = NSRectToCGRect(self.bounds);
-
+	self.introLayer.bounds = NSRectToCGRect(self.bounds);
+	[CATransaction commit];
 	[self setNeedsDisplay:YES];
 }
 
@@ -92,9 +95,19 @@
 	[self.mouseLayer addSublayer: newLayer];
 	self.handleLayer = newLayer;
 	
+	// set up layer for intro
+	newLayer = [CALayer layer];
+	newLayer.name = @"introLayer";
+	newLayer.opacity = 0.0;
+	newLayer.anchorPoint = CGPointMake(0.0, 0.0);
+	[mainLayer addSublayer: newLayer];
+	self.introLayer = newLayer;
+	
 	// set up sizing stuff
 	[self frameChanged: nil];
 	[self.window disableCursorRects];
+
+	
 	
 /*	CABasicAnimation* animation = [CABasicAnimation animationWithKeyPath: @"delegate.theDocument.straightTangentDirection"];
 	animation.duration = 10.0;
@@ -104,7 +117,86 @@
 	[mainLayer addAnimation:animation forKey:@"angleAnimation"];
 	[self.theDocument addObserver:self forKeyPath:@"straightTangentDirection" options:NSKeyValueObservingOptionNew context:nil];
  */
+	
+	[self intro];
 }	
+
+
+- (void) intro {
+	NSString * welcomeText1 = NSLocalizedString(@"Welcome", @"Welcome");
+	NSString * welcomeText2 = NSLocalizedString(@"Click whatever looks clickable.", @"Click whatever looks clickable.");
+	NSString * welcomeText3 = NSLocalizedString(@"There's a Demo in the Help menu. And a Readme as well.", @"There's a Demo in the Help menu. And a Readme as well.");	
+
+	NSString * welcomeText = [NSString stringWithFormat:@"%@\n%@\n%@", welcomeText1, welcomeText2, welcomeText3];
+	
+	NSMutableAttributedString * aString = [[NSMutableAttributedString alloc] initWithString:welcomeText];
+	
+	NSMutableDictionary * textAttributes = [NSMutableDictionary dictionaryWithCapacity:3];
+	NSFont * font = [NSFont fontWithName:@"Lucida Grande Bold" size:72.0];
+	[textAttributes setObject:font forKey:NSFontAttributeName];
+	NSMutableParagraphStyle * myParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+	[myParagraphStyle setAlignment: NSCenterTextAlignment];
+	[textAttributes setObject:myParagraphStyle forKey:NSParagraphStyleAttributeName];
+	[textAttributes setObject:self.guideColor forKey:NSForegroundColorAttributeName];
+	
+	NSRange range = NSMakeRange(0, welcomeText1.length + 1);
+	[aString setAttributes:textAttributes range:range];
+	font = [NSFont fontWithName:@"Lucida Grande Bold" size: 32.0];
+	[textAttributes setObject:font forKey:NSFontAttributeName];
+	range = NSMakeRange(welcomeText1.length + 1, welcomeText2.length + 1);
+	[aString setAttributes:textAttributes range:range];
+	font = [NSFont fontWithName:@"Lucida Grande Bold" size: 18.0];
+	[textAttributes setObject:font forKey:NSFontAttributeName];
+	range = NSMakeRange(welcomeText1.length + 1 + welcomeText2.length + 1, welcomeText3.length);
+	[aString setAttributes:textAttributes range:range];
+	
+	NSImage * image = [[NSImage alloc] initWithSize:self.bounds.size];
+	[image lockFocus];
+	NSRect stringRect = NSMakeRect(0.0, 32.0, self.bounds.size.width, 72.0 + 48.0 + 48.0);
+	[aString drawInRect:stringRect];
+	[image unlockFocus];
+	
+	CGImageRef imageRef = [image cgImage];
+	self.introLayer.contents = (id) imageRef;
+	self.introLayer.opacity = 1.0;
+	
+	CAKeyframeAnimation * myAnimation = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
+	myAnimation.keyTimes = [NSArray arrayWithObjects: 
+							[NSNumber numberWithFloat:0.0],
+							[NSNumber numberWithFloat:0.8],
+							[NSNumber numberWithFloat:1.0],
+								nil];
+	myAnimation.timingFunctions = [NSArray arrayWithObjects:
+						[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear],
+						[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut],
+								   nil];
+	myAnimation.values = [NSArray arrayWithObjects:
+							[NSNumber numberWithFloat:1.0],
+							[NSNumber numberWithFloat:1.0],
+							[NSNumber numberWithFloat:0.0],
+								nil];
+	myAnimation.delegate = self;
+	myAnimation.duration = 8.0;
+	myAnimation.removedOnCompletion = NO;
+	myAnimation.fillMode = kCAFillModeForwards;
+	[self.introLayer addAnimation:myAnimation forKey:@"textFadeOut"];
+}
+
+
+/* 
+	animation delegate
+*/
+- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag {
+	[CATransaction begin];
+	[CATransaction setValue:[NSNumber numberWithFloat:0.0] forKey:kCATransactionAnimationDuration];
+	self.introLayer.hidden = YES;
+	[self.introLayer removeAnimationForKey:@"textFadeOut"];
+	[CATransaction commit];
+}
+
+
+
+
 
 /*
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -114,29 +206,6 @@
 }
 */
 
-/*
-- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	if ([keyPath isEqualToString:@"path"]) {
-		NSPoint points[3];
-		int i = 1;
-		NSBezierPath * compoundPath = [self valueForKey:keyPath];
-		[compoundPath elementAtIndex:i associatedPoints:points];
-		start = points[0];
-		[compoundPath elementAtIndex:++i associatedPoints:points];
-		startTangent = points[0];
-		mid1TangentIn = points[1];
-		mid1 = points[2];
-		[compoundPath elementAtIndex:++i associatedPoints:points];	
-		mid1TangentOut = points[0];
-		mid2TangentIn = points[1];
-		mid2 = points[2];
-		[compoundPath elementAtIndex:++i associatedPoints:points];
-		mid2TangentOut = points[0];
-		endTangent = points[1];
-		end = points[2];
-	}
-}
-*/
 
 
 
@@ -204,7 +273,7 @@
 		self.oldDocumentValues = [self.theDocument dictionary];
 	}
 	else {
-		self.clickedPointName = @"";
+		self.clickedPointName = nil;
 	}	
 }
 
@@ -239,6 +308,7 @@
 	if (self.clickedPointName != nil) {
 		// we want to follow this click
 		NSString * TAName = self.clickedPointName;
+		NSLog(@"-mouseDragged after click on %@", TAName);
 		
 		NSPoint realMouseLocation = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
 		NSPoint mouseLocation = [self.moveFromMiddle transformPoint:realMouseLocation];
@@ -344,11 +414,88 @@
 			//NSLog(@"%f", theDocument.thickenedCorner);
 		}
 		else {
+			// err, we shouldn't be here
 			return;
 		}
 	}
+	else {
+		// The click was on no point => initiate drag and drop
+		[self handleDragForEvent:event];
+	}
 }
 
+
+
+#pragma mark DRAG & DROP 
+
+/* We want to do drag and drop */
+- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal  {
+	return NSDragOperationCopy;
+}
+
+
+- (void) handleDragForEvent: (NSEvent*) event {
+	NSLog(@"-handleDragForEvent:");
+	NSDictionary * documentDict = [self.theDocument dictionary];
+	NSData * pdfData = [NSBezierPath PDFDataForDictionary: documentDict];
+	NSImage * image = [[NSImage alloc] initWithData:pdfData];
+	
+	NSPasteboard * draggingPasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+	[draggingPasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, ESSYMMETRYPBOARDTYPE, NSFilesPromisePboardType, nil] owner:self];
+	
+	[draggingPasteboard setData:pdfData forType:NSPDFPboardType];
+	NSString * errorString;
+	NSData * fileTypesData = [NSPropertyListSerialization dataFromPropertyList:[NSArray arrayWithObject:@"pdf"] format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorString];
+	[draggingPasteboard setData:fileTypesData forType:NSFilesPromisePboardType];
+	[draggingPasteboard setData:[@"com.adobe.pdf" dataUsingEncoding:NSUTF8StringEncoding] forType:@"com.apple.pasteboard.promised-file-content-type"];
+	NSData * dictData = [NSArchiver archivedDataWithRootObject:documentDict];
+	[draggingPasteboard setData:dictData forType:ESSYMMETRYPBOARDTYPE];
+
+	NSPoint eventMousePosition = event.locationInWindow;
+	NSPoint imagePosition = NSMakePoint(image.size.width * eventMousePosition.x / self.bounds.size.width,
+										image.size.height * eventMousePosition.y / self.bounds.size.height);
+
+	NSImage * dragProxyImage = [[NSImage alloc] initWithSize: image.size];
+	[dragProxyImage lockFocus];
+	[image compositeToPoint:NSZeroPoint operation:NSCompositeCopy fraction: 0.5];
+	[dragProxyImage unlockFocus];
+	
+	[self dragImage:dragProxyImage at:imagePosition offset:NSZeroSize event:event pasteboard:draggingPasteboard source:self slideBack:YES];	
+}
+
+
+- (NSArray *)namesOfPromisedFilesDroppedAtDestination:(NSURL *)dropDestination {
+	NSLog(@"namesOfPromisedFilesDroppedAtDestination");
+	if ([dropDestination isFileURL]) {
+		NSString * folderName = [dropDestination path];
+		NSString * fileName;
+		NSURL * documentURL = self.theDocument.fileURL;
+		if (documentURL && [documentURL isFileURL]) {
+			fileName = [[documentURL.path lastPathComponent] stringByDeletingPathExtension];
+		}
+		else {
+			fileName = @"Symmetry";
+		}
+		NSString * fullName = [fileName stringByAppendingPathExtension:@"pdf"];
+		NSString * fullPath = [folderName stringByAppendingPathComponent:fullName];
+		int i = 2;
+		// make sure we have a new name
+		while ([[NSFileManager defaultManager] fileExistsAtPath:fullPath]) {
+			fullName = [fileName stringByAppendingFormat:@"-%i.pdf", i++];
+			fullPath = [folderName stringByAppendingPathComponent:fullName];
+		}
+		
+		// write the file 
+		NSDictionary * documentDict = [self.theDocument dictionary];
+		NSData * pdfData = [NSBezierPath PDFDataForDictionary: documentDict];
+		NSURL * destinationURL = [NSURL fileURLWithPath:fullPath];
+		[pdfData writeToURL:destinationURL atomically:YES];
+		return [NSArray arrayWithObject:fullName];
+	}
+	else {
+		return nil;
+	}
+}
 
 
 
@@ -367,7 +514,6 @@
 	if (thePointName) {
 		NSPoint origin = NSMakePoint(0.0, 0.0);
 		CGFloat guideLineWidth = 8.0;
-		NSColor * guideColor = [NSColor colorWithCalibratedRed:0.0 green:0.0 blue:1.0 alpha:0.6];
 		NSBezierPath * bP = [NSBezierPath bezierPath];
 		bP.lineCapStyle = NSRoundLineCapStyle;
 		bP.lineWidth = guideLineWidth;
@@ -379,7 +525,7 @@
 			[image lockFocus];
 		}
 
-		[guideColor set];
+		[self.guideColor set];
 
 		if ([thePointName isEqualToString:@"endPoint"]) {
 			// draw circle segment from 2pi/71 to pi
@@ -410,7 +556,7 @@
 				CGFloat fontSize = 72.0;
 				NSFont * lucidaGrande = [NSFont fontWithName:@"Lucida Grande Bold" size:fontSize];
 				[aString addAttribute:NSFontAttributeName value:lucidaGrande range:wholeString];
-				[aString addAttribute:NSForegroundColorAttributeName value:guideColor range:wholeString];
+				[aString addAttribute:NSForegroundColorAttributeName value:self.guideColor range:wholeString];
 				NSMutableParagraphStyle * myParagraphStyle = [[NSMutableParagraphStyle alloc] init];
 				[myParagraphStyle setAlignment: NSRightTextAlignment];
 				[aString addAttribute:NSParagraphStyleAttributeName value:myParagraphStyle range:wholeString];
@@ -485,7 +631,7 @@
 			[bP moveToPoint:line2Begin];
 			[bP lineToPoint:line2End];
 			
-			[guideColor set];
+			[self.guideColor set];
 			[bP stroke];
 		}
 		else if ([thePointName isEqualToString:@"midHandle"]) {
@@ -845,6 +991,9 @@
 
 
 
+
+
+
 #pragma mark VALUES
 
 
@@ -861,7 +1010,9 @@
 	return [[[NSUserDefaults standardUserDefaults] valueForKey:@"useCoreAnimation"]boolValue];
 }
 
-
+- (NSColor *) guideColor {
+	return [NSColor colorWithCalibratedRed:0.0 green:0.0 blue:1.0 alpha:0.6];
+}
 
 
 # pragma mark POINTS

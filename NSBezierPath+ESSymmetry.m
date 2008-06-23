@@ -30,8 +30,56 @@
 
 
 
++ (NSData*) PDFDataForDictionary: (NSDictionary *) dict {
+	CGFloat radius = 100.0;
+	CGFloat shapeSize = [[dict objectForKey:@"size"] floatValue];
+	CGFloat strokeThickness = [[dict objectForKey:@"strokeThickness"] floatValue] * radius / shapeSize / 10.0;
+	NSBezierPath * bP = [NSBezierPath bezierPathWithDictionary:dict size:radius] ;
+	NSRect pathBounds = [bP bounds];
+	CGFloat pdfSize = pathBounds.size.width + strokeThickness * 2.0 * 4.0;
+	CGRect boundingRect = CGRectMake(0.0, 0.0, pdfSize, pdfSize);
 
-+ (NSBezierPath*) bezierPathWithDictionary: (NSDictionary*) dict size: (CGFloat) s cornerDelta: (CGFloat) cornerDelta{
+	CGFloat translationDistance = boundingRect.size.width / 2.0;
+	NSAffineTransform * aT = [NSAffineTransform transform];
+	[aT translateXBy:translationDistance yBy:translationDistance];
+	[bP transformUsingAffineTransform:aT];
+
+	NSMutableData * pdfData = [NSMutableData dataWithCapacity:10000];
+	CGDataConsumerRef consumer = CGDataConsumerCreateWithCFData((CFMutableDataRef)pdfData);
+	NSDictionary * PDFInfo = nil;
+
+	CGContextRef pdfContext = CGPDFContextCreate (consumer, &boundingRect, (CFDictionaryRef)PDFInfo);
+   
+	CGContextBeginPage (pdfContext, &boundingRect); 
+
+	[NSGraphicsContext saveGraphicsState]; 
+	NSGraphicsContext * graphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:pdfContext flipped:NO];
+	[NSGraphicsContext setCurrentContext:graphicsContext];
+	
+	// draw
+	if ([[dict objectForKey:@"twoLines"] boolValue]) {
+		[(NSColor*) [dict objectForKey:@"fillColor"] set];
+		[bP fill];
+	}
+	[(NSColor*) [dict objectForKey:@"strokeColor"] set];
+	[bP setLineWidth: strokeThickness];
+	[bP stroke];
+	
+	[NSGraphicsContext restoreGraphicsState];
+	
+	CGContextEndPage(pdfContext);
+	CGPDFContextClose(pdfContext);
+	CGContextRelease(pdfContext);
+	CGDataConsumerRelease(consumer);
+
+	return pdfData;	
+}
+
+
+
+
+
++ (NSBezierPath*) bezierPathWithDictionary: (NSDictionary*) dict size: (CGFloat) size cornerDelta: (CGFloat) cornerDelta{
 	// gather the values we need
 	NSUInteger corners = [[dict objectForKey:@"cornerCount"] unsignedIntValue];
 	CGFloat cF =  ([[dict objectForKey:@"cornerFraction"] floatValue] - cornerDelta) * sqrt(2.0);
@@ -44,14 +92,14 @@
 	CGFloat phi = 2.0 * pi / corners;
 		
 	// anchor points
-	NSPoint startPoint = NSMakePoint(s, 0.0);
-	NSPoint midPoint = NSMakePoint(cos(0.5 * phi) * cF * s,  sin(0.5 * phi) * cF * s);
-	NSPoint endPoint = NSMakePoint(cos(phi) * s,   sin(phi) * s);
+	NSPoint startPoint = NSMakePoint(size, 0.0);
+	NSPoint midPoint = NSMakePoint(cos(0.5 * phi) * cF * size,  sin(0.5 * phi) * cF * size);
+	NSPoint endPoint = NSMakePoint(cos(phi) * size,   sin(phi) * size);
 	
 	// handle directions
-	NSPoint startHandleDirection = NSMakePoint(0,   s * sTL);
-	NSPoint endHandleDirection = NSMakePoint( sin(phi) * s * sTL , 
-											 -cos(phi) * s * sTL ); 	
+	NSPoint startHandleDirection = NSMakePoint(0,   size * sTL);
+	NSPoint endHandleDirection = NSMakePoint( sin(phi) * size * sTL , 
+											 -cos(phi) * size * sTL ); 	
 	NSAffineTransform * rotateStartHandle = [NSAffineTransform transform];
 	[rotateStartHandle rotateByRadians: -sTD];
 	NSPoint startHandleDirectionOut = [rotateStartHandle transformPoint:startHandleDirection];

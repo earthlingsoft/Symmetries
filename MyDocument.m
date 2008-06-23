@@ -7,6 +7,7 @@
 //
 
 #import "MyDocument.h"
+#import "NSBezierPath+ESSymmetry.h"
 
 @implementation MyDocument
 
@@ -191,7 +192,7 @@
 #pragma mark PASTEBOARDS
 
 - (void) copy: (id) sender {
-	NSData * pdfData = [myView dataWithPDFInsideRect:[myView frame]];
+	NSData * pdfData = [NSBezierPath PDFDataForDictionary:[self dictionary]];
 	NSPasteboard * pb = [NSPasteboard generalPasteboard];
 	[pb declareTypes:[NSArray arrayWithObjects: NSPDFPboardType, nil] owner:self];
 	[pb setData:pdfData forType:NSPDFPboardType];
@@ -278,6 +279,29 @@
 		self.twoLines = !self.twoLines;
 	}		
 }
+
+- (IBAction) exportAsPDF: (id) sender {
+	if ([sender isKindOfClass:[NSMenuItem class]]) {
+		NSSavePanel * savePanel = [NSSavePanel savePanel];
+		savePanel.prompt = NSLocalizedString(@"Export", @"Export as PDF");
+		savePanel.requiredFileType = @"pdf";
+		[savePanel beginSheetForDirectory:nil file:nil modalForWindow:self.windowForSheet modalDelegate:self didEndSelector:@selector(exportSavePanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+		
+		
+	}		
+}
+
+/*
+	return function for export sheet
+*/
+- (void)exportSavePanelDidEnd:(NSSavePanel *)sheet returnCode:(int)returnCode  contextInfo:(void  *)contextInfo {
+	if (returnCode == NSOKButton) {
+		NSURL  * destinationURL =  sheet.URL;
+		NSData * pdfData = [NSBezierPath PDFDataForDictionary:[self dictionary]];
+		[pdfData writeToURL:destinationURL atomically:YES];
+	}
+}
+
 
 
 - (IBAction) sliderMoved: (id) sender {

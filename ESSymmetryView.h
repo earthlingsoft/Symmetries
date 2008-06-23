@@ -10,6 +10,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import "MyDocument.h" 
 
+#define ESSYMMETRYPBOARDTYPE @"ESSSymmetryPboardType"
+
 typedef struct {
 	CGFloat r;
 	CGFloat phi;
@@ -35,7 +37,9 @@ typedef struct {
 	NSTrackingArea * widthHandleTA;
 	NSTrackingArea * thickCornerHandleTA;
 	
-	NSDictionary * oldDocumentValues;	
+	NSDictionary * oldDocumentValues;
+	
+	CALayer * introLayer;
 }
 
 @property (retain) MyDocument * theDocument;
@@ -53,6 +57,7 @@ typedef struct {
 @property (retain) NSTrackingArea * widthHandleTA;
 @property (retain) NSTrackingArea * thickCornerHandleTA;
 @property (retain) NSDictionary * oldDocumentValues;
+@property (retain) CALayer * introLayer;
 
 
 @property (readonly) CGFloat shapeRadius;
@@ -68,15 +73,18 @@ typedef struct {
 @property (readonly) NSPoint innerEndPoint;
 @property (readonly) NSPoint innerMidmidPoint;
 @property (readonly) BOOL useCoreAnimation;
+@property (readonly) NSColor * guideColor;
+
+- (void) intro;
 
 - (NSString*) trackingAreaNameForMouseLocation;
 - (void) drawHandlesForFundamentalPath;
 - (void) drawGuidesForPoint:(NSString *) pointName;
 
-//- (NSBezierPath *) pathWithSize: (CGFloat) s  cornerDelta: (CGFloat) cF;
-
 - (void) drawPoint: (NSPoint) pt;
 - (void) updateCursor;
+
+- (void) handleDragForEvent: (NSEvent*) event;
 
 - (BOOL) point: (NSPoint) point inRect: (NSRect) rect;
 

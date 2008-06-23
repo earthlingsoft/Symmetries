@@ -11,6 +11,7 @@
 
 @implementation AppDelegate
 - (void)applicationWillFinishLaunching:(NSNotification *)aNotification {
+	[[NSDocumentController sharedDocumentController] setAutosavingDelay:10.0];
 }
 
 

@@ -42,7 +42,7 @@
 	<key>CFBundleSignature</key>
 	<string>esRR</string>
 	<key>CFBundleVersion</key>
-	<string>8</string>
+	<string>9</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
