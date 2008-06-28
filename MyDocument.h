@@ -8,6 +8,8 @@
 
 
 #import <Cocoa/Cocoa.h>
+#import "ESSymmetryAnimation.h"
+
 
 @interface MyDocument : NSDocument
 {
@@ -56,6 +58,7 @@
 @property (retain) NSDate * strokeThicknessRecentChange;
 @property	NSUInteger showHandles;
 @property (retain) NSView * myView;
+@property (readonly) BOOL runningDemo;
 
 - (id) init;
 - (id) initWithDictionary: (NSDictionary*) dict;
@@ -63,10 +66,14 @@
 - (NSDictionary*) dictionary;
 - (void) setValuesFromDictionary: (NSDictionary*) dict;
 
+- (void) intro;
+
 - (void)printDocumentUsingPrintPanel:(BOOL)uiFlag;
 - (void)printDocument:(id)sender;
 - (void)runPageLayout:(id)sender;
 - (void)didEndPageLayout:(NSPageLayout *)pageLayout returnCode:(int)result contextInfo:(void *)contextInfo;
+
+- (CGFloat) normalisePolarAngle: (CGFloat) phi;
 
 - (BOOL) validateMenuItem:(NSMenuItem *)menuItem;
 - (IBAction) setHandles:(id) sender;
@@ -74,5 +81,15 @@
 - (IBAction) twoLines:(id) sender;
 - (IBAction) sliderMoved: (id) sender;
 - (IBAction) bogusAction: (id) sender;
+
+- (IBAction) animate:(id) sender;
+- (IBAction) animateFullScreen:(id) sender;
+- (IBAction) stopAnimation:(id) sender;
+
+- (NSArray*) animationKeys;
+- (CGFloat) randomFloatBetween: (CGFloat) min and:(CGFloat) max;
+- (ESSymmetryAnimation *) randomAnimationForKey:(NSString *) key withStartValue:(CGFloat) startValue targetValueBetween:(CGFloat) min and: (CGFloat) max;
+- (ESSymmetryAnimation *) randomAnimationForKey:(NSString *) key withStartValue:(CGFloat) startValue;
+
 
 @end

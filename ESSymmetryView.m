@@ -10,8 +10,8 @@
 #import "NSBezierPath+Points.h"
 #import "NSBezierPath+ESSymmetry.h"
 #import "NSImage+Extras.h"
+#import "ESSymmetryAnimation.h"
 
-#define MAXCORNERNUMBER 37
 #define HANDLELINEWIDTH 1.5
 #define HANDLESIZE 4.0
 #define POINTSIZE 6.0
@@ -28,6 +28,7 @@
 @synthesize guideLayer;
 @synthesize handleLayer;
 @synthesize clickedPointName;
+@synthesize previousGuidesPoint;
 @synthesize endPointTA;
 @synthesize endHandleTA;
 @synthesize midPointTA;
@@ -36,6 +37,10 @@
 @synthesize thickCornerHandleTA;
 @synthesize oldDocumentValues;
 @synthesize introLayer;
+@synthesize demoLayer;
+@synthesize currentDemoStep;
+@synthesize preAnimationDocumentValues;
+@synthesize lastAnimations;
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
@@ -48,12 +53,13 @@
 
 
 - (void) frameChanged: (NSNotification*) notification {
-	NSLog(@"framechange");
+	//NSLog(@"framechange");
 	[CATransaction begin];
 	[CATransaction setValue:[NSNumber numberWithFloat:0.0] forKey:kCATransactionAnimationDuration];
 	self.guideLayer.bounds = NSRectToCGRect(self.bounds);
 	self.handleLayer.bounds = NSRectToCGRect(self.bounds);
 	self.introLayer.bounds = NSRectToCGRect(self.bounds);
+//	self.demoLayer.bounds = NSRectToCGRect(self.bounds);
 	[CATransaction commit];
 	[self setNeedsDisplay:YES];
 }
@@ -70,7 +76,7 @@
 	self.wantsLayer = YES;
 	CALayer* mainLayer = self.layer;
 	mainLayer.name = @"mainLayer";
-	mainLayer.delegate = self;
+//	mainLayer.delegate = self;
 	[mainLayer setNeedsDisplay];
 
 	// set up layer for extra drawing during interaction
@@ -82,6 +88,7 @@
 	// set up layer to display interaction guides for the user
 	newLayer = [CALayer layer];
 	newLayer.name = @"guideLayer";
+//	newLayer.delegate = self;
 	newLayer.opacity = 1.0;
 	newLayer.anchorPoint = CGPointMake(0.0, 0.0);
 	[self.mouseLayer addSublayer: newLayer];
@@ -98,16 +105,19 @@
 	// set up layer for intro
 	newLayer = [CALayer layer];
 	newLayer.name = @"introLayer";
+	newLayer.delegate = self;
 	newLayer.opacity = 0.0;
 	newLayer.anchorPoint = CGPointMake(0.0, 0.0);
+	newLayer.contentsGravity = kCAGravityResizeAspect;
 	[mainLayer addSublayer: newLayer];
 	self.introLayer = newLayer;
-	
+
 	// set up sizing stuff
 	[self frameChanged: nil];
-	[self.window disableCursorRects];
-
+	[self.window disableCursorRects];	
 	
+	// negative value <==> no demo
+	self.currentDemoStep = -1;
 	
 /*	CABasicAnimation* animation = [CABasicAnimation animationWithKeyPath: @"delegate.theDocument.straightTangentDirection"];
 	animation.duration = 10.0;
@@ -118,84 +128,23 @@
 	[self.theDocument addObserver:self forKeyPath:@"straightTangentDirection" options:NSKeyValueObservingOptionNew context:nil];
  */
 	
-	[self intro];
+//	[self intro];
 }	
 
 
-- (void) intro {
-	NSString * welcomeText1 = NSLocalizedString(@"Welcome", @"Welcome");
-	NSString * welcomeText2 = NSLocalizedString(@"Click whatever looks clickable.", @"Click whatever looks clickable.");
-	NSString * welcomeText3 = NSLocalizedString(@"There's a Demo in the Help menu. And a Readme as well.", @"There's a Demo in the Help menu. And a Readme as well.");	
 
-	NSString * welcomeText = [NSString stringWithFormat:@"%@\n%@\n%@", welcomeText1, welcomeText2, welcomeText3];
-	
-	NSMutableAttributedString * aString = [[NSMutableAttributedString alloc] initWithString:welcomeText];
-	
-	NSMutableDictionary * textAttributes = [NSMutableDictionary dictionaryWithCapacity:3];
-	NSFont * font = [NSFont fontWithName:@"Lucida Grande Bold" size:72.0];
-	[textAttributes setObject:font forKey:NSFontAttributeName];
-	NSMutableParagraphStyle * myParagraphStyle = [[NSMutableParagraphStyle alloc] init];
-	[myParagraphStyle setAlignment: NSCenterTextAlignment];
-	[textAttributes setObject:myParagraphStyle forKey:NSParagraphStyleAttributeName];
-	[textAttributes setObject:self.guideColor forKey:NSForegroundColorAttributeName];
-	
-	NSRange range = NSMakeRange(0, welcomeText1.length + 1);
-	[aString setAttributes:textAttributes range:range];
-	font = [NSFont fontWithName:@"Lucida Grande Bold" size: 32.0];
-	[textAttributes setObject:font forKey:NSFontAttributeName];
-	range = NSMakeRange(welcomeText1.length + 1, welcomeText2.length + 1);
-	[aString setAttributes:textAttributes range:range];
-	font = [NSFont fontWithName:@"Lucida Grande Bold" size: 18.0];
-	[textAttributes setObject:font forKey:NSFontAttributeName];
-	range = NSMakeRange(welcomeText1.length + 1 + welcomeText2.length + 1, welcomeText3.length);
-	[aString setAttributes:textAttributes range:range];
-	
-	NSImage * image = [[NSImage alloc] initWithSize:self.bounds.size];
-	[image lockFocus];
-	NSRect stringRect = NSMakeRect(0.0, 32.0, self.bounds.size.width, 72.0 + 48.0 + 48.0);
-	[aString drawInRect:stringRect];
-	[image unlockFocus];
-	
-	CGImageRef imageRef = [image cgImage];
-	self.introLayer.contents = (id) imageRef;
-	self.introLayer.opacity = 1.0;
-	
-	CAKeyframeAnimation * myAnimation = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
-	myAnimation.keyTimes = [NSArray arrayWithObjects: 
-							[NSNumber numberWithFloat:0.0],
-							[NSNumber numberWithFloat:0.8],
-							[NSNumber numberWithFloat:1.0],
-								nil];
-	myAnimation.timingFunctions = [NSArray arrayWithObjects:
-						[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear],
-						[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut],
-								   nil];
-	myAnimation.values = [NSArray arrayWithObjects:
-							[NSNumber numberWithFloat:1.0],
-							[NSNumber numberWithFloat:1.0],
-							[NSNumber numberWithFloat:0.0],
-								nil];
-	myAnimation.delegate = self;
-	myAnimation.duration = 8.0;
-	myAnimation.removedOnCompletion = NO;
-	myAnimation.fillMode = kCAFillModeForwards;
-	[self.introLayer addAnimation:myAnimation forKey:@"textFadeOut"];
+/*
+- (void) startRandomAnimation:(id)sender {
+	NSDictionary * startDict = self.theDocument.dictionary;
+	NSDictionary * targetDict = [NSDictionary dictionaryWithObjectsAndKeys:
+	[NSNumber numberWithFloat:MAX(MIN(fp.hself.theDocument + randomx(1.0)*0.4 -0.2, 0.8), 0.4) ], @"size",
+	[NSNumber numberWithFloat:MAX(MIN(fp.hself.theDocument + randomx(1.0)*0.4 -0.2, 0.1), 0.0) ], @"straightTangentLength",
+	[NSNumber numberWithFloat:MAX(MIN(fp.hself.theDocument + randomx(1.0)*0.4 -0.2, 0.8), 0.4) ], @"straightTangentDirection",
+	[NSNumber numberWithFloat:MAX(MIN(fp.hself.theDocument + randomx(1.0)*0.4 -0.2, 0.8), 0.4) ], @"diagona",
+	[NSNumber numberWithFloat:MAX(MIN(fp.hself.theDocument + randomx(1.0)*0.4 -0.2, 0.8), 0.4) ], @"size",
+	[NSNumber numberWithFloat:MAX(MIN(fp.hself.theDocument + randomx(1.0)*0.4 -0.2, 0.8), 0.4) ], @"size",
 }
-
-
-/* 
-	animation delegate
 */
-- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag {
-	[CATransaction begin];
-	[CATransaction setValue:[NSNumber numberWithFloat:0.0] forKey:kCATransactionAnimationDuration];
-	self.introLayer.hidden = YES;
-	[self.introLayer removeAnimationForKey:@"textFadeOut"];
-	[CATransaction commit];
-}
-
-
-
 
 
 /*
@@ -205,8 +154,6 @@
 	}
 }
 */
-
-
 
 
 #pragma mark MOUSE HANDLING
@@ -308,7 +255,7 @@
 	if (self.clickedPointName != nil) {
 		// we want to follow this click
 		NSString * TAName = self.clickedPointName;
-		NSLog(@"-mouseDragged after click on %@", TAName);
+		//NSLog(@"-mouseDragged after click on %@", TAName);
 		
 		NSPoint realMouseLocation = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
 		NSPoint mouseLocation = [self.moveFromMiddle transformPoint:realMouseLocation];
@@ -435,7 +382,7 @@
 
 
 - (void) handleDragForEvent: (NSEvent*) event {
-	NSLog(@"-handleDragForEvent:");
+	//NSLog(@"-handleDragForEvent:");
 	NSDictionary * documentDict = [self.theDocument dictionary];
 	NSData * pdfData = [NSBezierPath PDFDataForDictionary: documentDict];
 	NSImage * image = [[NSImage alloc] initWithData:pdfData];
@@ -444,16 +391,16 @@
 	[draggingPasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, ESSYMMETRYPBOARDTYPE, NSFilesPromisePboardType, nil] owner:self];
 	
 	[draggingPasteboard setData:pdfData forType:NSPDFPboardType];
-	NSString * errorString;
-	NSData * fileTypesData = [NSPropertyListSerialization dataFromPropertyList:[NSArray arrayWithObject:@"pdf"] format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorString];
-	[draggingPasteboard setData:fileTypesData forType:NSFilesPromisePboardType];
+//	NSString * errorString;
+//	NSData * fileTypesData = [NSPropertyListSerialization dataFromPropertyList:[NSArray arrayWithObject:@"pdf"] format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorString];
+//	[draggingPasteboard setData:fileTypesData forType:NSFilesPromisePboardType];
 	[draggingPasteboard setData:[@"com.adobe.pdf" dataUsingEncoding:NSUTF8StringEncoding] forType:@"com.apple.pasteboard.promised-file-content-type"];
 	NSData * dictData = [NSArchiver archivedDataWithRootObject:documentDict];
 	[draggingPasteboard setData:dictData forType:ESSYMMETRYPBOARDTYPE];
 
 	NSPoint eventMousePosition = event.locationInWindow;
-	NSPoint imagePosition = NSMakePoint(image.size.width * eventMousePosition.x / self.bounds.size.width,
-										image.size.height * eventMousePosition.y / self.bounds.size.height);
+	NSPoint imagePosition = NSMakePoint(eventMousePosition.x - image.size.width /2.0,
+										eventMousePosition.y - image.size.height / 2.0);
 
 	NSImage * dragProxyImage = [[NSImage alloc] initWithSize: image.size];
 	[dragProxyImage lockFocus];
@@ -465,7 +412,7 @@
 
 
 - (NSArray *)namesOfPromisedFilesDroppedAtDestination:(NSURL *)dropDestination {
-	NSLog(@"namesOfPromisedFilesDroppedAtDestination");
+	//NSLog(@"namesOfPromisedFilesDroppedAtDestination");
 	if ([dropDestination isFileURL]) {
 		NSString * folderName = [dropDestination path];
 		NSString * fileName;
@@ -507,8 +454,23 @@
 
 	NSString * thePointName = pointName;
 	if (!pointName) {
-		thePointName = [self trackingAreaNameForMouseLocation];
-		// NSLog([NSString stringWithFormat:@"   ... corrected to %@", thePointName]);
+		if (self.currentDemoStep >= 0) {
+			// running demo
+			switch (self.currentDemoStep) {
+				case 1: thePointName = @"endPoint"; break;
+				case 2: case 3: thePointName = @"midPoint"; break;
+				case 4: thePointName = @"endHandle"; break;
+				case 5: thePointName = @"midHandle"; break;
+				case 6: thePointName = @"widthHandle"; break;
+				case 7: thePointName = @"thickCornerHandle"; break;
+				case 9: case 10: thePointName = @"midPoint"; break;
+				default: break;
+			}
+		}
+		else {
+			thePointName = [self trackingAreaNameForMouseLocation];
+			//	 NSLog([NSString stringWithFormat:@"   ... corrected to %@", thePointName]);
+		}
 	}	
 	
 	if (thePointName) {
@@ -518,11 +480,11 @@
 		bP.lineCapStyle = NSRoundLineCapStyle;
 		bP.lineWidth = guideLineWidth;
 
-		NSImage * image;
+		// NSImage * image;
 		if (self.useCoreAnimation) {
 			// we want Core Animation - create image and draw there
-			image = [[NSImage alloc] initWithSize:self.frame.size];
-			[image lockFocus];
+			// image = [[NSImage alloc] initWithSize:self.frame.size];
+			// [image lockFocus];
 		}
 
 		[self.guideColor set];
@@ -686,14 +648,14 @@
 		
 		
 		if (self.useCoreAnimation) {
-			[image unlockFocus];
-			CGImageRef imageRef = [image cgImage];
+		//	[image unlockFocus];
+		//	CGImageRef imageRef = [image cgImage];
 			[CATransaction begin];
 			[CATransaction setValue:[NSNumber numberWithFloat:0.0f] forKey:kCATransactionAnimationDuration];
-			self.guideLayer.contents = (id) imageRef;
+		//	self.guideLayer.contents = (id) imageRef;
 			self.guideLayer.opacity = 1.0;
 			[CATransaction commit];
-			CGImageRelease(imageRef);
+		//	CGImageRelease(imageRef);
 		}
 
 	 }
@@ -738,6 +700,14 @@
 		image = [[NSImage alloc] initWithSize:self.frame.size];
 		[image lockFocus];
 	}
+	
+	/*
+	NSShadow * shadow = [[NSShadow alloc] init];
+	shadow.shadowOffset = NSMakeSize(1.0,-1.5);
+	shadow.shadowBlurRadius = 3.0;
+	shadow.shadowColor = [NSColor colorWithDeviceWhite:0.1 alpha:0.6];
+	[shadow set];
+	*/
 		
 	// Handles first...
 	//
@@ -771,6 +741,9 @@
 	[bP fill];
 	
 	if (self.theDocument.twoLines) {
+	/*	shadow.shadowBlurRadius = 4.5;
+		shadow.shadowOffset = NSMakeSize(-1, 1.5);
+		[shadow set]; */
 		// handles for thickness and thickened corner
 		CGFloat lineHandleWidth = 12.0;
 		CGFloat lineHandleThickness = 6.0;
@@ -819,6 +792,15 @@
 		[bP appendBezierPath:bP2];
 		[handleColor set];
 		[bP stroke];
+		
+		// a little bit of structure
+		[[NSColor colorWithDeviceRed:0.0 green:0.88 blue:0.0 alpha:1.0] set];
+		bP.lineWidth = 3.0;
+		[bP stroke];
+		[[NSColor colorWithDeviceRed:0.3 green:0.85 blue:0.0 alpha:1.0] set];
+		bP.lineWidth = 1.0;
+		[bP stroke];
+		
 	}
 	
 
@@ -841,7 +823,8 @@
 	self.midPointTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"midPoint" forKey:@"name"]];
 	[self addTrackingArea:self.midPointTA];
 	
-	if (self.clickedPointName && self.theDocument.twoMidPoints) {
+	if (( [self.clickedPointName isEqualTo:@"midPoint"] && self.theDocument.twoMidPoints)
+			|| self.currentDemoStep == 2 || self.currentDemoStep == 3 || self.currentDemoStep == 9 || self.currentDemoStep == 10) {
 		// we are dragging with two mid points -> draw the oder mid point as well
 		[bP moveToPoint:NSMakePoint(self.otherMidPoint.x + 0.5 * pSize, self.otherMidPoint.y)];
 		[bP lineToPoint:NSMakePoint(self.otherMidPoint.x, self.otherMidPoint.y + 0.5 * pSize)];
@@ -914,6 +897,34 @@
 	if (theDocument.showHandles != 0) {
 		self.handleLayer.opacity = 1.0;
 		[self drawGuidesForPoint:self.clickedPointName];
+/*		NSString * pointName = self.clickedPointName;
+		if (!pointName) { pointName = [self trackingAreaNameForMouseLocation]; }
+		if (pointName) {
+			self.previousGuidesPoint = pointName;
+			self.guideLayer.opacity = 1.0;
+			[self.guideLayer setNeedsDisplay];
+		} 
+		else {
+			NSLog(@"drawRect: hide guide layer");
+
+			NSImage * image = [[NSImage alloc] initWithSize:self.frame.size];
+			[image lockFocus];
+			[self drawGuidesForPoint:self.previousGuidesPoint];
+			NSRectFill(NSMakeRect(0,0,10,10));
+			[image unlockFocus];
+			[CATransaction begin];
+			[CATransaction setValue:[NSNumber numberWithFloat:0.0f] forKey:kCATransactionAnimationDuration];
+			CGImageRef imageRef = [image cgImage];
+			self.guideLayer.contents = (id) imageRef;
+			CGImageRelease(imageRef);
+			[CATransaction commit];
+
+			[CATransaction begin];
+			[CATransaction setValue:[NSNumber numberWithFloat:0.5f] forKey:kCATransactionAnimationDuration];
+			self.guideLayer.opacity = 0.0;
+			[CATransaction commit];
+		}
+*/	
 		if (theDocument.showHandles == 2) {
 			[thePath drawPointsInColor:[NSColor grayColor] withHandlesInColor:[NSColor grayColor]];
 		}
@@ -922,6 +933,8 @@
 	else {
 		self.handleLayer.opacity = 0.0;
 	}
+	
+	// Window resize widget
 }
 
 
@@ -1007,7 +1020,8 @@
 }
 
 - (BOOL) useCoreAnimation {
-	return [[[NSUserDefaults standardUserDefaults] valueForKey:@"useCoreAnimation"]boolValue];
+	return [[[NSUserDefaults standardUserDefaults] valueForKey:@"useCoreAnimation"] boolValue];
+	// return YES;
 }
 
 - (NSColor *) guideColor {
@@ -1166,7 +1180,6 @@
 	pt.y = origin.y + sin(polar.phi) * polar.r;
 	return pt;
 }
-
 
 
 @end

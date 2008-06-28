@@ -8,9 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
-#import "MyDocument.h" 
+#include "MyDocument.h" 
 
 #define ESSYMMETRYPBOARDTYPE @"ESSSymmetryPboardType"
+#define MAXCORNERNUMBER 37
 
 typedef struct {
 	CGFloat r;
@@ -29,6 +30,7 @@ typedef struct {
 	CALayer * guideLayer;
 	CALayer * handleLayer;
 	NSString * clickedPointName;
+	NSString * previousGuidesPoint;
 	
 	NSTrackingArea * endPointTA;
 	NSTrackingArea * endHandleTA;
@@ -40,6 +42,12 @@ typedef struct {
 	NSDictionary * oldDocumentValues;
 	
 	CALayer * introLayer;
+	CALayer * demoLayer;
+	NSInteger currentDemoStep;
+	NSDictionary * preAnimationDocumentValues;
+	NSArray * lastAnimations;
+
+	NSArray * stringsFromFile;
 }
 
 @property (retain) MyDocument * theDocument;
@@ -50,6 +58,7 @@ typedef struct {
 @property (retain) CALayer * guideLayer;
 @property (retain) CALayer * handleLayer;
 @property (retain) NSString * clickedPointName;
+@property (retain) NSString * previousGuidesPoint;
 @property (retain) NSTrackingArea * endPointTA;
 @property (retain) NSTrackingArea * endHandleTA;
 @property (retain) NSTrackingArea * midPointTA;
@@ -57,8 +66,12 @@ typedef struct {
 @property (retain) NSTrackingArea * widthHandleTA;
 @property (retain) NSTrackingArea * thickCornerHandleTA;
 @property (retain) NSDictionary * oldDocumentValues;
-@property (retain) CALayer * introLayer;
 
+@property (retain) CALayer * introLayer;
+@property (retain) CALayer * demoLayer;
+@property NSInteger currentDemoStep;
+@property (retain) NSDictionary * preAnimationDocumentValues;
+@property (retain) NSArray * lastAnimations;
 
 @property (readonly) CGFloat shapeRadius;
 @property (readonly) CGFloat canvasRadius;
@@ -75,7 +88,6 @@ typedef struct {
 @property (readonly) BOOL useCoreAnimation;
 @property (readonly) NSColor * guideColor;
 
-- (void) intro;
 
 - (NSString*) trackingAreaNameForMouseLocation;
 - (void) drawHandlesForFundamentalPath;

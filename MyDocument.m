@@ -8,6 +8,8 @@
 
 #import "MyDocument.h"
 #import "NSBezierPath+ESSymmetry.h"
+#import "ESSymmetryView+Intro.h"
+#import "ESSymmetryAnimation.h"
 
 @implementation MyDocument
 
@@ -103,6 +105,12 @@
 }
 
 
+- (void) intro {
+	[(ESSymmetryView*) myView intro];
+}
+
+
+
 #pragma mark DOCUMENT DELEGATE METHODS
 
 - (NSString *)windowNibName
@@ -179,6 +187,7 @@
 	trigger redraw when one of our values is changed
 */
  - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+//	NSLog(@"[MyDocument observeValueForKeyPath: %@ ...]", keyPath);
 	 if ([object isEqual:self]) {
 		 [self.myView setNeedsDisplay:YES];
 		 if ([keyPath isEqualToString:@"strokeThickness"]) {
@@ -199,6 +208,27 @@
 }
 
 
+
+#pragma mark ACCESSORS
+
+- (BOOL) runningDemo {
+	return (((ESSymmetryView*)self.myView).currentDemoStep >= 0);
+}
+
+- (CGFloat) normalisePolarAngle: (CGFloat) phi {
+	CGFloat f = phi;
+	while (f < 0 ) { f = f + 2.0 * pi; }
+	while (f > 2.0 * pi ) { f = f - 2.0 * pi; }
+	return f;
+}
+
+- (void) setStraightTangentDirection: (CGFloat) sTD {
+	straightTangentDirection = [self normalisePolarAngle: sTD];
+}
+
+- (void) setDiagonalTangentDirection: (CGFloat) dTD {
+	diagonalTangentDirection = [self normalisePolarAngle: dTD];
+}
 
 
 #pragma mark PRINTING
@@ -229,15 +259,22 @@
 
 
 #pragma mark MENU BAR
+
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
 	if ([menuItem action] == @selector(setHandles:)) {
-		if ([menuItem tag] == self.showHandles) {
-			[menuItem setState:NSOnState];
+		if (self.runningDemo) {
+			// cannot change handle setting while demo is running
+			return NO;
 		}
 		else {
-			[menuItem setState:NSOffState];
+			if ([menuItem tag] == self.showHandles) {
+				[menuItem setState:NSOnState];
+			}
+			else {
+				[menuItem setState:NSOffState];
+			}
+			return YES; // menu item is always active
 		}
-		return YES; // menu item is always active
 	}
 	else if ([menuItem action] == @selector(twoMiddlePoints:)) {
 		[menuItem setState:self.twoMidPoints];
@@ -328,6 +365,109 @@
 }
 
 - (IBAction) bogusAction: (id) sender {
+}
+
+
+
+- (IBAction) animate: (id) sender {
+	NSArray * keys = [self animationKeys];
+	NSMutableArray * animationArray = [NSMutableArray arrayWithCapacity:[keys count]];
+	for (NSString * key in keys) {
+		ESSymmetryAnimation * animation = [self randomAnimationForKey:key withStartValue:[[self valueForKey:key] floatValue]];
+		[animationArray addObject:animation];
+		[animation startAnimation];
+	}
+}
+
+
+- (IBAction) animateFullScreen: (id) sender {
+	
+}
+
+- (IBAction) stopAnimation: (id) sender {
+	
+}
+
+
+#pragma mark ANIMATION
+
+
+- (NSArray*) animationKeys {
+	return [NSArray arrayWithObjects: @"size", @"cornerCount", @"cornerFraction", @"straightTangentLength", @"straightTangentDirection", @"diagonalTangentLength", @"diagonalTangentDirection", @"midPointsDistance", @"thickness", @"thickenedCorner", nil];
+	// twoLines, strokeThickness left out
+}
+
+
+- (CGFloat) randomFloatBetween: (CGFloat) min and: (CGFloat) max {
+	double time = round((double)[NSDate timeIntervalSinceReferenceDate]);
+	CGFloat r = randomx(&time) / (scalb(31,1)-1);
+	r = r * (max - min) + min;
+	return r;	
+}
+
+
+- (ESSymmetryAnimation *) randomAnimationForKey: (NSString *) key withStartValue:(CGFloat) startValue targetValueBetween:(CGFloat) min and: (CGFloat) max {
+	CGFloat duration = [self randomFloatBetween: 2.0 and: 10.0];
+	CGFloat fraction = duration / 10.0 / 2.0;
+	CGFloat targetValue = [self randomFloatBetween: min + (max - min) / fraction and: max - (max - min)/ fraction];
+	
+	ESSymmetryAnimation * animation;
+	animation = [[ESSymmetryAnimation alloc] initWithDuration:duration animationCurve:NSAnimationEaseInOut];
+	animation.valueObject = self;
+	animation.delegate = self;
+	animation.animationBlockingMode = NSAnimationNonblocking;
+	animation.startValues = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:startValue] forKey:key];
+	animation.targetValues = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:targetValue] forKey:key];
+	
+	return animation;
+}
+
+
+- (ESSymmetryAnimation *) randomAnimationForKey: (NSString *) key withStartValue: (CGFloat) startValue {
+	ESSymmetryAnimation * animation = nil;
+	
+	if ([key isEqualToString:@"size"]) {
+		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:0.0 and:1.0];
+	}
+	else if ([key isEqualToString:@"cornerCount"]) {
+		NSInteger minCorners = MAX(round( self.cornerCount - MAX(cornerCount / 10, 1.0)), 2.0);
+		NSInteger maxCorners = MIN(round( self.cornerCount + MAX(cornerCount / 10, 1.0)), MAXCORNERNUMBER);
+		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:minCorners and:maxCorners];	
+	}
+	else if ([key isEqualToString:@"cornerFraction"]) {
+		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:0.0 and:1.41];
+	}
+	else if ([key isEqualToString:@"straightTangentLength"]) {
+		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:0.0 and:1.0];
+	}
+	else if ([key isEqualToString:@"straightTangentDirection"]) {
+		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:startValue - 3.0 * pi and:startValue + 3.0 * pi];
+	}
+	else if ([key isEqualToString:@"diagonalTangentLength"]) {
+		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:0.0 and:1.0];
+	}
+	else if ([key isEqualToString:@"diagonalTangentDirection"]) {
+		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:startValue - 3.0 * pi and:startValue + 3.0 * pi];
+	}
+	else if ([key isEqualToString:@"midPointsDistance"]) {
+		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:-1.0 and:1.0];
+	}
+	else if ([key isEqualToString:@"thickness"]) {
+		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:-1.0 and:1.0];
+	}
+	else if ([key isEqualToString:@"thickenedCorner"]) {
+		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:-1.0 and:1.0];
+	}
+	
+	return animation;
+}
+
+
+
+
+- (void)animationDidEnd:(NSAnimation *)animation {
+	// NSLog(@"[MyDocument animationDidEnd:]");
+	
 }
 
 

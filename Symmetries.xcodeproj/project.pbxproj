@@ -28,6 +28,9 @@
 		6C3BE82B0DE8268D0064BCE7 /* NSBezierPath+Points.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+Points.m */; };
 		6C3FE2190DE9762100EAB959 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C3FE2180DE9762100EAB959 /* QuartzCore.framework */; };
 		6C5935040DEA0441000B3428 /* NSImage+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5935030DEA0441000B3428 /* NSImage+Extras.m */; };
+		6C5A79BB0E11B5D200A3D6E1 /* ESSymmetryAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5A79BA0E11B5D200A3D6E1 /* ESSymmetryAnimation.m */; };
+		6C5A7ABD0E15419800A3D6E1 /* ESSymmetryView+Intro.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5A7ABC0E15419800A3D6E1 /* ESSymmetryView+Intro.m */; };
+		6C5A7AE60E1544DD00A3D6E1 /* AttributedStrings.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6C5A7AE40E1544DD00A3D6E1 /* AttributedStrings.rtf */; };
 		6C73CF3A0E0B079C00749440 /* NSBezierPath+ESSymmetry.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */; };
 		6C82F99D0DF7614F005CF008 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C82F99C0DF7614F005CF008 /* AppDelegate.m */; };
 		6CBC479C0DEAE2610073B214 /* ESSymmetryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */; };
@@ -99,6 +102,11 @@
 		6C3FE2180DE9762100EAB959 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		6C5935030DEA0441000B3428 /* NSImage+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Extras.m"; sourceTree = "<group>"; };
 		6C59350D0DEA0449000B3428 /* NSImage+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+Extras.h"; sourceTree = "<group>"; };
+		6C5A79B90E11B5D200A3D6E1 /* ESSymmetryAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryAnimation.h; sourceTree = "<group>"; };
+		6C5A79BA0E11B5D200A3D6E1 /* ESSymmetryAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryAnimation.m; sourceTree = "<group>"; };
+		6C5A7ABB0E15419800A3D6E1 /* ESSymmetryView+Intro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ESSymmetryView+Intro.h"; sourceTree = "<group>"; };
+		6C5A7ABC0E15419800A3D6E1 /* ESSymmetryView+Intro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ESSymmetryView+Intro.m"; sourceTree = "<group>"; };
+		6C5A7AE50E1544DD00A3D6E1 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/AttributedStrings.rtf; sourceTree = "<group>"; };
 		6C73CF380E0B079C00749440 /* NSBezierPath+ESSymmetry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+ESSymmetry.h"; sourceTree = "<group>"; };
 		6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+ESSymmetry.m"; sourceTree = "<group>"; };
 		6C82F99B0DF7614F005CF008 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -173,10 +181,14 @@
 				2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */,
 				6C0012A70DE6244B0016ABB5 /* ESSymmetryView.h */,
 				6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */,
+				6C5A7ABB0E15419800A3D6E1 /* ESSymmetryView+Intro.h */,
+				6C5A7ABC0E15419800A3D6E1 /* ESSymmetryView+Intro.m */,
 				6C73CF380E0B079C00749440 /* NSBezierPath+ESSymmetry.h */,
 				6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */,
 				6C3BE8290DE8268D0064BCE7 /* NSBezierPath+Points.h */,
 				6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+Points.m */,
+				6C5A79B90E11B5D200A3D6E1 /* ESSymmetryAnimation.h */,
+				6C5A79BA0E11B5D200A3D6E1 /* ESSymmetryAnimation.m */,
 				6C5935030DEA0441000B3428 /* NSImage+Extras.m */,
 				6C59350D0DEA0449000B3428 /* NSImage+Extras.h */,
 			);
@@ -195,6 +207,7 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6C5A7AE40E1544DD00A3D6E1 /* AttributedStrings.rtf */,
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
@@ -322,6 +335,7 @@
 				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
 				1DDD582C0DA1D0D100B32029 /* MyDocument.xib in Resources */,
 				1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */,
+				6C5A7AE60E1544DD00A3D6E1 /* AttributedStrings.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,6 +382,8 @@
 				6CBC479C0DEAE2610073B214 /* ESSymmetryView.m in Sources */,
 				6C82F99D0DF7614F005CF008 /* AppDelegate.m in Sources */,
 				6C73CF3A0E0B079C00749440 /* NSBezierPath+ESSymmetry.m in Sources */,
+				6C5A79BB0E11B5D200A3D6E1 /* ESSymmetryAnimation.m in Sources */,
+				6C5A7ABD0E15419800A3D6E1 /* ESSymmetryView+Intro.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +428,14 @@
 				2A37F4BAFDCFA73011CA2CEA /* English */,
 			);
 			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		6C5A7AE40E1544DD00A3D6E1 /* AttributedStrings.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6C5A7AE50E1544DD00A3D6E1 /* English */,
+			);
+			name = AttributedStrings.rtf;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

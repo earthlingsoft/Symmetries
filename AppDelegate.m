@@ -7,17 +7,24 @@
 //
 
 #import "AppDelegate.h"
-
+#import "MyDocument.h"
+#import "ESSymmetryView.h"
+#import "ESSymmetryView+Intro.h"
 
 @implementation AppDelegate
+
 - (void)applicationWillFinishLaunching:(NSNotification *)aNotification {
 	[[NSDocumentController sharedDocumentController] setAutosavingDelay:10.0];
 }
 
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+	[(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] intro];
+}
 
 - (NSDocument*) firstDocument {
 	return (NSDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
 }
+
 
 
 
@@ -40,23 +47,58 @@
 
 #pragma mark ACTIONS & MENUS
 
-- (IBAction) setCoreAnimation:(id) sender {
-	self.useCoreAnimation = !self.useCoreAnimation;
-	[sender setState: (self.useCoreAnimation) ? (NSOnState) : (NSOffState)];
-}
-
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
 	if ([menuItem tag] == 100) {
-		NSLog(@"AppDelegate -validateMenuItem: slider");
+		// NSLog(@"AppDelegate -validateMenuItem: slider");
 		// menu item with slider
 		NSSlider * slider = [menuItem.view.subviews objectAtIndex:0];
 		[slider setEnabled:NO];
 		[slider setFloatValue:0.0];
 		return NO;
 	}	
+	else if ([menuItem action] == @selector(demo:)) {
+		// demo menu item, change text to reflect current state
+		if (![self demoIsRunning]) {
+			menuItem.title = NSLocalizedString(@"Start Demo", @"Show Demo");
+			menuItem.keyEquivalent = @"";
+		}
+		else {
+			menuItem.title = NSLocalizedString(@"Stop Demo", @"Stop Demo");
+		}
+	}
 	return [NSApp validateMenuItem:menuItem];
 }
+
+
+- (BOOL) demoIsRunning {
+	BOOL isRunning = NO;
+
+	for (MyDocument * doc in [[NSDocumentController sharedDocumentController] documents]) {
+		isRunning = isRunning || doc.runningDemo;
+	}
+	NSLog(@"[AppDelegate demoIsRunning] -> %b", isRunning);
+
+	return isRunning;
+}
+
+
+- (IBAction) demo:(id) sender {
+	NSDocumentController * dC = [NSDocumentController sharedDocumentController];
+	if ([sender isKindOfClass:[NSMenuItem class]]) {
+		((NSMenuItem *) sender).keyEquivalent = @".";
+		((NSMenuItem *) sender).keyEquivalentModifierMask = NSCommandKeyMask;
+	}
+	
+	if (dC.documents.count == 0 ) {
+		// create a document if there is none
+		[dC openUntitledDocumentAndDisplay:YES error:NULL];
+	}
+		
+	[(ESSymmetryView*)((MyDocument*)dC.currentDocument).myView startDemo:sender];
+}
+
+
 
 - (IBAction) bogusAction: (id) sender {
 }

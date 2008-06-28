@@ -14,9 +14,11 @@
 }
 
 @property (readonly) NSDocument * firstDocument;
+@property (readonly) BOOL demoIsRunning;
 @property (readwrite) BOOL useCoreAnimation;
 
-- (IBAction) setCoreAnimation: (id) sender;
+// - (IBAction) setCoreAnimation:(id) sender;
+- (IBAction) demo:(id) sender;
 - (void) readme:(id) sender;
 - (NSString*) myVersionString;
 
