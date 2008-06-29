@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="106"/>
+			<integer value="507"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -502,7 +502,7 @@
 									<reference key="NSMixedImage" ref="310636482"/>
 									<int key="NSTag">2</int>
 								</object>
-								<object class="NSMenuItem" id="60434689">
+								<object class="NSMenuItem" id="556859469">
 									<reference key="NSMenu" ref="413802386"/>
 									<bool key="NSIsDisabled">YES</bool>
 									<bool key="NSIsSeparator">YES</bool>
@@ -512,19 +512,10 @@
 									<reference key="NSOnImage" ref="1033313550"/>
 									<reference key="NSMixedImage" ref="310636482"/>
 								</object>
-								<object class="NSMenuItem" id="916701475">
+								<object class="NSMenuItem" id="354762611">
 									<reference key="NSMenu" ref="413802386"/>
 									<string key="NSTitle">Animate path</string>
 									<string key="NSKeyEquiv">g</string>
-									<int key="NSKeyEquivModMask">1048576</int>
-									<int key="NSMnemonicLoc">2147483647</int>
-									<reference key="NSOnImage" ref="1033313550"/>
-									<reference key="NSMixedImage" ref="310636482"/>
-								</object>
-								<object class="NSMenuItem" id="429446108">
-									<reference key="NSMenu" ref="413802386"/>
-									<string key="NSTitle">Present animated path</string>
-									<string key="NSKeyEquiv">f</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
 									<reference key="NSOnImage" ref="1033313550"/>
@@ -1067,17 +1058,9 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">animate:</string>
 						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="916701475"/>
+						<reference key="destination" ref="354762611"/>
 					</object>
 					<int key="connectionID">580</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">animateFullScreen:</string>
-						<reference key="source" ref="1014"/>
-						<reference key="destination" ref="429446108"/>
-					</object>
-					<int key="connectionID">581</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1579,9 +1562,8 @@
 							<reference ref="1043833806"/>
 							<reference ref="402606592"/>
 							<reference ref="636588218"/>
-							<reference ref="60434689"/>
-							<reference ref="916701475"/>
-							<reference ref="429446108"/>
+							<reference ref="556859469"/>
+							<reference ref="354762611"/>
 						</object>
 						<reference key="parent" ref="349275861"/>
 					</object>
@@ -1628,17 +1610,12 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">575</int>
-						<reference key="object" ref="60434689"/>
+						<reference key="object" ref="556859469"/>
 						<reference key="parent" ref="413802386"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">576</int>
-						<reference key="object" ref="916701475"/>
-						<reference key="parent" ref="413802386"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">577</int>
-						<reference key="object" ref="429446108"/>
+						<reference key="object" ref="354762611"/>
 						<reference key="parent" ref="413802386"/>
 					</object>
 				</object>
@@ -1766,7 +1743,6 @@
 					<string>57.editorWindowContentRectSynchronizationRect</string>
 					<string>575.IBPluginDependency</string>
 					<string>576.IBPluginDependency</string>
-					<string>577.IBPluginDependency</string>
 					<string>58.IBPluginDependency</string>
 					<string>58.ImportedFromIB2</string>
 					<string>72.IBPluginDependency</string>
@@ -1897,7 +1873,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{294, 611}, {232, 113}}</string>
+					<string>{{294, 631}, {207, 93}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{475, 832}, {234, 43}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1915,7 +1891,6 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
 					<string>{{23, 794}, {245, 183}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

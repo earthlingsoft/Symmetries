@@ -7,20 +7,24 @@
 //
 
 #import "MyDocument.h"
+#import "MyDocument+Animation.h"
 #import "NSBezierPath+ESSymmetry.h"
 #import "ESSymmetryView+Intro.h"
-#import "ESSymmetryAnimation.h"
+#import "ESSymmetryTotalAnimation.h"
+
 
 @implementation MyDocument
 
-@synthesize size, twoMidPoints, twoLines, cornerFraction, straightTangentLength, straightTangentDirection, diagonalTangentLength, diagonalTangentDirection, midPointsDistance, thickness, thickenedCorner, backgroundColor, strokeColor, fillColor, strokeThickness, cornerCount, showHandles, myView, strokeThicknessRecentChange, previousStrokeThickness;
-
+@synthesize twoMidPoints, twoLines, backgroundColor, strokeColor, fillColor, strokeThickness, showHandles, myView, strokeThicknessRecentChange, previousStrokeThickness, totalAnimation;
+@dynamic cornerCount, size, cornerFraction, straightTangentLength, straightTangentDirection, diagonalTangentLength, diagonalTangentDirection, midPointsDistance, thickness;
 
 # pragma mark HOUSEKEEPING
 
 - (id)init
 {
     return [self initWithDictionary: [self initialValues]];
+	unsigned int time = round((double)[NSDate timeIntervalSinceReferenceDate]);
+	srandom(time);
 }
 
 
@@ -63,6 +67,13 @@
 			nil];
 }
 
+
+- (void) close {
+	NSLog(@"[MyDocument close]");
+	[self stopAnimation:self];
+	[(ESSymmetryView*) self.myView endDemo:self];
+	[super close];
+}
 
 
 - (NSDictionary*) dictionary {
@@ -198,23 +209,149 @@
 
 
 
-#pragma mark PASTEBOARDS
-
-- (void) copy: (id) sender {
-	NSData * pdfData = [NSBezierPath PDFDataForDictionary:[self dictionary]];
-	NSPasteboard * pb = [NSPasteboard generalPasteboard];
-	[pb declareTypes:[NSArray arrayWithObjects: NSPDFPboardType, nil] owner:self];
-	[pb setData:pdfData forType:NSPDFPboardType];
-}
-
-
-
 #pragma mark ACCESSORS
 
 - (BOOL) runningDemo {
 	return (((ESSymmetryView*)self.myView).currentDemoStep >= 0);
 }
 
+- (BOOL) runningAnimation {
+	return [self.totalAnimation isAnimating];
+}
+
+
+/*
+	Our main document values.
+	Try to normalise / sanitise them a bit before setting.
+	Also tell animations about the changes, so they can pick up the changes.
+*/
+
+
+- (NSUInteger) cornerCount {
+	return cornerCount;
+}
+
+- (void) setCornerCount: (NSUInteger) n {
+	cornerCount = MAX(MIN(n, 61), 0);
+	if (self.runningAnimation){
+//		[self.totalAnimation addProperty:@"cornerCount"];
+	}	
+}
+
+
+- (CGFloat) size {
+	return size;
+}
+
+- (void) setSize: (CGFloat) s {
+	size = MAX(MIN(s, 1.41), 0.0);
+	if (self.runningAnimation){
+//		[self.totalAnimation addProperty:@"size"];
+	}	
+}
+
+
+- (CGFloat) cornerFraction {
+	return cornerFraction;
+}
+
+- (void) setCornerFraction: (CGFloat) cF {
+	cornerFraction = MAX(MIN(cF, 2), -2);
+	if (self.runningAnimation){
+//		[self.totalAnimation addProperty:@"cornerFraction"];
+	}	
+}
+
+
+- (CGFloat) straightTangentLength {
+	return straightTangentLength;
+}
+
+- (void) setStraightTangentLength: (CGFloat) sTL {
+	straightTangentLength = MAX(MIN(sTL, 2.0), 0.0);
+	if (self.runningAnimation){
+//		[self.totalAnimation addProperty:@"straightTangentLength"];
+	}	
+}
+
+
+- (CGFloat) straightTangentDirection {
+	return straightTangentDirection;
+}
+
+- (void) setStraightTangentDirection: (CGFloat) sTD {
+	straightTangentDirection = [self normalisePolarAngle: sTD];
+	if (self.runningAnimation){
+//		[self.totalAnimation addProperty:@"straightTangentDirection"];
+	}	
+}
+
+
+- (CGFloat) diagonalTangentLength {
+	return diagonalTangentLength;
+}
+
+- (void) setDiagonalTangentLength: (CGFloat) sTL {
+	diagonalTangentLength = MAX(MIN(sTL, 2.0), 0.0);
+	if (self.runningAnimation){
+//		[self.totalAnimation addProperty:@"diagonalTangentLength"];
+	}	
+}
+
+
+- (CGFloat) diagonalTangentDirection {
+	return diagonalTangentDirection;
+}
+
+- (void) setDiagonalTangentDirection: (CGFloat) dTD {
+	diagonalTangentDirection = [self normalisePolarAngle: dTD];
+	if (self.runningAnimation){
+//		[self.totalAnimation addProperty:@"diagonalTangentDirection"];
+	}	
+}
+
+
+- (CGFloat) midPointsDistance {
+	return midPointsDistance;
+}
+
+- (void) setMidPointsDistance: (CGFloat) mPD {
+	midPointsDistance = MAX(MIN(mPD, 1.0), -1.0);
+	if (self.runningAnimation){
+//		[self.totalAnimation addProperty:@"midPointsDistance"];
+	}	
+}
+
+
+- (CGFloat) thickness {
+	return thickness;
+}
+
+- (void) setThickness: (CGFloat) t {
+	thickness = MAX(MIN(t, 1.0), -1.0);
+	if (self.runningAnimation){
+//		[self.totalAnimation addProperty:@"thickness"];
+	}	
+}
+
+- (CGFloat) thickenedCorner {
+	return thickenedCorner;
+}
+
+- (void) setThickenedCorner: (CGFloat) tC {
+	thickenedCorner = MAX(MIN(tC, 1.0), -1.0);
+	if (self.runningAnimation){
+//		[self.totalAnimation addProperty:@"thickenedCorner"];
+	}	
+}
+
+
+
+
+/*
+	Make sure that 0 <= phi <= 2pi
+	This will be horrible for large phi
+*/ 
 - (CGFloat) normalisePolarAngle: (CGFloat) phi {
 	CGFloat f = phi;
 	while (f < 0 ) { f = f + 2.0 * pi; }
@@ -222,18 +359,16 @@
 	return f;
 }
 
-- (void) setStraightTangentDirection: (CGFloat) sTD {
-	straightTangentDirection = [self normalisePolarAngle: sTD];
-}
-
-- (void) setDiagonalTangentDirection: (CGFloat) dTD {
-	diagonalTangentDirection = [self normalisePolarAngle: dTD];
-}
-
 
 #pragma mark PRINTING
 
 - (void)printDocumentUsingPrintPanel:(BOOL)uiFlag {
+	NSPrintInfo * pI = [self printInfo];
+	[pI setHorizontallyCentered:YES];
+	[pI setVerticallyCentered:YES];
+	[pI setHorizontalPagination:NSFitPagination];
+	[pI setVerticalPagination:NSFitPagination];
+	
 	NSPrintOperation *op = [NSPrintOperation printOperationWithView:myView printInfo:[self printInfo]];
 	[op setShowPanels:uiFlag];
 	[op runOperationModalForWindow:[self windowForSheet] delegate:nil didRunSelector:NULL contextInfo:NULL];
@@ -254,6 +389,19 @@
 	if (result == NSOKButton) [self setPrintInfo:tempPrintInfo];
 	[tempPrintInfo release];
 }
+
+
+
+
+#pragma mark PASTEBOARDS
+
+- (void) copy: (id) sender {
+	NSData * pdfData = [NSBezierPath PDFDataForDictionary:[self dictionary]];
+	NSPasteboard * pb = [NSPasteboard generalPasteboard];
+	[pb declareTypes:[NSArray arrayWithObjects: NSPDFPboardType, nil] owner:self];
+	[pb setData:pdfData forType:NSPDFPboardType];
+}
+
 
 
 
@@ -290,6 +438,13 @@
 		[slider setFloatValue:self.strokeThickness];
 		menuItem.menu.delegate = self; // need this to know when the menu has closed
 	}
+	else if ([menuItem action] == @selector(animate:)) {
+		menuItem.title = NSLocalizedString(@"Animate Path", @"Animate Path");
+	}
+	else if ([menuItem action] == @selector(stopAnimation:)) {
+		menuItem.title = NSLocalizedString(@"Stop Animation", @"Stop Animation");
+	}			
+	
 	return [super validateMenuItem:menuItem];
 }
 
@@ -317,16 +472,16 @@
 	}		
 }
 
+
 - (IBAction) exportAsPDF: (id) sender {
 	if ([sender isKindOfClass:[NSMenuItem class]]) {
 		NSSavePanel * savePanel = [NSSavePanel savePanel];
 		savePanel.prompt = NSLocalizedString(@"Export", @"Export as PDF");
 		savePanel.requiredFileType = @"pdf";
 		[savePanel beginSheetForDirectory:nil file:nil modalForWindow:self.windowForSheet modalDelegate:self didEndSelector:@selector(exportSavePanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
-		
-		
 	}		
 }
+
 
 /*
 	return function for export sheet
@@ -356,7 +511,7 @@
 /*
  close undo group for strokeThickness change when menu closes
  */
-- (void)menuDidClose:(NSMenu *)menu {
+- (void) menuDidClose:(NSMenu *)menu {
 	// NSLog(@"MyDocument -menuDidClose:");
 	if(self.strokeThicknessRecentChange) {
 		[self.undoManager endUndoGrouping];
@@ -364,111 +519,8 @@
 	}
 }
 
+
 - (IBAction) bogusAction: (id) sender {
 }
-
-
-
-- (IBAction) animate: (id) sender {
-	NSArray * keys = [self animationKeys];
-	NSMutableArray * animationArray = [NSMutableArray arrayWithCapacity:[keys count]];
-	for (NSString * key in keys) {
-		ESSymmetryAnimation * animation = [self randomAnimationForKey:key withStartValue:[[self valueForKey:key] floatValue]];
-		[animationArray addObject:animation];
-		[animation startAnimation];
-	}
-}
-
-
-- (IBAction) animateFullScreen: (id) sender {
-	
-}
-
-- (IBAction) stopAnimation: (id) sender {
-	
-}
-
-
-#pragma mark ANIMATION
-
-
-- (NSArray*) animationKeys {
-	return [NSArray arrayWithObjects: @"size", @"cornerCount", @"cornerFraction", @"straightTangentLength", @"straightTangentDirection", @"diagonalTangentLength", @"diagonalTangentDirection", @"midPointsDistance", @"thickness", @"thickenedCorner", nil];
-	// twoLines, strokeThickness left out
-}
-
-
-- (CGFloat) randomFloatBetween: (CGFloat) min and: (CGFloat) max {
-	double time = round((double)[NSDate timeIntervalSinceReferenceDate]);
-	CGFloat r = randomx(&time) / (scalb(31,1)-1);
-	r = r * (max - min) + min;
-	return r;	
-}
-
-
-- (ESSymmetryAnimation *) randomAnimationForKey: (NSString *) key withStartValue:(CGFloat) startValue targetValueBetween:(CGFloat) min and: (CGFloat) max {
-	CGFloat duration = [self randomFloatBetween: 2.0 and: 10.0];
-	CGFloat fraction = duration / 10.0 / 2.0;
-	CGFloat targetValue = [self randomFloatBetween: min + (max - min) / fraction and: max - (max - min)/ fraction];
-	
-	ESSymmetryAnimation * animation;
-	animation = [[ESSymmetryAnimation alloc] initWithDuration:duration animationCurve:NSAnimationEaseInOut];
-	animation.valueObject = self;
-	animation.delegate = self;
-	animation.animationBlockingMode = NSAnimationNonblocking;
-	animation.startValues = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:startValue] forKey:key];
-	animation.targetValues = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:targetValue] forKey:key];
-	
-	return animation;
-}
-
-
-- (ESSymmetryAnimation *) randomAnimationForKey: (NSString *) key withStartValue: (CGFloat) startValue {
-	ESSymmetryAnimation * animation = nil;
-	
-	if ([key isEqualToString:@"size"]) {
-		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:0.0 and:1.0];
-	}
-	else if ([key isEqualToString:@"cornerCount"]) {
-		NSInteger minCorners = MAX(round( self.cornerCount - MAX(cornerCount / 10, 1.0)), 2.0);
-		NSInteger maxCorners = MIN(round( self.cornerCount + MAX(cornerCount / 10, 1.0)), MAXCORNERNUMBER);
-		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:minCorners and:maxCorners];	
-	}
-	else if ([key isEqualToString:@"cornerFraction"]) {
-		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:0.0 and:1.41];
-	}
-	else if ([key isEqualToString:@"straightTangentLength"]) {
-		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:0.0 and:1.0];
-	}
-	else if ([key isEqualToString:@"straightTangentDirection"]) {
-		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:startValue - 3.0 * pi and:startValue + 3.0 * pi];
-	}
-	else if ([key isEqualToString:@"diagonalTangentLength"]) {
-		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:0.0 and:1.0];
-	}
-	else if ([key isEqualToString:@"diagonalTangentDirection"]) {
-		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:startValue - 3.0 * pi and:startValue + 3.0 * pi];
-	}
-	else if ([key isEqualToString:@"midPointsDistance"]) {
-		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:-1.0 and:1.0];
-	}
-	else if ([key isEqualToString:@"thickness"]) {
-		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:-1.0 and:1.0];
-	}
-	else if ([key isEqualToString:@"thickenedCorner"]) {
-		animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:-1.0 and:1.0];
-	}
-	
-	return animation;
-}
-
-
-
-
-- (void)animationDidEnd:(NSAnimation *)animation {
-	// NSLog(@"[MyDocument animationDidEnd:]");
-	
-}
-
 
 @end

@@ -8,8 +8,10 @@
 
 
 #import <Cocoa/Cocoa.h>
-#import "ESSymmetryAnimation.h"
 
+#define MAXCORNERNUMBER 37
+
+@class ESSymmetryTotalAnimation;
 
 @interface MyDocument : NSDocument
 {
@@ -36,6 +38,8 @@
 	NSUInteger showHandles;
 	
 	IBOutlet NSView *  myView;
+	
+	ESSymmetryTotalAnimation * totalAnimation;
 } 
 
 @property 	CGFloat size;
@@ -58,6 +62,9 @@
 @property (retain) NSDate * strokeThicknessRecentChange;
 @property	NSUInteger showHandles;
 @property (retain) NSView * myView;
+
+@property (retain) ESSymmetryTotalAnimation * totalAnimation;
+
 @property (readonly) BOOL runningDemo;
 
 - (id) init;
@@ -76,20 +83,11 @@
 - (CGFloat) normalisePolarAngle: (CGFloat) phi;
 
 - (BOOL) validateMenuItem:(NSMenuItem *)menuItem;
+
 - (IBAction) setHandles:(id) sender;
 - (IBAction) twoMiddlePoints:(id) sender;
 - (IBAction) twoLines:(id) sender;
 - (IBAction) sliderMoved: (id) sender;
 - (IBAction) bogusAction: (id) sender;
-
-- (IBAction) animate:(id) sender;
-- (IBAction) animateFullScreen:(id) sender;
-- (IBAction) stopAnimation:(id) sender;
-
-- (NSArray*) animationKeys;
-- (CGFloat) randomFloatBetween: (CGFloat) min and:(CGFloat) max;
-- (ESSymmetryAnimation *) randomAnimationForKey:(NSString *) key withStartValue:(CGFloat) startValue targetValueBetween:(CGFloat) min and: (CGFloat) max;
-- (ESSymmetryAnimation *) randomAnimationForKey:(NSString *) key withStartValue:(CGFloat) startValue;
-
 
 @end

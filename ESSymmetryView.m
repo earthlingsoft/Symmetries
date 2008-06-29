@@ -11,6 +11,7 @@
 #import "NSBezierPath+ESSymmetry.h"
 #import "NSImage+Extras.h"
 #import "ESSymmetryAnimation.h"
+#import "ESSymmetryTotalAnimation.h"
 
 #define HANDLELINEWIDTH 1.5
 #define HANDLESIZE 4.0
@@ -56,10 +57,30 @@
 	//NSLog(@"framechange");
 	[CATransaction begin];
 	[CATransaction setValue:[NSNumber numberWithFloat:0.0] forKey:kCATransactionAnimationDuration];
-	self.guideLayer.bounds = NSRectToCGRect(self.bounds);
-	self.handleLayer.bounds = NSRectToCGRect(self.bounds);
-	self.introLayer.bounds = NSRectToCGRect(self.bounds);
-//	self.demoLayer.bounds = NSRectToCGRect(self.bounds);
+	
+	CGRect newBounds = NSRectToCGRect(self.bounds);
+	
+	self.guideLayer.bounds = newBounds;
+	self.handleLayer.bounds = newBounds;
+	self.introLayer.bounds = newBounds;
+	if (self.demoLayer) {
+		
+	self.demoLayer.position = CGPointMake(self.layer.bounds.size.width/2.0, self.layer.bounds.size.height/2.0);
+
+		//self.demoLayer.bounds = newBounds;
+		for (CALayer * layer in self.demoLayer.sublayers) {
+			
+			layer.bounds = newBounds;
+			NSInteger nr = [[[layer.name componentsSeparatedByString:@"-"] objectAtIndex:1] intValue];
+			if (nr < self.currentDemoStep) { layer.position = CGPointMake( -newBounds.size.width , 0.0); }
+			else if (nr > self.currentDemoStep) {layer.position = CGPointMake(newBounds.size.width, 0.0);}
+		}
+		
+		
+//		self.demoLayer.position = CGPointMake(0, 0);
+//		[self.demoLayer resizeSublayersWithOldSize:oldDemoSize];
+	}
+	
 	[CATransaction commit];
 	[self setNeedsDisplay:YES];
 }
@@ -76,7 +97,6 @@
 	self.wantsLayer = YES;
 	CALayer* mainLayer = self.layer;
 	mainLayer.name = @"mainLayer";
-//	mainLayer.delegate = self;
 	[mainLayer setNeedsDisplay];
 
 	// set up layer for extra drawing during interaction
@@ -88,7 +108,6 @@
 	// set up layer to display interaction guides for the user
 	newLayer = [CALayer layer];
 	newLayer.name = @"guideLayer";
-//	newLayer.delegate = self;
 	newLayer.opacity = 1.0;
 	newLayer.anchorPoint = CGPointMake(0.0, 0.0);
 	[self.mouseLayer addSublayer: newLayer];
@@ -118,33 +137,8 @@
 	
 	// negative value <==> no demo
 	self.currentDemoStep = -1;
-	
-/*	CABasicAnimation* animation = [CABasicAnimation animationWithKeyPath: @"delegate.theDocument.straightTangentDirection"];
-	animation.duration = 10.0;
-	animation.repeatCount = 20;
-	animation.fromValue = [NSNumber numberWithFloat:0.0];
-	animation.toValue = [NSNumber numberWithFloat:2.0 * pi];
-	[mainLayer addAnimation:animation forKey:@"angleAnimation"];
-	[self.theDocument addObserver:self forKeyPath:@"straightTangentDirection" options:NSKeyValueObservingOptionNew context:nil];
- */
-	
-//	[self intro];
 }	
 
-
-
-/*
-- (void) startRandomAnimation:(id)sender {
-	NSDictionary * startDict = self.theDocument.dictionary;
-	NSDictionary * targetDict = [NSDictionary dictionaryWithObjectsAndKeys:
-	[NSNumber numberWithFloat:MAX(MIN(fp.hself.theDocument + randomx(1.0)*0.4 -0.2, 0.8), 0.4) ], @"size",
-	[NSNumber numberWithFloat:MAX(MIN(fp.hself.theDocument + randomx(1.0)*0.4 -0.2, 0.1), 0.0) ], @"straightTangentLength",
-	[NSNumber numberWithFloat:MAX(MIN(fp.hself.theDocument + randomx(1.0)*0.4 -0.2, 0.8), 0.4) ], @"straightTangentDirection",
-	[NSNumber numberWithFloat:MAX(MIN(fp.hself.theDocument + randomx(1.0)*0.4 -0.2, 0.8), 0.4) ], @"diagona",
-	[NSNumber numberWithFloat:MAX(MIN(fp.hself.theDocument + randomx(1.0)*0.4 -0.2, 0.8), 0.4) ], @"size",
-	[NSNumber numberWithFloat:MAX(MIN(fp.hself.theDocument + randomx(1.0)*0.4 -0.2, 0.8), 0.4) ], @"size",
-}
-*/
 
 
 /*
@@ -250,7 +244,6 @@
 
 
 
-
 - (void) mouseDragged: (NSEvent*) event {
 	if (self.clickedPointName != nil) {
 		// we want to follow this click
@@ -263,9 +256,15 @@
 		
 		if ([TAName isEqualToString:@"endPoint"]) {
 			CGFloat length = LENGTH(mouseLocation) / self.canvasRadius;
-			theDocument.size = MIN(length, 1.0);
+			self.theDocument.size = MIN(length, 1.0);
+			
 			CGFloat safeXValue = MAX(MIN(mouseLocation.x / self.shapeRadius , 1.0), -1.0);
-			theDocument.cornerCount = MIN(round( 2 * pi / acos(safeXValue)), MAXCORNERNUMBER);
+			self.theDocument.cornerCount = MIN(round( 2 * pi / acos(safeXValue)), MAXCORNERNUMBER);
+	
+			if (self.theDocument.runningAnimation){
+				[self.theDocument.totalAnimation addProperty:@"cornerCount"];
+				[self.theDocument.totalAnimation addProperty:@"size"];
+			}	
 		}
 		else if ([TAName isEqualToString:@"endHandle"]) {
 			ESPolarPoint polar = [self polarPointForPoint: realMouseLocation origin: self.endPoint];		
@@ -292,6 +291,11 @@
 				}
 			}
 			self.theDocument.straightTangentDirection = straightTangentDirection;
+	
+			if (self.theDocument.runningAnimation){
+				[self.theDocument.totalAnimation addProperty:@"straightTangentDirection"];
+				[self.theDocument.totalAnimation addProperty:@"straightTangentLength"];
+			}				
 		}
 		else if ([TAName isEqualToString:@"midPoint"]) {
 			NSPoint midTangent = NSMakePoint(self.endPoint.x - self.startPoint.x, self.endPoint.y - self.startPoint.y);
@@ -310,14 +314,19 @@
 				}
 				self.theDocument.midPointsDistance = midPointsDistance;		
 			}
+
+			if (self.theDocument.runningAnimation){
+				[self.theDocument.totalAnimation addProperty:@"cornerFraction"];
+				[self.theDocument.totalAnimation addProperty:@"midPointsDistance"];
+			}				
 		}
 		else if ([TAName isEqualToString:@"midHandle"]) {
 			ESPolarPoint polar = [self polarPointForPoint: realMouseLocation origin: self.midPoint];
 			
 			NSPoint startToEndVector = NSMakePoint(self.endPoint.x - self.startPoint.x , self.endPoint.y - self.startPoint.y);
 			CGFloat startToEndDistance = LENGTH(startToEndVector);
-
-			theDocument.diagonalTangentLength = MAX(MIN(polar.r / startToEndDistance, 1.0), 0.0);
+			self.theDocument.diagonalTangentLength = MAX(MIN(polar.r / startToEndDistance, 1.0), 0.0);
+			
 			CGFloat diagonalTangentDirection = polar.phi - pi / theDocument.cornerCount + pi * 0.5;
 			if (stickyValues) {
 				if ( fabs(diagonalTangentDirection) < STICKYANGLE) {
@@ -333,7 +342,12 @@
 					diagonalTangentDirection = pi/2.0;
 				}
 			}
-			theDocument.diagonalTangentDirection = diagonalTangentDirection;
+			self.theDocument.diagonalTangentDirection = diagonalTangentDirection;
+
+			if (self.theDocument.runningAnimation){
+				[self.theDocument.totalAnimation addProperty:@"diagonalTangentLength"];
+				[self.theDocument.totalAnimation addProperty:@"diagonalTangentDirection"];
+			}				
 		}
 		else if ([TAName isEqualToString:@"widthHandle"]) {
 			ESPolarPoint endPolar = [self polarPointForPoint:self.endPoint origin:self.middle];
@@ -343,7 +357,11 @@
 				// we're on the wrong side of the origin => end value
 				thickness = 1.0;
 			}
-			theDocument.thickness = thickness;
+			self.theDocument.thickness = thickness;
+			
+			if (self.theDocument.runningAnimation){
+				[self.theDocument.totalAnimation addProperty:@"thickness"];
+			}				
 		}
 		else if ([TAName isEqualToString:@"thickCornerHandle"]) {
 			ESPolarPoint mousePolar = [self polarPointForPoint:realMouseLocation	origin:self.middle];
@@ -357,8 +375,11 @@
 				// we're on the wrong side of the origin => maximum value
 				thickenedCorner = 1.0;
 			}
-			theDocument.thickenedCorner =  thickenedCorner;			
-			//NSLog(@"%f", theDocument.thickenedCorner);
+			self.theDocument.thickenedCorner =  thickenedCorner;			
+			
+			if (self.theDocument.runningAnimation) {
+				[self.theDocument.totalAnimation addProperty:@"thickenedCorner"];
+			}				
 		}
 		else {
 			// err, we shouldn't be here
@@ -892,49 +913,51 @@
 	[theDocument.strokeColor set];
 	[thePath setLineWidth: theDocument.strokeThickness * self.canvasRadius / 10.0];
 	[thePath stroke];
-		
-	// draw handles and guides
-	if (theDocument.showHandles != 0) {
-		self.handleLayer.opacity = 1.0;
-		[self drawGuidesForPoint:self.clickedPointName];
-/*		NSString * pointName = self.clickedPointName;
-		if (!pointName) { pointName = [self trackingAreaNameForMouseLocation]; }
-		if (pointName) {
-			self.previousGuidesPoint = pointName;
-			self.guideLayer.opacity = 1.0;
-			[self.guideLayer setNeedsDisplay];
-		} 
-		else {
-			NSLog(@"drawRect: hide guide layer");
-
-			NSImage * image = [[NSImage alloc] initWithSize:self.frame.size];
-			[image lockFocus];
-			[self drawGuidesForPoint:self.previousGuidesPoint];
-			NSRectFill(NSMakeRect(0,0,10,10));
-			[image unlockFocus];
-			[CATransaction begin];
-			[CATransaction setValue:[NSNumber numberWithFloat:0.0f] forKey:kCATransactionAnimationDuration];
-			CGImageRef imageRef = [image cgImage];
-			self.guideLayer.contents = (id) imageRef;
-			CGImageRelease(imageRef);
-			[CATransaction commit];
-
-			[CATransaction begin];
-			[CATransaction setValue:[NSNumber numberWithFloat:0.5f] forKey:kCATransactionAnimationDuration];
-			self.guideLayer.opacity = 0.0;
-			[CATransaction commit];
-		}
-*/	
-		if (theDocument.showHandles == 2) {
-			[thePath drawPointsInColor:[NSColor grayColor] withHandlesInColor:[NSColor grayColor]];
-		}
-		[self drawHandlesForFundamentalPath];
-	}
-	else {
-		self.handleLayer.opacity = 0.0;
-	}
 	
-	// Window resize widget
+	
+	if ( [NSGraphicsContext currentContextDrawingToScreen] ) {
+		// draw handles and guides to the screen (only)
+		if (theDocument.showHandles != 0) {
+			self.handleLayer.opacity = 1.0;
+			[self drawGuidesForPoint:self.clickedPointName];
+	/*		NSString * pointName = self.clickedPointName;
+			if (!pointName) { pointName = [self trackingAreaNameForMouseLocation]; }
+			if (pointName) {
+				self.previousGuidesPoint = pointName;
+				self.guideLayer.opacity = 1.0;
+				[self.guideLayer setNeedsDisplay];
+			} 
+			else {
+				NSLog(@"drawRect: hide guide layer");
+
+				NSImage * image = [[NSImage alloc] initWithSize:self.frame.size];
+				[image lockFocus];
+				[self drawGuidesForPoint:self.previousGuidesPoint];
+				NSRectFill(NSMakeRect(0,0,10,10));
+				[image unlockFocus];
+				[CATransaction begin];
+				[CATransaction setValue:[NSNumber numberWithFloat:0.0f] forKey:kCATransactionAnimationDuration];
+				CGImageRef imageRef = [image cgImage];
+				self.guideLayer.contents = (id) imageRef;
+				CGImageRelease(imageRef);
+				[CATransaction commit];
+
+				[CATransaction begin];
+				[CATransaction setValue:[NSNumber numberWithFloat:0.5f] forKey:kCATransactionAnimationDuration];
+				self.guideLayer.opacity = 0.0;
+				[CATransaction commit];
+			}
+	*/	
+			if (theDocument.showHandles == 2) {
+				[thePath drawPointsInColor:[NSColor grayColor] withHandlesInColor:[NSColor grayColor]];
+			}
+			[self drawHandlesForFundamentalPath];
+		}
+		else {
+			self.handleLayer.opacity = 0.0;
+		}
+		// Window resize widget
+	}
 }
 
 

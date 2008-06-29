@@ -14,59 +14,8 @@
 #pragma mark INTRO
 
 - (void) intro {
-	NSLog(@"[ESSymmetryView intro]");
-	/*
-	NSString * welcomeText1 = NSLocalizedString(@"Welcome.", @"Welcome.");
-	NSString * welcomeText2 = NSLocalizedString(@"Click whatever looks clickable.", @"Click whatever looks clickable.");
-	NSString * welcomeText3 = NSLocalizedString(@"A Demo and Readme are hiding in the Help menu.", @"A Demo hides in the Help menu. And a Readme as well");	
-	
-	NSString * welcomeText = [NSString stringWithFormat:@"%@\n%@\n%@", welcomeText1, welcomeText2, welcomeText3];
-	
-	NSMutableAttributedString * aString = [[NSMutableAttributedString alloc] initWithString:welcomeText];
-	
-	NSMutableDictionary * textAttributes = [NSMutableDictionary dictionaryWithCapacity:3];
-	NSFont * font = [NSFont fontWithName:@"Lucida Grande Bold" size:64.0];
-	[textAttributes setObject:font forKey:NSFontAttributeName];
-	NSMutableParagraphStyle * myParagraphStyle = [[NSMutableParagraphStyle alloc] init];
-	[myParagraphStyle setAlignment: NSCenterTextAlignment];
-	[textAttributes setObject:myParagraphStyle forKey:NSParagraphStyleAttributeName];
-	[textAttributes setObject:[NSColor colorWithDeviceWhite:0.9 alpha:0.9] forKey:
-	 NSForegroundColorAttributeName];
-	*/
-	/*	NSShadow * shadow = [[NSShadow alloc] init];
-	 shadow.shadowColor = [NSColor whiteColor];
-	 shadow.shadowBlurRadius = 5.0;
-	 shadow.shadowOffset = NSMakeSize(2.0, -3.0);
-	 [textAttributes setObject:shadow forKey:NSShadowAttributeName];
-	 */	
-	/*
-	NSRange range = NSMakeRange(0, welcomeText1.length + 1);
-	[aString setAttributes:textAttributes range:range];
-	font = [NSFont fontWithName:@"Lucida Grande Bold" size: 26.0];
-	[textAttributes setObject:font forKey:NSFontAttributeName];
-	range = NSMakeRange(welcomeText1.length + 1, welcomeText2.length + 1);
-	[aString setAttributes:textAttributes range:range];
-	font = [NSFont fontWithName:@"Lucida Grande Bold" size: 16.0];
-	[textAttributes setObject:font forKey:NSFontAttributeName];
-	range = NSMakeRange(welcomeText1.length + 1 + welcomeText2.length + 1, welcomeText3.length);
-	[aString setAttributes:textAttributes range:range];
-	
-	NSImage * image = [[NSImage alloc] initWithSize:self.bounds.size];
-	[image lockFocus];
-	NSRect stringRect = NSMakeRect(32.0, 32.0, self.bounds.size.width - 64.0, 72.0 + 48.0 + 48.0);
-	NSBezierPath * bP = [NSBezierPath bezierPathWithRoundedRect:stringRect xRadius:15.0 yRadius:15.0];
-	[[NSColor colorWithDeviceWhite:0.3 alpha:0.8] set];
-	[bP fill];
-	[[NSColor colorWithDeviceWhite:0.1 alpha:0.9] set];
-	bP.lineWidth = 6.0;
-	[bP stroke];
-	stringRect.origin.y -= 16.0;
-	[aString drawInRect:stringRect];
-	[image unlockFocus];
-	
-	CGImageRef imageRef = [image cgImage];
-	*/
-	// self.introLayer.contents = (id) imageRef;
+	// NSLog(@"[ESSymmetryView intro]");
+
 	self.introLayer.opacity = 1.0;
 	[self.introLayer setNeedsDisplay];
 	
@@ -91,19 +40,6 @@
 	myAnimation.fillMode = kCAFillModeForwards;
 	[self.introLayer addAnimation:myAnimation forKey:@"textFadeOut"];
 	
-	/*	ESSymmetryAnimation * animation = [[ESSymmetryAnimation alloc] initWithDuration:0.4 animationCurve:NSAnimationEaseOut];
-	 animation.delegate = self.theDocument;
-	 animation.animationBlockingMode = NSAnimationNonblocking;
-	 animation.startValues = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:0.0] forKey:@"size"];
-	 animation.targetValues = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:0.75] forKey:@"size"];
-	 ESSymmetryAnimation * animation2 = [[ESSymmetryAnimation alloc] initWithDuration:0.05 animationCurve:NSAnimationEaseOut];
-	 animation2.delegate = self.theDocument;
-	 animation2.animationBlockingMode = NSAnimationNonblocking;
-	 animation2.startValues = animation.targetValues;
-	 animation2.targetValues = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:0.7] forKey:@"size"];
-	 [animation2 startWhenAnimation:animation reachesProgress:1.0];
-	 [animation startAnimation];
-	 */
 }
 
 
@@ -195,7 +131,7 @@
 		newLayer.name = @"demoLayer";
 		newLayer.delegate = self;
 		newLayer.opacity = 1.0;
-		newLayer.contentsGravity = kCAGravityBottom;
+		newLayer.contentsGravity = kCAGravityResize;
 		newLayer.position = CGPointMake(self.layer.bounds.size.width/2.0, self.layer.bounds.size.height/2.0);
 		[self.layer addSublayer: newLayer];
 		self.demoLayer = newLayer;
@@ -206,19 +142,20 @@
 			newLayer.delegate = self;
 			newLayer.opacity = 1.0;
 			newLayer.contentsGravity = kCAGravityBottom;
-			newLayer.needsDisplayOnBoundsChange = YES;
 			newLayer.bounds = NSRectToCGRect(self.bounds);
 			newLayer.position = CGPointMake( self.layer.bounds.size.width, 0.0);
+			[newLayer setNeedsDisplay];
+			
+			CAConstraint * constraint;
+			constraint = [CAConstraint constraintWithAttribute:kCAConstraintMidX relativeTo:@"superlayer" attribute:kCAConstraintMidX];
+			[newLayer addConstraint:constraint];
+			constraint = [CAConstraint constraintWithAttribute:kCAConstraintMinY relativeTo:@"superlayer" attribute:kCAConstraintMinY];
+			[newLayer addConstraint:constraint];			
 			[self.demoLayer addSublayer: newLayer];
 		}
 	}
 		
 	[self gotoDemoStep:0];
-}
-
-
-- (void) nextDemoStep {
-	[self gotoDemoStep: self.currentDemoStep + 1];
 }
 
 
@@ -246,8 +183,11 @@
 }
 
 
+- (void) nextDemoStep {
+	[self gotoDemoStep: self.currentDemoStep + 1];
+}
 
-// layer names are referring to the situation before the animation
+
 - (void) gotoDemoStep: (NSUInteger) nr {
 	NSArray * sublayers = self.demoLayer.sublayers;
 	NSUInteger demoSteps = sublayers.count;
@@ -976,23 +916,6 @@
 
 
 
-/* 
- animation delegate
-*/
-/*
-- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag {
-	[CATransaction begin];
-	[CATransaction setValue:[NSNumber numberWithFloat:0.0] forKey:kCATransactionAnimationDuration];
-	self.introLayer.hidden = YES;
-	[self.introLayer removeAnimationForKey:@"textFadeOut"];
-	[CATransaction commit];
-}
-
-*/
-
-
-
-
 #pragma mark LAYER DELEGATE
 
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx {
@@ -1007,13 +930,9 @@
 		[self drawLayerWithAttributedString:[self introString] inContext:ctx];
 		drew = YES;
 	} 
-/*	else if ([layer.name isEqualToString:@"guideLayer"] ) {
-			[self drawGuidesForPoint: self.clickedPointName];
-			drew = YES;
-	}
-*/	
 	else if ([layer.name hasPrefix:@"demo.page"]) {
 		// need to draw for demo
+		NSLog(@"-drawLayer: %@ (%f, %f, %f, %f - %f, %f)", layer.name, layer.bounds.origin.x, layer.bounds.origin.y, layer.bounds.size.width, layer.bounds.size.height, layer.position.x, layer.position.y);
 		NSUInteger layerNumber = [[[layer.name componentsSeparatedByString:@"-"] lastObject] intValue];
 		[self drawLayerWithAttributedString:[self.stringsFromFile objectAtIndex:layerNumber + 1] inContext:ctx];
 		drew = YES;

@@ -15,6 +15,7 @@
 
 - (void)applicationWillFinishLaunching:(NSNotification *)aNotification {
 	[[NSDocumentController sharedDocumentController] setAutosavingDelay:10.0];
+	srandomdev();
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
@@ -77,7 +78,7 @@
 	for (MyDocument * doc in [[NSDocumentController sharedDocumentController] documents]) {
 		isRunning = isRunning || doc.runningDemo;
 	}
-	NSLog(@"[AppDelegate demoIsRunning] -> %b", isRunning);
+	// NSLog(@"[AppDelegate demoIsRunning] -> %i", isRunning);
 
 	return isRunning;
 }
@@ -119,7 +120,7 @@
 			[WORKSPACE openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:earthlingsoft%%40earthlingsoft.net?subject=Symmetries%%20%@", [self myVersionString]]]];
 			break;
 		case 4: // Paypal
-			[WORKSPACE openURL: [NSURL URLWithString:@"https://www.paypal.com/xclick/business=earthlingsoft%40earthlingsoft.net&item_name=Mailboxer&no_shipping=1&cn=Comments&tax=0&currency_code=EUR"]];
+			[WORKSPACE openURL: [NSURL URLWithString:@"https://www.paypal.com/xclick/business=earthlingsoft%40earthlingsoft.net&item_name=Symmetries&no_shipping=1&cn=Comments&tax=0&currency_code=EUR"]];
 			break;
 		case 5: // Readme
 			[WORKSPACE openFile:[[NSBundle mainBundle] pathForResource:@"readme" ofType:@"html"]];

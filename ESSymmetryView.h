@@ -8,10 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 #import <QuartzCore/QuartzCore.h>
-#include "MyDocument.h" 
+#import "MyDocument.h"
+#import "MyDocument+Animation.h"
 
 #define ESSYMMETRYPBOARDTYPE @"ESSSymmetryPboardType"
-#define MAXCORNERNUMBER 37
+
+@class MyDocument;
 
 typedef struct {
 	CGFloat r;
