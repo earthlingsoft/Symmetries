@@ -34,6 +34,8 @@
 		6C73CF3A0E0B079C00749440 /* NSBezierPath+ESSymmetry.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */; };
 		6C82F99D0DF7614F005CF008 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C82F99C0DF7614F005CF008 /* AppDelegate.m */; };
 		6CBC479C0DEAE2610073B214 /* ESSymmetryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */; };
+		6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */; };
+		6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC20D00E17E4AC00772100 /* MyDocument+Animation.m */; };
 		6CE60E830E0D54C800BFE3F3 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CE60E820E0D54C800BFE3F3 /* Sparkle.framework */; };
 		6CE60E860E0D54D100BFE3F3 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CE60E820E0D54C800BFE3F3 /* Sparkle.framework */; };
 		6CE610BE0E0DBC5B00BFE3F3 /* Symmetries.qlgenerator in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CE610BD0E0DBC4700BFE3F3 /* Symmetries.qlgenerator */; };
@@ -112,6 +114,13 @@
 		6C82F99B0DF7614F005CF008 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6C82F99C0DF7614F005CF008 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryView.m; sourceTree = "<group>"; };
+		6CDC1ED70E17935B00772100 /* ESSymmetryTotalAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryTotalAnimation.h; sourceTree = "<group>"; };
+		6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryTotalAnimation.m; sourceTree = "<group>"; };
+		6CDC209D0E17E2D400772100 /* PLANS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PLANS; sourceTree = "<group>"; };
+		6CDC20CF0E17E4AC00772100 /* MyDocument+Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MyDocument+Animation.h"; sourceTree = "<group>"; };
+		6CDC20D00E17E4AC00772100 /* MyDocument+Animation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MyDocument+Animation.m"; sourceTree = "<group>"; };
+		6CDC22850E18168500772100 /* Symmetries.scriptSuite */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = Symmetries.scriptSuite; sourceTree = "<group>"; };
+		6CDC22860E18168500772100 /* Symmetries.scriptTerminology */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = Symmetries.scriptTerminology; sourceTree = "<group>"; };
 		6CE607150E0BA48300BFE3F3 /* Symmetries QuickLook.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Symmetries QuickLook.xcodeproj"; path = "QuickLook/Symmetries QuickLook.xcodeproj"; sourceTree = "<group>"; };
 		6CE60E820E0D54C800BFE3F3 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = ../../../Shared/builds/Deployment/Sparkle.framework; sourceTree = SOURCE_ROOT; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -162,6 +171,7 @@
 		2A37F4AAFDCFA73011CA2CEA /* RoundRect */ = {
 			isa = PBXGroup;
 			children = (
+				6CDC209D0E17E2D400772100 /* PLANS */,
 				6CE607150E0BA48300BFE3F3 /* Symmetries QuickLook.xcodeproj */,
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
 				2A37F4AFFDCFA73011CA2CEA /* Other Sources */,
@@ -179,6 +189,8 @@
 				6C82F99C0DF7614F005CF008 /* AppDelegate.m */,
 				2A37F4AEFDCFA73011CA2CEA /* MyDocument.h */,
 				2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */,
+				6CDC20CF0E17E4AC00772100 /* MyDocument+Animation.h */,
+				6CDC20D00E17E4AC00772100 /* MyDocument+Animation.m */,
 				6C0012A70DE6244B0016ABB5 /* ESSymmetryView.h */,
 				6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */,
 				6C5A7ABB0E15419800A3D6E1 /* ESSymmetryView+Intro.h */,
@@ -189,6 +201,8 @@
 				6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+Points.m */,
 				6C5A79B90E11B5D200A3D6E1 /* ESSymmetryAnimation.h */,
 				6C5A79BA0E11B5D200A3D6E1 /* ESSymmetryAnimation.m */,
+				6CDC1ED70E17935B00772100 /* ESSymmetryTotalAnimation.h */,
+				6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */,
 				6C5935030DEA0441000B3428 /* NSImage+Extras.m */,
 				6C59350D0DEA0449000B3428 /* NSImage+Extras.h */,
 			);
@@ -210,6 +224,8 @@
 				6C5A7AE40E1544DD00A3D6E1 /* AttributedStrings.rtf */,
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
+				6CDC22850E18168500772100 /* Symmetries.scriptSuite */,
+				6CDC22860E18168500772100 /* Symmetries.scriptTerminology */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				1DDD58280DA1D0D100B32029 /* MyDocument.xib */,
 				1DDD582A0DA1D0D100B32029 /* MainMenu.xib */,
@@ -384,6 +400,8 @@
 				6C73CF3A0E0B079C00749440 /* NSBezierPath+ESSymmetry.m in Sources */,
 				6C5A79BB0E11B5D200A3D6E1 /* ESSymmetryAnimation.m in Sources */,
 				6C5A7ABD0E15419800A3D6E1 /* ESSymmetryView+Intro.m in Sources */,
+				6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */,
+				6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
