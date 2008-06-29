@@ -7,42 +7,42 @@
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMDhAJm
 	ZgEBhg==
 	</data>
-	<key>beSquare</key>
-	<integer>1</integer>
 	<key>cornerCount</key>
 	<integer>3</integer>
 	<key>cornerFraction</key>
-	<real>0.099420495331287384</real>
+	<real>0.70999997854232788</real>
 	<key>diagonalTangentDirection</key>
-	<real>2.347639799118042</real>
+	<real>-0.78328347206115723</real>
 	<key>diagonalTangentLength</key>
-	<real>0.8818543553352356</real>
+	<real>1</real>
 	<key>fillColor</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMDhAJm
 	ZoOrqio/AYY=
 	</data>
 	<key>midPointsDistance</key>
-	<real>1</real>
+	<real>0.5</real>
 	<key>showHandles</key>
 	<integer>1</integer>
 	<key>size</key>
-	<real>0.44925442337989807</real>
+	<real>0.67780929803848267</real>
 	<key>straightTangentDirection</key>
-	<real>-1.0150861740112305</real>
+	<real>3.0834646224975586</real>
 	<key>straightTangentLength</key>
-	<real>0.71219092607498169</real>
+	<real>1</real>
 	<key>strokeColor</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMDhAJm
 	ZgABhg==
 	</data>
 	<key>strokeThickness</key>
-	<real>5</real>
+	<real>0.14100000262260437</real>
 	<key>thickenedCorner</key>
-	<real>-1</real>
+	<real>-0.4931047260761261</real>
 	<key>thickness</key>
-	<real>0.59901893138885498</real>
+	<real>0.42026102542877197</real>
+	<key>twoLines</key>
+	<integer>1</integer>
 	<key>twoMidPoints</key>
 	<integer>1</integer>
 </dict>
