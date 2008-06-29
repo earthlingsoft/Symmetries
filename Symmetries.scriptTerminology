@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Classes</key>
+	<dict>
+		<key>Document</key>
+		<dict>
+			<key>Attributes</key>
+			<dict>
+				<key>cornerCount</key>
+				<dict>
+					<key>Description</key>
+					<string>The number of corners / degree of symmetry [2 through 37]</string>
+					<key>Name</key>
+					<string>symmetry</string>
+				</dict>
+				<key>diagonalTangentDirection</key>
+				<dict>
+					<key>Description</key>
+					<string>the direction of the handle attached to the mid point [between 0 and 2π]</string>
+					<key>Name</key>
+					<string>mid point handle direction</string>
+				</dict>
+				<key>diagonalTangentLength</key>
+				<dict>
+					<key>Description</key>
+					<string>the length of the handle attached to the mid point [between 0 and 1]</string>
+					<key>Name</key>
+					<string>mid point handle length</string>
+				</dict>
+				<key>size</key>
+				<dict>
+					<key>Description</key>
+					<string>The shape’s size [between 0 and 1]</string>
+					<key>Name</key>
+					<string>size</string>
+				</dict>
+				<key>straightTangentDirection</key>
+				<dict>
+					<key>Description</key>
+					<string>the direction of the handle attached to the start point [between 0 and 2π]</string>
+					<key>Name</key>
+					<string>start point handle direction</string>
+				</dict>
+				<key>straightTangentLength</key>
+				<dict>
+					<key>Description</key>
+					<string>the length of the handle attached to the start point [between 0 and 1]</string>
+					<key>Name</key>
+					<string>start point handle length</string>
+				</dict>
+				<key>strokeThickness</key>
+				<dict>
+					<key>Description</key>
+					<string>width of the stroke used [between 0 and 1]</string>
+					<key>Name</key>
+					<string>stroke width</string>
+				</dict>
+				<key>thickenedCorner</key>
+				<dict>
+					<key>Description</key>
+					<string>This attribute is for xxxx.</string>
+					<key>Name</key>
+					<string>corner thickness</string>
+				</dict>
+				<key>thickness</key>
+				<dict>
+					<key>Description</key>
+					<string>the thickness of the shape [between 0 and 1]</string>
+					<key>Name</key>
+					<string>thickness</string>
+				</dict>
+				<key>twoLines</key>
+				<dict>
+					<key>Description</key>
+					<string>true if two strokes are drawn and the area between strokes is filled</string>
+					<key>Name</key>
+					<string>two strokes</string>
+				</dict>
+				<key>twoMidPoints</key>
+				<dict>
+					<key>Description</key>
+					<string>true if two points are used to determine the middle of the path segment</string>
+					<key>Name</key>
+					<string>two mid points</string>
+				</dict>
+			</dict>
+			<key>Description</key>
+			<string>A Symmetries document.</string>
+			<key>Name</key>
+			<string>document</string>
+			<key>PluralName</key>
+			<string>documents</string>
+		</dict>
+	</dict>
+	<key>Commands</key>
+	<dict>
+		<key>animate</key>
+		<dict>
+			<key>Arguments</key>
+			<dict/>
+			<key>Description</key>
+			<string>begins randomly animating the document</string>
+			<key>IsVerb</key>
+			<string>YES</string>
+			<key>Name</key>
+			<string>animate</string>
+		</dict>
+		<key>stopAnimation</key>
+		<dict>
+			<key>Arguments</key>
+			<dict/>
+			<key>Description</key>
+			<string>stops randomly animating the document</string>
+			<key>IsVerb</key>
+			<string>YES</string>
+			<key>Name</key>
+			<string>stop animation</string>
+		</dict>
+	</dict>
+	<key>Description</key>
+	<string>Classes for the Symmetries application.</string>
+	<key>Name</key>
+	<string>Symmetries</string>
+</dict>
+</plist>
