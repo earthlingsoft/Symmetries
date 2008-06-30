@@ -38,8 +38,7 @@
 	myAnimation.duration = 7.0;
 	myAnimation.removedOnCompletion = NO;
 	myAnimation.fillMode = kCAFillModeForwards;
-	[self.introLayer addAnimation:myAnimation forKey:@"textFadeOut"];
-	
+	[self.introLayer addAnimation:myAnimation forKey:@"textFadeOut"];	
 }
 
 
@@ -48,26 +47,6 @@
 	return [self.stringsFromFile objectAtIndex:0];
 }
 
-#pragma mark KEYBOARD
-
-- (void)keyDown:(NSEvent *)theEvent {
-	NSLog(@"[ESSymmetryView(Intro) keyDown]");
-	// only listen to keys when running the demo
-	if (self.currentDemoStep < 0) { return;}
-	
-	NSString * key = [theEvent charactersIgnoringModifiers];
-	if ([key isEqualToString:@"."] && ([theEvent modifierFlags] | NSCommandKeyMask)) {
-		[self endDemo:nil];
-		return;
-	}
-	if ([key isEqualToString:[NSString stringWithUTF8String:"\033\000"]]) {
-		// escape key pressed
-		[self endDemo:nil];
-		return;
-	}
-	
-	[super keyDown:theEvent];
-}
 
 
 
@@ -932,7 +911,7 @@
 	} 
 	else if ([layer.name hasPrefix:@"demo.page"]) {
 		// need to draw for demo
-		NSLog(@"-drawLayer: %@ (%f, %f, %f, %f - %f, %f)", layer.name, layer.bounds.origin.x, layer.bounds.origin.y, layer.bounds.size.width, layer.bounds.size.height, layer.position.x, layer.position.y);
+		// NSLog(@"-drawLayer: %@ (%f, %f, %f, %f - %f, %f)", layer.name, layer.bounds.origin.x, layer.bounds.origin.y, layer.bounds.size.width, layer.bounds.size.height, layer.position.x, layer.position.y);
 		NSUInteger layerNumber = [[[layer.name componentsSeparatedByString:@"-"] lastObject] intValue];
 		[self drawLayerWithAttributedString:[self.stringsFromFile objectAtIndex:layerNumber + 1] inContext:ctx];
 		drew = YES;

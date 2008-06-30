@@ -16,7 +16,7 @@
 @implementation MyDocument
 
 @synthesize twoMidPoints, twoLines, backgroundColor, strokeColor, fillColor, strokeThickness, showHandles, myView, strokeThicknessRecentChange, previousStrokeThickness, totalAnimation;
-@dynamic cornerCount, size, cornerFraction, straightTangentLength, straightTangentDirection, diagonalTangentLength, diagonalTangentDirection, midPointsDistance, thickness;
+@dynamic cornerCount, size, cornerFraction, straightTangentLength, straightTangentDirection, diagonalTangentLength, diagonalTangentDirection, midPointsDistance, thickness, rotation;
 
 # pragma mark HOUSEKEEPING
 
@@ -48,28 +48,28 @@
 - (NSDictionary*) initialValues {
 	return [NSDictionary dictionaryWithObjectsAndKeys: 
 			[NSNumber numberWithFloat: 0.6], @"size",
-			[NSNumber numberWithBool:YES ], @"twoMidPoints",
-			[NSNumber numberWithBool:YES ], @"twoLines",
 			[NSNumber numberWithInt:4], @"cornerCount",
 			[NSNumber numberWithFloat: 0.71], @"cornerFraction",
+			[NSNumber numberWithFloat: 0.5], @"midPointsDistance",
 			[NSNumber numberWithFloat: 0.8], @"straightTangentLength",
 			[NSNumber numberWithFloat: 0.0], @"straightTangentDirection",
 			[NSNumber numberWithFloat: 0.07], @"diagonalTangentLength",
 			[NSNumber numberWithFloat: 1.0], @"diagonalTangentDirection",
-			[NSNumber numberWithFloat: 0.5], @"midPointsDistance",
 			[NSNumber numberWithFloat: 0.2], @"thickness",
 			[NSNumber numberWithFloat: 0.01], @"thickenedCorner",
+			[NSNumber numberWithBool:YES ], @"twoMidPoints",
+			[NSNumber numberWithBool:YES ], @"twoLines",
+			[NSNumber numberWithFloat: 0.141], @"strokeThickness",
 			[NSColor whiteColor], @"backgroundColor",
 			[NSColor blackColor], @"strokeColor",
 			[NSColor lightGrayColor], @"fillColor",
-			[NSNumber numberWithFloat: 0.141], @"strokeThickness",
 			[NSNumber numberWithUnsignedInt: 1 ], @"showHandles",
 			nil];
 }
 
 
 - (void) close {
-	NSLog(@"[MyDocument close]");
+	// NSLog(@"[MyDocument close]");
 	[self stopAnimation:self];
 	[(ESSymmetryView*) self.myView endDemo:self];
 	[super close];
@@ -116,6 +116,14 @@
 }
 
 
+/*
+	Allegedly this should be obvious from the Info.plist, but that didn't work…
+*/
++ (NSArray*) writableTypes {
+	return [NSArray arrayWithObjects: FILETYPEUTI, kUTTypePDF, nil];
+}
+
+
 - (void) intro {
 	[(ESSymmetryView*) myView intro];
 }
@@ -140,28 +148,47 @@
 
 
 - (BOOL)writeToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
-	NSDictionary * dict = [self plistDictionary];
-	BOOL writeOK;
-	if (dict) {
-		writeOK = [dict writeToURL:absoluteURL atomically:YES];
+	// NSLog(@"[MyDocument writeToURL: ofType: %@...]", typeName);
+	BOOL writeOK = NO;
+
+	if ([typeName isEqualToString:FILETYPEUTI]) {
+		// our own file type
+		NSDictionary * dict = [self plistDictionary];
+		if (dict) {
+			writeOK = [dict writeToURL:absoluteURL atomically:YES];
+		}
+	}
+	else if ([typeName isEqualToString:(NSString *) 
+			  kUTTypePDF]) {
+		// export a PDF file
+		NSData * pdfData = [NSBezierPath PDFDataForDictionary:[self dictionary]];
+		if (pdfData) {
+			writeOK = [pdfData writeToURL:absoluteURL atomically:YES];	
+		}
 	}
 	
-	if ( !dict ) {
+	if (!writeOK) {
+		// nicked from sample code, not even sure what it does
 		*outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:NULL];
 	}
 
-	return (dict && writeOK);
+	return writeOK;
 }
 
 
-- (NSDictionary *)fileAttributesToWriteToFile:(NSString *)fullDocumentPath ofType:(NSString *)documentTypeName saveOperation:(NSSaveOperationType)saveOperationType
+
+- (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation originalContentsURL:(NSURL *)absoluteOriginalContentsURL error:(NSError **)outError
 {
-	NSMutableDictionary *myDict= [NSMutableDictionary dictionaryWithDictionary:[super fileAttributesToWriteToFile:fullDocumentPath ofType:documentTypeName saveOperation:saveOperationType]];
-	
-	[myDict setObject:[NSNumber numberWithLong:'esRR'] forKey:NSFileHFSCreatorCode];
-	[myDict setObject:[NSNumber numberWithLong:'esRR'] forKey:NSFileHFSTypeCode];
+	if ([typeName isEqualToString:FILETYPEUTI]) {
+		NSMutableDictionary *myDict= [NSMutableDictionary dictionaryWithDictionary: [super fileAttributesToWriteToURL:absoluteURL ofType:typeName forSaveOperation:saveOperation originalContentsURL:absoluteOriginalContentsURL error:outError]];
+									  
+		[myDict setObject:[NSNumber numberWithLong:'esRR'] forKey:NSFileHFSCreatorCode];
+		[myDict setObject:[NSNumber numberWithLong:'esRR'] forKey:NSFileHFSTypeCode];
 	
 	return myDict;
+	}
+	
+	return nil;
 }
 
 
@@ -189,6 +216,8 @@
 	}
     return (dict != nil);
 }
+
+
 
 
 
@@ -227,27 +256,21 @@
 */
 
 
-- (NSUInteger) cornerCount {
-	return cornerCount;
-}
-
-- (void) setCornerCount: (NSUInteger) n {
-	cornerCount = MAX(MIN(n, 61), 0);
-	if (self.runningAnimation){
-//		[self.totalAnimation addProperty:@"cornerCount"];
-	}	
-}
-
-
 - (CGFloat) size {
 	return size;
 }
 
 - (void) setSize: (CGFloat) s {
-	size = MAX(MIN(s, 1.41), 0.0);
-	if (self.runningAnimation){
-//		[self.totalAnimation addProperty:@"size"];
-	}	
+	size = MAX(MIN(s, SIZE_MAX), SIZE_MIN);
+}
+
+
+- (NSUInteger) cornerCount {
+	return cornerCount;
+}
+
+- (void) setCornerCount: (NSUInteger) n {
+	cornerCount = MAX(MIN(n, CORNERCOUNT_MAX), CORNERCOUNT_MIN);
 }
 
 
@@ -256,10 +279,7 @@
 }
 
 - (void) setCornerFraction: (CGFloat) cF {
-	cornerFraction = MAX(MIN(cF, 2), -2);
-	if (self.runningAnimation){
-//		[self.totalAnimation addProperty:@"cornerFraction"];
-	}	
+	cornerFraction = MAX(MIN(cF, CORNERFRACTION_MAX), CORNERFRACTION_MIN);
 }
 
 
@@ -268,10 +288,7 @@
 }
 
 - (void) setStraightTangentLength: (CGFloat) sTL {
-	straightTangentLength = MAX(MIN(sTL, 2.0), 0.0);
-	if (self.runningAnimation){
-//		[self.totalAnimation addProperty:@"straightTangentLength"];
-	}	
+	straightTangentLength = MAX(MIN(sTL, STRAIGHTTANGENTLENGTH_MAX), STRAIGHTTANGENTLENGTH_MIN);
 }
 
 
@@ -281,9 +298,6 @@
 
 - (void) setStraightTangentDirection: (CGFloat) sTD {
 	straightTangentDirection = [self normalisePolarAngle: sTD];
-	if (self.runningAnimation){
-//		[self.totalAnimation addProperty:@"straightTangentDirection"];
-	}	
 }
 
 
@@ -291,11 +305,8 @@
 	return diagonalTangentLength;
 }
 
-- (void) setDiagonalTangentLength: (CGFloat) sTL {
-	diagonalTangentLength = MAX(MIN(sTL, 2.0), 0.0);
-	if (self.runningAnimation){
-//		[self.totalAnimation addProperty:@"diagonalTangentLength"];
-	}	
+- (void) setDiagonalTangentLength: (CGFloat) dTL {
+	diagonalTangentLength = MAX(MIN(dTL, DIAGONALTANGENTLENGTH_MAX), DIAGONALTANGENTLENGTH_MIN);
 }
 
 
@@ -305,9 +316,6 @@
 
 - (void) setDiagonalTangentDirection: (CGFloat) dTD {
 	diagonalTangentDirection = [self normalisePolarAngle: dTD];
-	if (self.runningAnimation){
-//		[self.totalAnimation addProperty:@"diagonalTangentDirection"];
-	}	
 }
 
 
@@ -316,10 +324,7 @@
 }
 
 - (void) setMidPointsDistance: (CGFloat) mPD {
-	midPointsDistance = MAX(MIN(mPD, 1.0), -1.0);
-	if (self.runningAnimation){
-//		[self.totalAnimation addProperty:@"midPointsDistance"];
-	}	
+	midPointsDistance = MAX(MIN(mPD, MIDPOINTSDISTANCE_MAX), MIDPOINTSDISTANCE_MIN);
 }
 
 
@@ -328,22 +333,27 @@
 }
 
 - (void) setThickness: (CGFloat) t {
-	thickness = MAX(MIN(t, 1.0), -1.0);
-	if (self.runningAnimation){
-//		[self.totalAnimation addProperty:@"thickness"];
-	}	
+	thickness = MAX(MIN(t, THICKNESS_MAX), THICKNESS_MIN);
 }
+
 
 - (CGFloat) thickenedCorner {
 	return thickenedCorner;
 }
 
 - (void) setThickenedCorner: (CGFloat) tC {
-	thickenedCorner = MAX(MIN(tC, 1.0), -1.0);
-	if (self.runningAnimation){
-//		[self.totalAnimation addProperty:@"thickenedCorner"];
-	}	
+	thickenedCorner = MAX(MIN(tC, THICKENEDCORNER_MAX), THICKENEDCORNER_MIN);
 }
+
+
+- (CGFloat) rotation {
+	return rotation;
+}
+
+- (void) setRotation: (CGFloat) phi {
+	rotation = [self normalisePolarAngle: phi];
+}
+
 
 
 
@@ -484,13 +494,17 @@
 
 
 /*
-	return function for export sheet
-*/
+ return function for export sheet
+ */
 - (void)exportSavePanelDidEnd:(NSSavePanel *)sheet returnCode:(int)returnCode  contextInfo:(void  *)contextInfo {
 	if (returnCode == NSOKButton) {
-		NSURL  * destinationURL =  sheet.URL;
-		NSData * pdfData = [NSBezierPath PDFDataForDictionary:[self dictionary]];
-		[pdfData writeToURL:destinationURL atomically:YES];
+		NSError * myError = nil;
+		[self writeToURL:sheet.URL ofType:(NSString*) kUTTypePDF error:&myError];
+		
+		if (myError) {
+			NSBeep();
+			NSLog(@"exportSavePanelDidEnd PDF writing failed (%@)", [myError description]);
+		}
 	}
 }
 

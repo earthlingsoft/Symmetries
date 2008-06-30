@@ -36,6 +36,8 @@
 		6CBC479C0DEAE2610073B214 /* ESSymmetryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */; };
 		6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */; };
 		6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC20D00E17E4AC00772100 /* MyDocument+Animation.m */; };
+		6CDC23980E185DAA00772100 /* resize.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CDC23970E185DAA00772100 /* resize.png */; };
+		6CDC23C30E18DE6E00772100 /* Symmetries.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 6CDC23C20E18DE6E00772100 /* Symmetries.sdef */; };
 		6CE60E830E0D54C800BFE3F3 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CE60E820E0D54C800BFE3F3 /* Sparkle.framework */; };
 		6CE60E860E0D54D100BFE3F3 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CE60E820E0D54C800BFE3F3 /* Sparkle.framework */; };
 		6CE610BE0E0DBC5B00BFE3F3 /* Symmetries.qlgenerator in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CE610BD0E0DBC4700BFE3F3 /* Symmetries.qlgenerator */; };
@@ -121,6 +123,8 @@
 		6CDC20D00E17E4AC00772100 /* MyDocument+Animation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MyDocument+Animation.m"; sourceTree = "<group>"; };
 		6CDC22850E18168500772100 /* Symmetries.scriptSuite */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = Symmetries.scriptSuite; sourceTree = "<group>"; };
 		6CDC22860E18168500772100 /* Symmetries.scriptTerminology */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = Symmetries.scriptTerminology; sourceTree = "<group>"; };
+		6CDC23970E185DAA00772100 /* resize.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = resize.png; sourceTree = "<group>"; };
+		6CDC23C20E18DE6E00772100 /* Symmetries.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.sdef; path = Symmetries.sdef; sourceTree = "<group>"; };
 		6CE607150E0BA48300BFE3F3 /* Symmetries QuickLook.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Symmetries QuickLook.xcodeproj"; path = "QuickLook/Symmetries QuickLook.xcodeproj"; sourceTree = "<group>"; };
 		6CE60E820E0D54C800BFE3F3 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = ../../../Shared/builds/Deployment/Sparkle.framework; sourceTree = SOURCE_ROOT; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -224,7 +228,9 @@
 				6C5A7AE40E1544DD00A3D6E1 /* AttributedStrings.rtf */,
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
+				6CDC23970E185DAA00772100 /* resize.png */,
 				6CDC22850E18168500772100 /* Symmetries.scriptSuite */,
+				6CDC23C20E18DE6E00772100 /* Symmetries.sdef */,
 				6CDC22860E18168500772100 /* Symmetries.scriptTerminology */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				1DDD58280DA1D0D100B32029 /* MyDocument.xib */,
@@ -352,6 +358,8 @@
 				1DDD582C0DA1D0D100B32029 /* MyDocument.xib in Resources */,
 				1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */,
 				6C5A7AE60E1544DD00A3D6E1 /* AttributedStrings.rtf in Resources */,
+				6CDC23980E185DAA00772100 /* resize.png in Resources */,
+				6CDC23C30E18DE6E00772100 /* Symmetries.sdef in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

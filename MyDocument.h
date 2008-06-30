@@ -9,7 +9,28 @@
 
 #import <Cocoa/Cocoa.h>
 
-#define MAXCORNERNUMBER 37
+#define FILETYPEUTI @"net.earthlingsoft.symmetry.document"
+
+#define SIZE_MIN 0.0
+#define SIZE_MAX 1.0
+#define CORNERCOUNT_MIN 2
+#define CORNERCOUNT_MAX 37
+#define CORNERFRACTION_MIN -1.414
+#define CORNERFRACTION_MAX 1.414
+#define MIDPOINTSDISTANCE_MIN -1.0
+#define MIDPOINTSDISTANCE_MAX 1.0
+#define STRAIGHTTANGENTLENGTH_MIN 0.0
+#define STRAIGHTTANGENTLENGTH_MAX 1.0
+//#define STRAIGHTTANGENTDIRECTION_MIN 0.0
+//#define STRAIGHTTANGENTDIRECTION_MAX 2 * pi
+#define DIAGONALTANGENTLENGTH_MIN 0.0
+#define DIAGONALTANGENTLENGTH_MAX 1.0
+//#define DIAGONALTANGENTDIRECTION_MIN 0.0
+//#define DIAGONALTANGENTDIRECTION_MAX 1.0
+#define THICKNESS_MIN 0.0
+#define THICKNESS_MAX 1.0
+#define THICKENEDCORNER_MIN -1.0
+#define THICKENEDCORNER_MAX 1.0
 
 @class ESSymmetryTotalAnimation;
 
@@ -17,16 +38,17 @@
 {
  	CGFloat size;
 	NSUInteger cornerCount;
-	BOOL twoMidPoints;
-	BOOL twoLines;
  	CGFloat cornerFraction;
+	CGFloat midPointsDistance;
  	CGFloat straightTangentLength;
 	CGFloat straightTangentDirection;
  	CGFloat diagonalTangentLength;
 	CGFloat diagonalTangentDirection;
-	CGFloat midPointsDistance;
 	CGFloat thickness;
 	CGFloat thickenedCorner; 
+	BOOL twoMidPoints;
+	BOOL twoLines;
+	CGFloat rotation;
 	
 	NSColor * backgroundColor; 
 	NSColor * strokeColor;
@@ -44,8 +66,6 @@
 
 @property 	CGFloat size;
 @property 	NSUInteger cornerCount;
-@property	BOOL twoMidPoints;
-@property	BOOL twoLines;
 @property 	CGFloat cornerFraction;
 @property 	CGFloat straightTangentLength;
 @property 	CGFloat straightTangentDirection;
@@ -54,10 +74,15 @@
 @property 	CGFloat midPointsDistance;
 @property	CGFloat thickness;
 @property	CGFloat thickenedCorner;
+@property	BOOL twoMidPoints;
+@property	BOOL twoLines;
+@property	CGFloat rotation;
+
 @property (retain)	NSColor * backgroundColor; 
 @property (retain)	NSColor * strokeColor;
 @property (retain)	NSColor * fillColor;
 @property	CGFloat strokeThickness;
+
 @property	CGFloat previousStrokeThickness;
 @property (retain) NSDate * strokeThicknessRecentChange;
 @property	NSUInteger showHandles;

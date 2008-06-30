@@ -16,9 +16,9 @@
 #define HANDLELINEWIDTH 1.5
 #define HANDLESIZE 4.0
 #define POINTSIZE 6.0
-#define LENGTH(point) sqrt(point.x*point.x + point.y*point.y)
-#define STICKYANGLE 0.05
-#define	STICKYLENGTH 4.0
+#define LENGTH(point) sqrt(point.x * point.x + point.y * point.y)
+#define STICKYANGLE 0.1
+#define	STICKYLENGTH 6.0
 
 
 @implementation ESSymmetryView
@@ -43,6 +43,8 @@
 @synthesize preAnimationDocumentValues;
 @synthesize lastAnimations;
 
+
+
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
@@ -50,7 +52,6 @@
     }
     return self;
 }
-
 
 
 - (void) frameChanged: (NSNotification*) notification {
@@ -64,21 +65,14 @@
 	self.handleLayer.bounds = newBounds;
 	self.introLayer.bounds = newBounds;
 	if (self.demoLayer) {
-		
-	self.demoLayer.position = CGPointMake(self.layer.bounds.size.width/2.0, self.layer.bounds.size.height/2.0);
+		self.demoLayer.position = CGPointMake(self.layer.bounds.size.width/2.0, self.layer.bounds.size.height/2.0);
 
-		//self.demoLayer.bounds = newBounds;
 		for (CALayer * layer in self.demoLayer.sublayers) {
-			
 			layer.bounds = newBounds;
 			NSInteger nr = [[[layer.name componentsSeparatedByString:@"-"] objectAtIndex:1] intValue];
 			if (nr < self.currentDemoStep) { layer.position = CGPointMake( -newBounds.size.width , 0.0); }
 			else if (nr > self.currentDemoStep) {layer.position = CGPointMake(newBounds.size.width, 0.0);}
 		}
-		
-		
-//		self.demoLayer.position = CGPointMake(0, 0);
-//		[self.demoLayer resizeSublayersWithOldSize:oldDemoSize];
 	}
 	
 	[CATransaction commit];
@@ -155,7 +149,11 @@
 - (void)scrollWheel:(NSEvent *)theEvent {
 	theDocument.size = MAX(MIN(theDocument.size + [theEvent deltaY]/100.0, 1.0), 0.0);
 	theDocument.cornerFraction = MAX(MIN(theDocument.cornerFraction - [theEvent deltaX]/100.0, 1.0), -1.0);
-	// [self setNeedsDisplay: YES];
+	
+	if (self.theDocument.runningAnimation){
+		[self.theDocument.totalAnimation addProperty:@"cornerCount"];
+		[self.theDocument.totalAnimation addProperty:@"size"];
+	}		
 }
 
 
@@ -259,7 +257,7 @@
 			self.theDocument.size = MIN(length, 1.0);
 			
 			CGFloat safeXValue = MAX(MIN(mouseLocation.x / self.shapeRadius , 1.0), -1.0);
-			self.theDocument.cornerCount = MIN(round( 2 * pi / acos(safeXValue)), MAXCORNERNUMBER);
+			self.theDocument.cornerCount = MIN(round( 2 * pi / acos(safeXValue)), CORNERCOUNT_MAX);
 	
 			if (self.theDocument.runningAnimation){
 				[self.theDocument.totalAnimation addProperty:@"cornerCount"];
@@ -284,7 +282,6 @@
 				}
 				else if (fabs(straightTangentDirection + pi/2.0) < STICKYANGLE) {
 					straightTangentDirection = - pi/2.0;
-					
 				}
 				else if (fabs(straightTangentDirection - pi/2.0) < STICKYANGLE) {
 					straightTangentDirection = pi/2.0;
@@ -303,7 +300,7 @@
 			[rotator rotateByRadians: -pi/theDocument.cornerCount];
 			NSPoint rotatedMouse = [rotator transformPoint:mouseLocation];
 
-			self.theDocument.cornerFraction = MAX(MIN(rotatedMouse.x / self.shapeRadius / sqrt(2.0), 1.0), -1.0);	
+			self.theDocument.cornerFraction = MAX(MIN(rotatedMouse.x / self.shapeRadius / sqrt(2.0), 1.0), -1.0);
 			
 			if (theDocument.twoMidPoints) {
 				CGFloat midPointsDistance =  MAX(MIN(rotatedMouse.y / LENGTH(midTangent), 1.0),-1.0);
@@ -350,31 +347,24 @@
 			}				
 		}
 		else if ([TAName isEqualToString:@"widthHandle"]) {
-			ESPolarPoint endPolar = [self polarPointForPoint:self.endPoint origin:self.middle];
-			ESPolarPoint mousePolar = [self polarPointForPoint:realMouseLocation origin:self.middle];
-			CGFloat thickness = MAX(MIN(1.0 - mousePolar.r / endPolar.r, 1.0), 0.0);
-			if (abs(mousePolar.phi - endPolar.phi) > pi/2.0 ) {
-				// we're on the wrong side of the origin => end value
-				thickness = 1.0;
-			}
-			self.theDocument.thickness = thickness;
+			NSPoint movedEndPoint = [self.moveFromMiddle transformPoint:self.endPoint];
+			CGFloat scalarProduct = (movedEndPoint.x * mouseLocation.x + movedEndPoint.y * mouseLocation.y) / (movedEndPoint.x * movedEndPoint.x + movedEndPoint.y * movedEndPoint.y);
+			self.theDocument.thickness = 1.0 - scalarProduct;
 			
 			if (self.theDocument.runningAnimation){
 				[self.theDocument.totalAnimation addProperty:@"thickness"];
 			}				
 		}
 		else if ([TAName isEqualToString:@"thickCornerHandle"]) {
-			ESPolarPoint mousePolar = [self polarPointForPoint:realMouseLocation	origin:self.middle];
-			ESPolarPoint midmidPolar = [self polarPointForPoint:self.midmidPoint origin:self.middle];
-			CGFloat thickenedCorner = 1.0 - 2.0 * mousePolar.r / midmidPolar.r;
-			thickenedCorner = MAX(MIN(thickenedCorner, 1.0), -1.0 );
-			if (stickyValues && fabs(mousePolar.r - midmidPolar.r/2.0 ) < STICKYLENGTH)  {
+			NSPoint movedMidMidPoint = [self.moveFromMiddle transformPoint:self.midmidPoint];
+			CGFloat scalarProduct = (movedMidMidPoint.x * mouseLocation.x + movedMidMidPoint.y * mouseLocation.y) / (movedMidMidPoint.x * movedMidMidPoint.x + movedMidMidPoint.y * movedMidMidPoint.y);
+			CGFloat thickenedCorner = 1.0 - 2.0 * scalarProduct;
+			
+			NSPoint distance = NSMakePoint(movedMidMidPoint.x / 2.0 - mouseLocation.x, movedMidMidPoint.y / 2.0 - mouseLocation.y);
+			if (stickyValues && LENGTH(distance) < STICKYLENGTH)  {
 				thickenedCorner = 0.0;
 			}
-			if (abs(mousePolar.phi - midmidPolar.phi) > pi/2.0 ) {
-				// we're on the wrong side of the origin => maximum value
-				thickenedCorner = 1.0;
-			}
+			
 			self.theDocument.thickenedCorner =  thickenedCorner;			
 			
 			if (self.theDocument.runningAnimation) {
@@ -391,6 +381,8 @@
 		[self handleDragForEvent:event];
 	}
 }
+
+
 
 
 
@@ -411,14 +403,20 @@
 	NSPasteboard * draggingPasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
 	[draggingPasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, ESSYMMETRYPBOARDTYPE, NSFilesPromisePboardType, nil] owner:self];
 	
+	// PDF Data
 	[draggingPasteboard setData:pdfData forType:NSPDFPboardType];
-//	NSString * errorString;
-//	NSData * fileTypesData = [NSPropertyListSerialization dataFromPropertyList:[NSArray arrayWithObject:@"pdf"] format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorString];
-//	[draggingPasteboard setData:fileTypesData forType:NSFilesPromisePboardType];
-	[draggingPasteboard setData:[@"com.adobe.pdf" dataUsingEncoding:NSUTF8StringEncoding] forType:@"com.apple.pasteboard.promised-file-content-type"];
+
+	// File Promise in a format accepted by Preview
+	NSString * errorString;
+	NSData * fileTypesData = [NSPropertyListSerialization dataFromPropertyList:[NSArray arrayWithObject:@"pdf"] format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorString];
+	[draggingPasteboard setData:fileTypesData forType:NSFilesPromisePboardType];
+	
+	// File Promise in a format accepted by the Finder or GKON
+	[draggingPasteboard setData:[(NSString *) kUTTypePDF dataUsingEncoding:NSUTF8StringEncoding] forType:@"com.apple.pasteboard.promised-file-content-type"];
 	NSData * dictData = [NSArchiver archivedDataWithRootObject:documentDict];
 	[draggingPasteboard setData:dictData forType:ESSYMMETRYPBOARDTYPE];
 
+	
 	NSPoint eventMousePosition = event.locationInWindow;
 	NSPoint imagePosition = NSMakePoint(eventMousePosition.x - image.size.width /2.0,
 										eventMousePosition.y - image.size.height / 2.0);
@@ -454,11 +452,19 @@
 		}
 		
 		// write the file 
-		NSDictionary * documentDict = [self.theDocument dictionary];
-		NSData * pdfData = [NSBezierPath PDFDataForDictionary: documentDict];
 		NSURL * destinationURL = [NSURL fileURLWithPath:fullPath];
-		[pdfData writeToURL:destinationURL atomically:YES];
-		return [NSArray arrayWithObject:fullName];
+		
+		NSError * myError = nil;
+		[self.theDocument writeToURL:destinationURL ofType: (NSString *) kUTTypePDF error:&myError];
+		
+		if (myError) {
+			NSBeep();
+			NSLog(@"-namesOfPromisedFilesDroppedAtDestrination: PDF writing failed (%@)", [myError description]);
+			return nil;
+		}
+		else {
+			return [NSArray arrayWithObject:fullName];
+		}
 	}
 	else {
 		return nil;
@@ -513,7 +519,7 @@
 		if ([thePointName isEqualToString:@"endPoint"]) {
 			// draw circle segment from 2pi/71 to pi
 			CGFloat radius = LENGTH([self.moveFromMiddle transformPoint:self.endPoint]);
-			[bP appendBezierPathWithArcWithCenter:origin radius:radius startAngle:360.0 / MAXCORNERNUMBER endAngle:180.0];
+			[bP appendBezierPathWithArcWithCenter:origin radius:radius startAngle:360.0 / CORNERCOUNT_MAX endAngle:180.0];
 			// draw vertical line
 			[bP moveToPoint: origin];
 			[bP lineToPoint: NSMakePoint(self.canvasRadius * cos(2.0 * pi / theDocument.cornerCount) , self.canvasRadius * sin(2.0 * pi / theDocument.cornerCount))];
@@ -521,7 +527,7 @@
 			[bP stroke];
 		
 			bP = [NSBezierPath bezierPath];
-			for (int i = 2; i <= MAXCORNERNUMBER; i++) {
+			for (int i = 2; i <= CORNERCOUNT_MAX; i++) {
 				NSRect circleRect = NSMakeRect(radius * cos(2.0 * pi / i) - guideLineWidth, 
 											   radius * sin(2.0 * pi / i) - guideLineWidth, 
 											   2.0 * guideLineWidth, 
@@ -897,9 +903,16 @@
 
 
 - (void)drawRect:(NSRect)rect {
-	// NSLog(@"-drawRect:");
+	// NSLog(@"-[ESSymmetryView drawRect:]");
 	
 	NSBezierPath * thePath = [NSBezierPath bezierPathWithDictionary:theDocument.dictionary size:self.shapeRadius];	
+/*	if (self.theDocument.runningAnimation) {
+		// while animating, take into account the rotation value
+		NSAffineTransform * aT = [NSAffineTransform transform];
+		[aT rotateByRadians: self.theDocument.rotation];
+		[thePath transformUsingAffineTransform:aT];
+	}
+*/	
 	[thePath transformUsingAffineTransform:self.moveToMiddle]; 
 	[self setValue:thePath forKey:@"path"];
 	
@@ -920,35 +933,7 @@
 		if (theDocument.showHandles != 0) {
 			self.handleLayer.opacity = 1.0;
 			[self drawGuidesForPoint:self.clickedPointName];
-	/*		NSString * pointName = self.clickedPointName;
-			if (!pointName) { pointName = [self trackingAreaNameForMouseLocation]; }
-			if (pointName) {
-				self.previousGuidesPoint = pointName;
-				self.guideLayer.opacity = 1.0;
-				[self.guideLayer setNeedsDisplay];
-			} 
-			else {
-				NSLog(@"drawRect: hide guide layer");
-
-				NSImage * image = [[NSImage alloc] initWithSize:self.frame.size];
-				[image lockFocus];
-				[self drawGuidesForPoint:self.previousGuidesPoint];
-				NSRectFill(NSMakeRect(0,0,10,10));
-				[image unlockFocus];
-				[CATransaction begin];
-				[CATransaction setValue:[NSNumber numberWithFloat:0.0f] forKey:kCATransactionAnimationDuration];
-				CGImageRef imageRef = [image cgImage];
-				self.guideLayer.contents = (id) imageRef;
-				CGImageRelease(imageRef);
-				[CATransaction commit];
-
-				[CATransaction begin];
-				[CATransaction setValue:[NSNumber numberWithFloat:0.5f] forKey:kCATransactionAnimationDuration];
-				self.guideLayer.opacity = 0.0;
-				[CATransaction commit];
-			}
-	*/	
-			if (theDocument.showHandles == 2) {
+				if (theDocument.showHandles == 2) {
 				[thePath drawPointsInColor:[NSColor grayColor] withHandlesInColor:[NSColor grayColor]];
 			}
 			[self drawHandlesForFundamentalPath];
@@ -957,6 +942,7 @@
 			self.handleLayer.opacity = 0.0;
 		}
 		// Window resize widget
+		[[NSImage imageNamed:@"resize.png"] drawAtPoint:NSMakePoint(self.window.frame.size.width - 13.0,  1.0) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction: 1.0];
 	}
 }
 
@@ -1037,19 +1023,24 @@
 	return self.canvasRadius * self.theDocument.size;
 }
 
+
 - (CGFloat) canvasRadius {
 	NSSize mySize  = self.frame.size;
 	return MIN(mySize.width, mySize.height) * 0.5 * 0.9;
 }
+
 
 - (BOOL) useCoreAnimation {
 	return [[[NSUserDefaults standardUserDefaults] valueForKey:@"useCoreAnimation"] boolValue];
 	// return YES;
 }
 
+
 - (NSColor *) guideColor {
 	return [NSColor colorWithCalibratedRed:0.0 green:0.0 blue:1.0 alpha:0.6];
 }
+
+
 
 
 # pragma mark POINTS

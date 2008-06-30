@@ -48,7 +48,8 @@ typedef struct {
 	NSInteger currentDemoStep;
 	NSDictionary * preAnimationDocumentValues;
 	NSArray * lastAnimations;
-
+	CGFloat * rotation;
+	
 	NSArray * stringsFromFile;
 }
 

@@ -119,9 +119,9 @@
 			<string>stop animation</string>
 		</dict>
 	</dict>
-	<key>Description</key>
-	<string>Classes for the Symmetries application.</string>
 	<key>Name</key>
 	<string>Symmetries</string>
+	<key>Description</key>
+	<string>Classes for the Symmetries application.</string>
 </dict>
 </plist>

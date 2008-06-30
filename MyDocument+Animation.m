@@ -71,7 +71,7 @@
 
 
 - (NSArray*) animationKeys {
-	return [NSArray arrayWithObjects: @"size", @"cornerCount", @"cornerFraction", @"straightTangentLength", @"straightTangentDirection", @"diagonalTangentLength", @"diagonalTangentDirection", @"midPointsDistance", @"thickness", @"thickenedCorner", nil];
+	return [NSArray arrayWithObjects: @"size", @"cornerCount", @"cornerFraction", @"straightTangentLength", @"straightTangentDirection", @"diagonalTangentLength", @"diagonalTangentDirection", @"midPointsDistance", @"thickness", @"thickenedCorner", @"rotation", nil];
 	// twoLines, strokeThickness left out
 }
 
@@ -84,12 +84,16 @@
 	CGFloat max = 1.0;
 	
 	/* Use standard 0-1 range for
-	 size, straightTangentLength, diagonalTangentLength
+	 straightTangentLength, diagonalTangentLength
 	*/
 	
-	if ([key isEqualToString:@"cornerCount"]) {
-		min = MAX( self.cornerCount - MAX(cornerCount / 10, 1.2), 2.0);
-		max = MIN( self.cornerCount + MAX(cornerCount / 10, 1.7), MAXCORNERNUMBER);
+	if ([key isEqualToString:@"size"]) {
+		min = 0.3;
+		max = 1.0;
+	}	
+	else if ([key isEqualToString:@"cornerCount"]) {
+		min = MAX( self.cornerCount - MAX(self.cornerCount / 10, 1.2), 2.0);
+		max = MIN( self.cornerCount + MAX(self.cornerCount / 10, 1.7), CORNERCOUNT_MAX);
 		// NSLog(@"newCornerTarget: %f - %f", min, max); 
 	}
 	else if ([key isEqualToString:@"cornerFraction"]) {
@@ -97,10 +101,14 @@
 		max = 1.41;
 	}
 	else if (	[key isEqualToString:@"straightTangentDirection"]
-			 || [key isEqualToString:@"diagonalTangentDirection"]) {
+			 || [key isEqualToString:@"diagonalTangentDirection"] ) {
 		min = currentValue - 3.0 * pi;
 		max = currentValue + 3.0 * pi;
 	}
+	else if ([key isEqualToString:@"rotation"]) {
+		min = currentValue - 1.5 * pi;
+		max = currentValue + 1.5 * pi;
+	}	
 	else if (	[key isEqualToString:@"midPointsDistance"]
 			 || [key isEqualToString:@"thickness"]
 			 || [key isEqualToString:@"thickenedCorner"]) {
@@ -117,62 +125,15 @@
 
 
 
-/*
- - (ESSymmetryAnimation *) randomAnimationForKey: (NSString *) key withStartValue: (CGFloat) startValue {
- ESSymmetryAnimation * animation = nil;
- 
- if ([key isEqualToString:@"size"]) {
- animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:0.0 and:1.0];
- }
- else if ([key isEqualToString:@"cornerCount"]) {
- NSInteger minCorners = MAX(round( self.cornerCount - MAX(cornerCount / 10, 1.2)), 2.0);
- NSInteger maxCorners = MIN(round( self.cornerCount + MAX(cornerCount / 10, 1.2)), MAXCORNERNUMBER);
- animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:minCorners and:maxCorners];	
- }
- else if ([key isEqualToString:@"cornerFraction"]) {
- animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:0.0 and:1.41];
- }
- else if ([key isEqualToString:@"straightTangentLength"]) {
- animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:0.0 and:1.0];
- }
- else if ([key isEqualToString:@"straightTangentDirection"]) {
- animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:startValue - 3.0 * pi and:startValue + 3.0 * pi];
- }
- else if ([key isEqualToString:@"diagonalTangentLength"]) {
- animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:0.0 and:1.0];
- }
- else if ([key isEqualToString:@"diagonalTangentDirection"]) {
- animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:startValue - 3.0 * pi and:startValue + 3.0 * pi];
- }
- else if ([key isEqualToString:@"midPointsDistance"]) {
- animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:-1.0 and:1.0];
- }
- else if ([key isEqualToString:@"thickness"]) {
- animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:-1.0 and:1.0];
- }
- else if ([key isEqualToString:@"thickenedCorner"]) {
- animation = [self randomAnimationForKey:key withStartValue:startValue targetValueBetween:-1.0 and:1.0];
- }
- 
- return animation;
- }
- */
+
 
 /*
  NSAnimation delegate
- When an animation ends, set up a new animation for the same key, start it and replace the old one in the animations array.
- */
+*/
 /*
  - (void)animationDidEnd:(ESSymmetryTotalAnimation *)animation {
- NSString * animationKey = [animation.startValues.allKeys objectAtIndex:0];
- //	ESSymmetryAnimation * newAnimation = [self randomAnimationForKey:animationKey withStartValue:[[animation.targetValues objectForKey:animationKey] floatValue]];
- [self.animationsArray removeObject:animation];
- [newAnimation startAnimation];
- [self.animationsArray addObject:newAnimation];
- 
- NSLog(@"[MyDocument animationDidEnd:] - key: %@", animationKey);
  }
- */
+*/
 
 
 
