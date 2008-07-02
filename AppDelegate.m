@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "MyDocument.h"
+#import "MyDocument+Animation.h"
 #import "ESSymmetryView.h"
 #import "ESSymmetryView+Intro.h"
 
@@ -85,18 +86,25 @@
 
 
 - (IBAction) demo:(id) sender {
-	NSDocumentController * dC = [NSDocumentController sharedDocumentController];
 	if ([sender isKindOfClass:[NSMenuItem class]]) {
 		((NSMenuItem *) sender).keyEquivalent = @".";
 		((NSMenuItem *) sender).keyEquivalentModifierMask = NSCommandKeyMask;
 	}
 	
+	NSDocumentController * dC = [NSDocumentController sharedDocumentController];
 	if (dC.documents.count == 0 ) {
 		// create a document if there is none
 		[dC openUntitledDocumentAndDisplay:YES error:NULL];
 	}
 		
-	[(ESSymmetryView*)((MyDocument*)dC.currentDocument).myView startDemo:sender];
+	MyDocument * document = (MyDocument *) dC.currentDocument;
+	
+	if (document.runningAnimation) {
+		// turn off animation if necessary
+		[document stopAnimation:self];
+	}
+	
+	[(ESSymmetryView*) document.myView startDemo:sender];
 }
 
 

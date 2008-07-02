@@ -2,20 +2,24 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
+	<key>CFBundleName</key>
+	<string>${PRODUCT_NAME}</string>
+	<key>CFBundleExecutable</key>
+	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1b2</string>
+	<key>CFBundleVersion</key>
+	<string>13</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>CFBundleIconFile</key>
+	<string>Primel.icns</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.5.0</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
-		<dict>
-			<key>CFBundleTypeName</key>
-			<string>kUTypePDF</string>
-			<key>CFBundleTypeRole</key>
-			<string>None</string>
-			<key>LSTypeIsPackage</key>
-			<false/>
-			<key>NSPersistentStoreTypeKey</key>
-			<string>Binary</string>
-		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
 			<string></string>
@@ -37,34 +41,6 @@
 			<string>XML</string>
 		</dict>
 	</array>
-	<key>CFBundleExecutable</key>
-	<string>${EXECUTABLE_NAME}</string>
-	<key>CFBundleIconFile</key>
-	<string></string>
-	<key>CFBundleIdentifier</key>
-	<string>net.earthlingsoft.symmetries</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>${PRODUCT_NAME}</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1b2</string>
-	<key>CFBundleSignature</key>
-	<string>esRR</string>
-	<key>CFBundleVersion</key>
-	<string>12</string>
-	<key>NSAppleScriptEnabled</key>
-	<true/>
-	<key>NSMainNibFile</key>
-	<string>MainMenu</string>
-	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
-	<key>OSAScriptingDefinition</key>
-	<string>Symmetries.sdef</string>
-	<key>SUFeedURL</key>
-	<string>http://earthlingsoft.net/Symmetries/appcast.xml</string>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
@@ -89,5 +65,21 @@
 			</dict>
 		</dict>
 	</array>
+	<key>CFBundleIdentifier</key>
+	<string>net.earthlingsoft.symmetries</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>esRR</string>
+	<key>NSAppleScriptEnabled</key>
+	<true/>
+	<key>OSAScriptingDefinition</key>
+	<string>Symmetries.sdef</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>SUFeedURL</key>
+	<string>http://earthlingsoft.net/Symmetries/appcast.xml</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
 </dict>
 </plist>

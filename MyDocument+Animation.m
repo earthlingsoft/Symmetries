@@ -8,6 +8,7 @@
 
 #import "MyDocument+Animation.h"
 #import "ESSymmetryTotalAnimation.h"
+#import "ESSymmetryView.h"
 
 @implementation MyDocument (Animation)
 
@@ -20,22 +21,28 @@
 
 - (IBAction) animate: (id) sender {
 	// NSLog(@"[MyDocument animate:]");
-	self.totalAnimation = [[ESSymmetryTotalAnimation alloc] initWithDuration: MAXFLOAT animationCurve: NSAnimationLinear];
-	self.totalAnimation.valueObject = self;
-	self.totalAnimation.delegate = self;
-	self.totalAnimation.animationBlockingMode = NSAnimationNonblocking;
+	if (!self.runningAnimation) {
+		// start animation if it's not running
+		self.totalAnimation = [[ESSymmetryTotalAnimation alloc] initWithDuration: MAXFLOAT animationCurve: NSAnimationLinear];
+		self.totalAnimation.valueObject = self;
+		self.totalAnimation.delegate = self;
+		self.totalAnimation.animationBlockingMode = NSAnimationNonblocking;
 	
-	for (NSString * key in [self animationKeys]) {
-		[self.totalAnimation addProperty:key];
+		for (NSString * key in [self animationKeys]) {
+			[self.totalAnimation addProperty:key];
+		}
+	
+		[self.totalAnimation startAnimation];	
 	}
-	
-	[self.totalAnimation startAnimation];	
-	
-	if ([sender isKindOfClass:[NSMenuItem class]]) {
-		((NSMenuItem *) sender).keyEquivalent = @".";
-		((NSMenuItem *) sender).keyEquivalentModifierMask = NSCommandKeyMask;
-		((NSMenuItem *) sender).action = @selector(stopAnimation:);		
-	}	
+	else {
+		[self stopAnimation:sender];
+	}
+}
+
+
+- (IBAction) spaceOut: (id) sender {
+	self.myView.spaceOut = YES;
+	[self animate:sender];
 }
 
 
@@ -43,12 +50,10 @@
 	// NSLog(@"[MyDocument stopAnimation:]");
 	[self.totalAnimation stopAnimation];
 	self.totalAnimation = nil;
-	
-	if ([sender isKindOfClass:[NSMenuItem class]]) {
-		((NSMenuItem *) sender).keyEquivalent = @"g";
-		((NSMenuItem *) sender).keyEquivalentModifierMask = NSCommandKeyMask;
-		((NSMenuItem *) sender).action = @selector(animate:);		
-	}	
+	if (self.myView.spaceOut) {
+		self.myView.spaceOut = NO;
+		[self.myView setNeedsDisplay:YES];
+	}
 }
 
 
@@ -92,9 +97,9 @@
 		max = 1.0;
 	}	
 	else if ([key isEqualToString:@"cornerCount"]) {
-		min = MAX( self.cornerCount - MAX(self.cornerCount / 10, 1.2), 2.0);
-		max = MIN( self.cornerCount + MAX(self.cornerCount / 10, 1.7), CORNERCOUNT_MAX);
-		// NSLog(@"newCornerTarget: %f - %f", min, max); 
+		min = self.cornerCount - 0.02;
+		max = self.cornerCount + 1.02 ;
+		NSLog(@"newCornerTarget: %f - %f", min, max); 
 	}
 	else if ([key isEqualToString:@"cornerFraction"]) {
 		min = 0.0;

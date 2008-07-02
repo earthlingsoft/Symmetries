@@ -11,27 +11,24 @@
 
 #define FILETYPEUTI @"net.earthlingsoft.symmetry.document"
 
-#define SIZE_MIN 0.0
-#define SIZE_MAX 1.0
-#define CORNERCOUNT_MIN 2
-#define CORNERCOUNT_MAX 37
-#define CORNERFRACTION_MIN -1.414
-#define CORNERFRACTION_MAX 1.414
-#define MIDPOINTSDISTANCE_MIN -1.0
-#define MIDPOINTSDISTANCE_MAX 1.0
-#define STRAIGHTTANGENTLENGTH_MIN 0.0
-#define STRAIGHTTANGENTLENGTH_MAX 1.0
-//#define STRAIGHTTANGENTDIRECTION_MIN 0.0
-//#define STRAIGHTTANGENTDIRECTION_MAX 2 * pi
-#define DIAGONALTANGENTLENGTH_MIN 0.0
-#define DIAGONALTANGENTLENGTH_MAX 1.0
-//#define DIAGONALTANGENTDIRECTION_MIN 0.0
-//#define DIAGONALTANGENTDIRECTION_MAX 1.0
-#define THICKNESS_MIN 0.0
-#define THICKNESS_MAX 1.0
-#define THICKENEDCORNER_MIN -1.0
-#define THICKENEDCORNER_MAX 1.0
+#define ESSYM_SIZE_MIN 0.0
+#define ESSYM_SIZE_MAX 1.0
+#define ESSYM_CORNERCOUNT_MIN 2
+#define ESSYM_CORNERCOUNT_MAX 37
+#define ESSYM_CORNERFRACTION_MIN -1.414
+#define ESSYM_CORNERFRACTION_MAX 1.414
+#define ESSYM_MIDPOINTSDISTANCE_MIN -1.0
+#define ESSYM_MIDPOINTSDISTANCE_MAX 1.0
+#define ESSYM_STRAIGHTTANGENTLENGTH_MIN 0.0
+#define ESSYM_STRAIGHTTANGENTLENGTH_MAX 1.0
+#define ESSYM_DIAGONALTANGENTLENGTH_MIN 0.0
+#define ESSYM_DIAGONALTANGENTLENGTH_MAX 1.0
+#define ESSYM_THICKNESS_MIN 0.0
+#define ESSYM_THICKNESS_MAX 1.0
+#define ESSYM_THICKENEDCORNER_MIN -1.0
+#define ESSYM_THICKENEDCORNER_MAX 1.0
 
+@class ESSymmetryView;
 @class ESSymmetryTotalAnimation;
 
 @interface MyDocument : NSDocument
@@ -59,7 +56,7 @@
 	NSDate * strokeThicknessRecentChange;
 	NSUInteger showHandles;
 	
-	IBOutlet NSView *  myView;
+	IBOutlet ESSymmetryView *  myView;
 	
 	ESSymmetryTotalAnimation * totalAnimation;
 } 
@@ -86,11 +83,12 @@
 @property	CGFloat previousStrokeThickness;
 @property (retain) NSDate * strokeThicknessRecentChange;
 @property	NSUInteger showHandles;
-@property (retain) NSView * myView;
+@property (retain) ESSymmetryView * myView;
 
 @property (retain) ESSymmetryTotalAnimation * totalAnimation;
 
 @property (readonly) BOOL runningDemo;
+@property (readonly) BOOL runningAnimation;
 
 - (id) init;
 - (id) initWithDictionary: (NSDictionary*) dict;

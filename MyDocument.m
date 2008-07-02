@@ -233,6 +233,9 @@
 		 if ([keyPath isEqualToString:@"strokeThickness"]) {
 			 self.previousStrokeThickness = [[change objectForKey:NSKeyValueChangeOldKey] floatValue];
 		 }
+		 if ([keyPath isEqualToString:@"backgroundColor"]) {
+			 self.myView.layer.backgroundColor = (CGColorRef) self.backgroundColor;
+		 }
 	 }
  }
 
@@ -261,7 +264,7 @@
 }
 
 - (void) setSize: (CGFloat) s {
-	size = MAX(MIN(s, SIZE_MAX), SIZE_MIN);
+	size = MAX(MIN(s, ESSYM_SIZE_MAX), ESSYM_SIZE_MIN);
 }
 
 
@@ -270,7 +273,7 @@
 }
 
 - (void) setCornerCount: (NSUInteger) n {
-	cornerCount = MAX(MIN(n, CORNERCOUNT_MAX), CORNERCOUNT_MIN);
+	cornerCount = MAX(MIN(n, ESSYM_CORNERCOUNT_MAX), ESSYM_CORNERCOUNT_MIN);
 }
 
 
@@ -279,7 +282,7 @@
 }
 
 - (void) setCornerFraction: (CGFloat) cF {
-	cornerFraction = MAX(MIN(cF, CORNERFRACTION_MAX), CORNERFRACTION_MIN);
+	cornerFraction = MAX(MIN(cF, ESSYM_CORNERFRACTION_MAX), ESSYM_CORNERFRACTION_MIN);
 }
 
 
@@ -288,7 +291,7 @@
 }
 
 - (void) setStraightTangentLength: (CGFloat) sTL {
-	straightTangentLength = MAX(MIN(sTL, STRAIGHTTANGENTLENGTH_MAX), STRAIGHTTANGENTLENGTH_MIN);
+	straightTangentLength = MAX(MIN(sTL, ESSYM_STRAIGHTTANGENTLENGTH_MAX), ESSYM_STRAIGHTTANGENTLENGTH_MIN);
 }
 
 
@@ -306,7 +309,7 @@
 }
 
 - (void) setDiagonalTangentLength: (CGFloat) dTL {
-	diagonalTangentLength = MAX(MIN(dTL, DIAGONALTANGENTLENGTH_MAX), DIAGONALTANGENTLENGTH_MIN);
+	diagonalTangentLength = MAX(MIN(dTL, ESSYM_DIAGONALTANGENTLENGTH_MAX), ESSYM_DIAGONALTANGENTLENGTH_MIN);
 }
 
 
@@ -324,7 +327,7 @@
 }
 
 - (void) setMidPointsDistance: (CGFloat) mPD {
-	midPointsDistance = MAX(MIN(mPD, MIDPOINTSDISTANCE_MAX), MIDPOINTSDISTANCE_MIN);
+	midPointsDistance = MAX(MIN(mPD, ESSYM_MIDPOINTSDISTANCE_MAX), ESSYM_MIDPOINTSDISTANCE_MIN);
 }
 
 
@@ -333,7 +336,7 @@
 }
 
 - (void) setThickness: (CGFloat) t {
-	thickness = MAX(MIN(t, THICKNESS_MAX), THICKNESS_MIN);
+	thickness = MAX(MIN(t, ESSYM_THICKNESS_MAX), ESSYM_THICKNESS_MIN);
 }
 
 
@@ -342,7 +345,7 @@
 }
 
 - (void) setThickenedCorner: (CGFloat) tC {
-	thickenedCorner = MAX(MIN(tC, THICKENEDCORNER_MAX), THICKENEDCORNER_MIN);
+	thickenedCorner = MAX(MIN(tC, ESSYM_THICKENEDCORNER_MAX), ESSYM_THICKENEDCORNER_MIN);
 }
 
 
@@ -422,9 +425,11 @@
 	if ([menuItem action] == @selector(setHandles:)) {
 		if (self.runningDemo) {
 			// cannot change handle setting while demo is running
+			menuItem.toolTip = NSLocalizedString(@"This setting cannot be changed while the Demo is running.", @"This setting cannot be changed while the Demo is running");
 			return NO;
 		}
 		else {
+			menuItem.toolTip = @"";
 			if ([menuItem tag] == self.showHandles) {
 				[menuItem setState:NSOnState];
 			}
@@ -436,25 +441,63 @@
 	}
 	else if ([menuItem action] == @selector(twoMiddlePoints:)) {
 		[menuItem setState:self.twoMidPoints];
+		if (self.runningDemo) {
+			menuItem.toolTip = NSLocalizedString(@"This setting cannot be changed while the Demo is running.", @"This setting cannot be changed while the Demo is running");
+			return NO;
+		}
+		menuItem.toolTip = @"";
 	}
 	else if ([menuItem action] == @selector(twoLines:)) {
 		[menuItem setState:self.twoLines];
+		if (self.runningDemo) {
+			menuItem.toolTip = NSLocalizedString(@"This setting cannot be changed while the Demo is running.", @"This setting cannot be changed while the Demo is running");
+			return NO;
+		}
+		menuItem.toolTip = @"";
 	}
-	else if ([menuItem tag] == 100) {
+	else if (menuItem.tag == 100) {
 		// menu item with slider
 		// NSLog(@"MyDocument -validateMenuItem: slider");
 		NSSlider * slider = [menuItem.view.subviews objectAtIndex:0];
-		[slider setEnabled:YES];
-		[slider setFloatValue:self.strokeThickness];
+		if (self.runningDemo) {
+			[slider setEnabled:NO];
+			menuItem.toolTip = NSLocalizedString(@"This setting cannot be changed while the Demo is running.", @"This setting cannot be changed while the Demo is running");
+		}
+		else {
+			[slider setEnabled:YES];
+			menuItem.toolTip = @"";
+		}
+		[slider setFloatValue:self.strokeThickness]; // binding this is more complicated than code
 		menuItem.menu.delegate = self; // need this to know when the menu has closed
 	}
-	else if ([menuItem action] == @selector(animate:)) {
-		menuItem.title = NSLocalizedString(@"Animate Path", @"Animate Path");
+	else if (menuItem.action == @selector(animate:) || menuItem.action == @selector(spaceOut:) ) {
+		if (!self.runningAnimation) {
+			if (menuItem.action == @selector(animate:)) {
+				menuItem.title = NSLocalizedString(@"Animate Path", @"Animate Path");
+			}
+			else {
+				menuItem.title = NSLocalizedString(@"Space Out", @"Space Out");
+			}
+		}
+		else {
+			if (!myView.spaceOut || menuItem.action == @selector(animate:) ) {
+				menuItem.title = NSLocalizedString(@"Stop Animation", @"Stop Animation");
+			}
+			else {
+				menuItem.title = NSLocalizedString(@"Whoa – stop spacing out!", @"Whoah – stop spacing out!");
+			}
+		}
+		
+		if (self.runningDemo) {
+			// no animation while running demo
+			menuItem.toolTip = NSLocalizedString(@"Animations cannot be started while the Demo is running. Please wait until the Demo has ended or use the Stop Demo command to do so.", @"Animations cannot be started while the Demo is running. Please wait until the Demo has ended or use the Stop Demo command to do so.");
+			return NO;
+		}
+		else {
+			menuItem.toolTip = @"";
+		}
 	}
-	else if ([menuItem action] == @selector(stopAnimation:)) {
-		menuItem.title = NSLocalizedString(@"Stop Animation", @"Stop Animation");
-	}			
-	
+
 	return [super validateMenuItem:menuItem];
 }
 

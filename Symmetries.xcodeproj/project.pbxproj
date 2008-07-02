@@ -33,6 +33,7 @@
 		6C5A7AE60E1544DD00A3D6E1 /* AttributedStrings.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6C5A7AE40E1544DD00A3D6E1 /* AttributedStrings.rtf */; };
 		6C73CF3A0E0B079C00749440 /* NSBezierPath+ESSymmetry.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */; };
 		6C82F99D0DF7614F005CF008 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C82F99C0DF7614F005CF008 /* AppDelegate.m */; };
+		6C92E0BA0E1A283700BEE063 /* Primel.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6C92E0B90E1A283700BEE063 /* Primel.icns */; };
 		6CBC479C0DEAE2610073B214 /* ESSymmetryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */; };
 		6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */; };
 		6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC20D00E17E4AC00772100 /* MyDocument+Animation.m */; };
@@ -115,6 +116,7 @@
 		6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+ESSymmetry.m"; sourceTree = "<group>"; };
 		6C82F99B0DF7614F005CF008 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6C82F99C0DF7614F005CF008 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		6C92E0B90E1A283700BEE063 /* Primel.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Primel.icns; sourceTree = "<group>"; };
 		6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryView.m; sourceTree = "<group>"; };
 		6CDC1ED70E17935B00772100 /* ESSymmetryTotalAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryTotalAnimation.h; sourceTree = "<group>"; };
 		6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryTotalAnimation.m; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 				6CDC23970E185DAA00772100 /* resize.png */,
 				6CDC22850E18168500772100 /* Symmetries.scriptSuite */,
 				6CDC23C20E18DE6E00772100 /* Symmetries.sdef */,
+				6C92E0B90E1A283700BEE063 /* Primel.icns */,
 				6CDC22860E18168500772100 /* Symmetries.scriptTerminology */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				1DDD58280DA1D0D100B32029 /* MyDocument.xib */,
@@ -360,6 +363,7 @@
 				6C5A7AE60E1544DD00A3D6E1 /* AttributedStrings.rtf in Resources */,
 				6CDC23980E185DAA00772100 /* resize.png in Resources */,
 				6CDC23C30E18DE6E00772100 /* Symmetries.sdef in Resources */,
+				6C92E0BA0E1A283700BEE063 /* Primel.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

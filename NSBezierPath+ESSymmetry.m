@@ -36,12 +36,12 @@
 	CGFloat strokeThickness = [[dict objectForKey:@"strokeThickness"] floatValue] * radius / shapeSize / 10.0;
 	NSBezierPath * bP = [NSBezierPath bezierPathWithDictionary:dict size:radius] ;
 	NSRect pathBounds = [bP bounds];
-	CGFloat pdfSize = pathBounds.size.width + strokeThickness * 2.0 * 4.0;
-	CGRect boundingRect = CGRectMake(0.0, 0.0, pdfSize, pdfSize);
+	CGFloat pdfSizeX = pathBounds.size.width + strokeThickness * 2.0 * 4.0;
+	CGFloat pdfSizeY = pathBounds.size.height + strokeThickness * 2.0 * 4.0;
+	CGRect boundingRect = CGRectMake(0.0, 0.0, pdfSizeX, pdfSizeY);
 
-	CGFloat translationDistance = boundingRect.size.width / 2.0;
 	NSAffineTransform * aT = [NSAffineTransform transform];
-	[aT translateXBy:translationDistance yBy:translationDistance];
+	[aT translateXBy: pdfSizeX / 2.0 yBy: pdfSizeY / 2.0];
 	[bP transformUsingAffineTransform:aT];
 
 	NSMutableData * pdfData = [NSMutableData dataWithCapacity:10000];

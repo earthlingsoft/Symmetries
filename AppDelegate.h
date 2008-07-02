@@ -10,14 +10,14 @@
 
 
 @interface AppDelegate : NSObject {
-
+	IBOutlet NSMenuItem * startAnimationMenuItem;
+	IBOutlet NSMenuItem * spaceOutMenuItem;	
 }
 
 @property (readonly) NSDocument * firstDocument;
 @property (readonly) BOOL demoIsRunning;
 @property (readwrite) BOOL useCoreAnimation;
 
-// - (IBAction) setCoreAnimation:(id) sender;
 - (IBAction) demo:(id) sender;
 - (void) readme:(id) sender;
 - (NSString*) myVersionString;

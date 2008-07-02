@@ -50,6 +50,8 @@ typedef struct {
 	NSArray * lastAnimations;
 	CGFloat * rotation;
 	
+	BOOL spaceOut;
+	
 	NSArray * stringsFromFile;
 }
 
@@ -75,6 +77,8 @@ typedef struct {
 @property NSInteger currentDemoStep;
 @property (retain) NSDictionary * preAnimationDocumentValues;
 @property (retain) NSArray * lastAnimations;
+
+@property BOOL spaceOut;
 
 @property (readonly) CGFloat shapeRadius;
 @property (readonly) CGFloat canvasRadius;

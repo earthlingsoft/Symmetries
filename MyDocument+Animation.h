@@ -15,6 +15,7 @@
 
 
 - (IBAction) animate:(id) sender;
+- (IBAction) spaceOut:(id) sender;
 - (IBAction) animateFullScreen:(id) sender;
 - (IBAction) stopAnimation:(id) sender;
 

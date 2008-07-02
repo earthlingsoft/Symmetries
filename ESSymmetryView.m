@@ -42,7 +42,7 @@
 @synthesize currentDemoStep;
 @synthesize preAnimationDocumentValues;
 @synthesize lastAnimations;
-
+@synthesize spaceOut;
 
 
 - (id)initWithFrame:(NSRect)frame {
@@ -257,7 +257,7 @@
 			self.theDocument.size = MIN(length, 1.0);
 			
 			CGFloat safeXValue = MAX(MIN(mouseLocation.x / self.shapeRadius , 1.0), -1.0);
-			self.theDocument.cornerCount = MIN(round( 2 * pi / acos(safeXValue)), CORNERCOUNT_MAX);
+			self.theDocument.cornerCount = MIN(round( 2 * pi / acos(safeXValue)), ESSYM_CORNERCOUNT_MAX);
 	
 			if (self.theDocument.runningAnimation){
 				[self.theDocument.totalAnimation addProperty:@"cornerCount"];
@@ -519,7 +519,7 @@
 		if ([thePointName isEqualToString:@"endPoint"]) {
 			// draw circle segment from 2pi/71 to pi
 			CGFloat radius = LENGTH([self.moveFromMiddle transformPoint:self.endPoint]);
-			[bP appendBezierPathWithArcWithCenter:origin radius:radius startAngle:360.0 / CORNERCOUNT_MAX endAngle:180.0];
+			[bP appendBezierPathWithArcWithCenter:origin radius:radius startAngle:360.0 / ESSYM_CORNERCOUNT_MAX endAngle:180.0];
 			// draw vertical line
 			[bP moveToPoint: origin];
 			[bP lineToPoint: NSMakePoint(self.canvasRadius * cos(2.0 * pi / theDocument.cornerCount) , self.canvasRadius * sin(2.0 * pi / theDocument.cornerCount))];
@@ -527,7 +527,7 @@
 			[bP stroke];
 		
 			bP = [NSBezierPath bezierPath];
-			for (int i = 2; i <= CORNERCOUNT_MAX; i++) {
+			for (int i = 2; i <= ESSYM_CORNERCOUNT_MAX; i++) {
 				NSRect circleRect = NSMakeRect(radius * cos(2.0 * pi / i) - guideLineWidth, 
 											   radius * sin(2.0 * pi / i) - guideLineWidth, 
 											   2.0 * guideLineWidth, 
@@ -917,15 +917,40 @@
 	[self setValue:thePath forKey:@"path"];
 	
 	// draw
-	[theDocument.backgroundColor set];
-	NSRectFill(self.bounds);
-	if (theDocument.twoLines) {
-		[theDocument.fillColor set];
-		[thePath fill];
+	
+	//[theDocument.backgroundColor set];
+	//NSRectFill(self.bounds);
+	
+	// background
+	if (spaceOut) {
+		NSColor * startColor = [NSColor colorWithCalibratedHue:1.0 - [theDocument normalisePolarAngle: 3.0 * theDocument.straightTangentDirection + 2.0 * theDocument.diagonalTangentDirection] / (2.0 * pi)  saturation:0.8 - theDocument.size * 0.3  brightness:0.7 alpha:0.9];
+		NSColor * endColor = [NSColor colorWithCalibratedHue:1.0 - [theDocument normalisePolarAngle: 3.0 * theDocument.straightTangentDirection - theDocument.diagonalTangentDirection + 2.0 * pi] / (2.0 * pi)  saturation:1.0 - theDocument.size * 0.3  brightness:0.7 alpha:0.9];
+		NSGradient * gradient = [[NSGradient alloc] initWithStartingColor:startColor endingColor:endColor];
+		[gradient drawInRect:self.bounds relativeCenterPosition:NSMakePoint(0.0, 0.0)];
 	}
-	[theDocument.strokeColor set];
-	[thePath setLineWidth: theDocument.strokeThickness * self.canvasRadius / 10.0];
-	[thePath stroke];
+	
+	
+	// fill shape
+	if (theDocument.twoLines) {
+		if (!spaceOut) {
+			[theDocument.fillColor set];
+			[thePath fill];
+		}
+		else{
+			CGFloat saturation = 1.0 - theDocument.size * 0.2;
+			NSColor * startColor = [NSColor colorWithCalibratedHue: [theDocument normalisePolarAngle: 2.0 * theDocument.straightTangentDirection + 3.0 * theDocument.diagonalTangentDirection] / (2.0 * pi)  saturation:saturation brightness:0.9 alpha:1.0];
+			NSColor * midColor = [NSColor colorWithCalibratedHue: [theDocument normalisePolarAngle: theDocument.straightTangentDirection + theDocument.diagonalTangentDirection] / ( 2.0 * pi) saturation:saturation brightness:0.9 alpha:0.8];
+			NSColor * endColor = [NSColor colorWithCalibratedHue:[theDocument normalisePolarAngle: 4.0 * theDocument.straightTangentDirection - 2.0 * theDocument.diagonalTangentDirection] / (2.0 * pi)  saturation:saturation brightness:0.9 alpha:1.0];
+			NSGradient * gradient = [[NSGradient alloc] initWithColorsAndLocations: startColor, 0.0, midColor, 0.5 * 0.2 * theDocument.cornerFraction, endColor, 1.0, nil];
+			[gradient drawInBezierPath:thePath relativeCenterPosition:NSMakePoint(0.0, 0.0)];
+		}
+	}
+
+	if (theDocument.strokeThickness != 0.0) {
+		[theDocument.strokeColor set];
+		[thePath setLineWidth: theDocument.strokeThickness * self.canvasRadius / 10.0];
+		[thePath stroke];
+	}
 	
 	
 	if ( [NSGraphicsContext currentContextDrawingToScreen] ) {
@@ -933,7 +958,7 @@
 		if (theDocument.showHandles != 0) {
 			self.handleLayer.opacity = 1.0;
 			[self drawGuidesForPoint:self.clickedPointName];
-				if (theDocument.showHandles == 2) {
+			if (theDocument.showHandles == 2) {
 				[thePath drawPointsInColor:[NSColor grayColor] withHandlesInColor:[NSColor grayColor]];
 			}
 			[self drawHandlesForFundamentalPath];
