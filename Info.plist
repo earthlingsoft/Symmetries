@@ -7,9 +7,9 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1b2</string>
+	<string>1b3</string>
 	<key>CFBundleVersion</key>
-	<string>13</string>
+	<string>14</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>NSMainNibFile</key>
@@ -73,6 +73,17 @@
 	<string>esRR</string>
 	<key>NSAppleScriptEnabled</key>
 	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>symmetries-registration</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>Symmetries registration URL</string>
+		</dict>
+	</array>
 	<key>OSAScriptingDefinition</key>
 	<string>Symmetries.sdef</string>
 	<key>CFBundleDevelopmentRegion</key>

@@ -12,12 +12,14 @@
 #import "NSImage+Extras.h"
 #import "ESSymmetryAnimation.h"
 #import "ESSymmetryTotalAnimation.h"
+#import "ESCursors.h"
 
 #define HANDLELINEWIDTH 1.5
 #define HANDLESIZE 4.0
+#define HANDLEEXTRATRACKINGSIZE 4.0
 #define POINTSIZE 6.0
 #define LENGTH(point) sqrt(point.x * point.x + point.y * point.y)
-#define STICKYANGLE 0.1
+#define STICKYANGLE 0.13
 #define	STICKYLENGTH 6.0
 
 
@@ -207,6 +209,7 @@
 	if (TAName) {
 		self.clickedPointName = TAName;
 		[[NSCursor closedHandCursor] set];
+		[self setNeedsDisplay: YES];
 		
 		// store current values of the document before changes happen
 		self.oldDocumentValues = [self.theDocument dictionary];
@@ -243,12 +246,13 @@
 
 
 - (void) mouseDragged: (NSEvent*) event {
+	NSPoint realMouseLocation = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
+
 	if (self.clickedPointName != nil) {
 		// we want to follow this click
 		NSString * TAName = self.clickedPointName;
 		//NSLog(@"-mouseDragged after click on %@", TAName);
 		
-		NSPoint realMouseLocation = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
 		NSPoint mouseLocation = [self.moveFromMiddle transformPoint:realMouseLocation];
 		BOOL stickyValues = !([[NSApp currentEvent] modifierFlags] & NSCommandKeyMask);
 		
@@ -377,7 +381,27 @@
 		}
 	}
 	else {
-		// The click was on no point => initiate drag and drop
+		// The click was on no point => initiate drag and drop if it was far enough away
+/*		BOOL handleDrag = YES;
+		CGFloat rectExtraSize = 6.0;
+		
+		for (NSTrackingArea * TA in self.trackingAreas) {
+			NSRect TARect = TA.rect; 
+			NSRect newRect;
+			newRect.origin.x = TARect.origin.x - rectExtraSize * 0.5;
+			newRect.origin.y = TARect.origin.y - rectExtraSize * 0.5;
+			newRect.size.width = TARect.size.width + rectExtraSize;
+			newRect.size.height = TARect.size.height + rectExtraSize;
+			if ( NSPointInRect(realMouseLocation, newRect) ) {
+				// too close for comfort
+				handleDrag = NO;
+				break;
+			}
+		}
+		if (handleDrag) {
+			[self handleDragForEvent:event];
+		}
+*/
 		[self handleDragForEvent:event];
 	}
 }
@@ -397,22 +421,45 @@
 - (void) handleDragForEvent: (NSEvent*) event {
 	//NSLog(@"-handleDragForEvent:");
 	NSDictionary * documentDict = [self.theDocument dictionary];
-	NSData * pdfData = [NSBezierPath PDFDataForDictionary: documentDict];
-	NSImage * image = [[NSImage alloc] initWithData:pdfData];
+	NSImage * image = [[NSImage alloc] initWithData:[NSBezierPath PDFDataForDictionary: documentDict]];
 	
 	NSPasteboard * draggingPasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
-	[draggingPasteboard declareTypes:[NSArray arrayWithObjects:NSPDFPboardType, ESSYMMETRYPBOARDTYPE, NSFilesPromisePboardType, nil] owner:self];
-	
-	// PDF Data
-	[draggingPasteboard setData:pdfData forType:NSPDFPboardType];
 
+	// prepare dragging in different styles for registered and unregistered users
+	NSString * imagePboardType;
+	NSString * imageType;
+	NSString * imageExtension;
+	NSData * imageData;
+	
+	if (self.theDocument.registeredMode) {
+		imagePboardType = NSPDFPboardType;
+		imageType = (NSString *) kUTTypePDF;
+		imageExtension = @"pdf";
+		imageData = [NSBezierPath PDFDataForDictionary: documentDict];
+	}
+	else {
+		imagePboardType = NSTIFFPboardType;
+		imageType = (NSString *) kUTTypeTIFF;
+		imageExtension = @"tiff";
+		imageData = [self.theDocument demoTIFFData];
+	}
+
+	// declare Pboard types
+	NSArray * pboardTypes = [NSArray arrayWithObjects:imagePboardType, ESSYMMETRYPBOARDTYPE, NSFilesPromisePboardType, nil];
+	[draggingPasteboard declareTypes:pboardTypes owner:self];
+	
+	// image data (PDF or TIFF)
+	[draggingPasteboard setData:imageData forType:imagePboardType];
+	
 	// File Promise in a format accepted by Preview
 	NSString * errorString;
-	NSData * fileTypesData = [NSPropertyListSerialization dataFromPropertyList:[NSArray arrayWithObject:@"pdf"] format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorString];
+	NSData * fileTypesData = [NSPropertyListSerialization dataFromPropertyList:[NSArray arrayWithObject:imageExtension] format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorString];
 	[draggingPasteboard setData:fileTypesData forType:NSFilesPromisePboardType];
 	
 	// File Promise in a format accepted by the Finder or GKON
-	[draggingPasteboard setData:[(NSString *) kUTTypePDF dataUsingEncoding:NSUTF8StringEncoding] forType:@"com.apple.pasteboard.promised-file-content-type"];
+	[draggingPasteboard setData:[imageType dataUsingEncoding:NSUTF8StringEncoding] forType:@"com.apple.pasteboard.promised-file-content-type"];
+	
+	// internal data format
 	NSData * dictData = [NSArchiver archivedDataWithRootObject:documentDict];
 	[draggingPasteboard setData:dictData forType:ESSYMMETRYPBOARDTYPE];
 
@@ -435,6 +482,7 @@
 	if ([dropDestination isFileURL]) {
 		NSString * folderName = [dropDestination path];
 		NSString * fileName;
+		NSString * fileNameExtension;
 		NSURL * documentURL = self.theDocument.fileURL;
 		if (documentURL && [documentURL isFileURL]) {
 			fileName = [[documentURL.path lastPathComponent] stringByDeletingPathExtension];
@@ -442,12 +490,19 @@
 		else {
 			fileName = @"Symmetry";
 		}
-		NSString * fullName = [fileName stringByAppendingPathExtension:@"pdf"];
+		if (self.theDocument.registeredMode) {
+			fileNameExtension = @"pdf";
+		}
+		else {
+			fileNameExtension = @"tiff";
+		}
+		
+		NSString * fullName = [fileName stringByAppendingPathExtension:fileNameExtension];
 		NSString * fullPath = [folderName stringByAppendingPathComponent:fullName];
 		int i = 2;
 		// make sure we have a new name
 		while ([[NSFileManager defaultManager] fileExistsAtPath:fullPath]) {
-			fullName = [fileName stringByAppendingFormat:@"-%i.pdf", i++];
+			fullName = [fileName stringByAppendingFormat:@"-%i.%@", i++, fileNameExtension];
 			fullPath = [folderName stringByAppendingPathComponent:fullName];
 		}
 		
@@ -455,11 +510,16 @@
 		NSURL * destinationURL = [NSURL fileURLWithPath:fullPath];
 		
 		NSError * myError = nil;
-		[self.theDocument writeToURL:destinationURL ofType: (NSString *) kUTTypePDF error:&myError];
+		if (self.theDocument.registeredMode) {
+			[self.theDocument writeToURL:destinationURL ofType: (NSString *) kUTTypePDF error:&myError];
+		}
+		else {
+			[[self.theDocument demoTIFFData] writeToURL:destinationURL options:0 error:&myError];
+		}
 		
 		if (myError) {
 			NSBeep();
-			NSLog(@"-namesOfPromisedFilesDroppedAtDestrination: PDF writing failed (%@)", [myError description]);
+			NSLog(@"-namesOfPromisedFilesDroppedAtDestrination: image file writing failed (%@)", [myError description]);
 			return nil;
 		}
 		else {
@@ -484,13 +544,13 @@
 		if (self.currentDemoStep >= 0) {
 			// running demo
 			switch (self.currentDemoStep) {
-				case 1: thePointName = @"endPoint"; break;
-				case 2: case 3: thePointName = @"midPoint"; break;
-				case 4: thePointName = @"endHandle"; break;
-				case 5: thePointName = @"midHandle"; break;
-				case 6: thePointName = @"widthHandle"; break;
-				case 7: thePointName = @"thickCornerHandle"; break;
-				case 9: case 10: thePointName = @"midPoint"; break;
+				case 1: case 2: thePointName = @"endPoint"; break;
+				case 3: case 4: thePointName = @"midPoint"; break;
+				case 5: thePointName = @"endHandle"; break;
+				case 6: thePointName = @"midHandle"; break;
+				case 7: thePointName = @"widthHandle"; break;
+				case 8: thePointName = @"thickCornerHandle"; break;
+				case 10: case 11: thePointName = @"midPoint"; break;
 				default: break;
 			}
 		}
@@ -673,6 +733,26 @@
 		}
 		
 		
+		// draw highlight of current point if adequate
+		if (self.clickedPointName || self.currentDemoStep >= 0) {
+			CGFloat diameter = 20.0;
+			NSPoint gradientCenter = [[self valueForKey:thePointName] pointValue];
+			NSGradient * gradient = [[NSGradient alloc] initWithColorsAndLocations:
+									 [NSColor colorWithCalibratedRed:0.9 green:0.9 blue:0.2 alpha:0.8], 0.0,
+									 [NSColor colorWithCalibratedRed:1.0 green:1.0 blue:0.4 alpha:0.0], 0.7,
+									 nil];
+
+			NSRect gradientRect;
+			gradientRect.origin.x = gradientCenter.x - diameter;
+			gradientRect.origin.y = gradientCenter.y - diameter;
+			gradientRect.size.width = 2.0 * diameter;
+			gradientRect.size.height = 2.0 * diameter;
+			[gradient drawInRect:gradientRect relativeCenterPosition:NSZeroPoint];
+			
+		}
+		
+		
+		
 		
 		if (self.useCoreAnimation) {
 		//	[image unlockFocus];
@@ -700,7 +780,7 @@
 */
 - (void) drawHandlesForFundamentalPath {
 	NSColor * pointColor = [NSColor redColor];
-	NSColor * handleColor = [NSColor greenColor];
+	NSColor * handleColor = [NSColor colorWithCalibratedRed:0.35 green:1.0 blue:0.3 alpha:1.0];
 	[NSBezierPath setDefaultLineWidth:HANDLELINEWIDTH];
 	// NSColor * irrelevantColor = [NSColor lightGrayColor];
 	
@@ -723,7 +803,9 @@
 	*/
 
 	NSImage * image;
-	if (self.useCoreAnimation) {
+	BOOL usingCoreAnimation = self.useCoreAnimation;
+	
+	if (usingCoreAnimation) {
 		image = [[NSImage alloc] initWithSize:self.frame.size];
 		[image lockFocus];
 	}
@@ -747,10 +829,10 @@
 							 round(self.endHandle.y - HANDLESIZE * 0.5), 
 							 HANDLESIZE, HANDLESIZE);
 	NSBezierPath * bP = [NSBezierPath bezierPathWithOvalInRect:rect];
-	rect.origin.x = round(rect.origin.x - 1.0);
+	rect.origin.x = round(rect.origin.x - HANDLEEXTRATRACKINGSIZE / 2.0);
 	rect.origin.y = round(rect.origin.y - 1.0);
-	rect.size.width = HANDLESIZE + 2.0;
-	rect.size.height = HANDLESIZE + 2.0;
+	rect.size.width = HANDLESIZE + HANDLEEXTRATRACKINGSIZE;
+	rect.size.height = HANDLESIZE + HANDLEEXTRATRACKINGSIZE;
 	self.endHandleTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"endHandle" forKey:@"name"]];
 	[self addTrackingArea:self.endHandleTA];
 	
@@ -759,10 +841,10 @@
 					  HANDLESIZE, 
 					  HANDLESIZE);
 	[bP appendBezierPathWithOvalInRect:rect];
-	rect.origin.x = round(rect.origin.x - 1.0);
-	rect.origin.y = round(rect.origin.y - 1.0);
-	rect.size.width = HANDLESIZE + 2.0;
-	rect.size.height = HANDLESIZE + 2.0;	
+	rect.origin.x = round(rect.origin.x - HANDLEEXTRATRACKINGSIZE / 2.0);
+	rect.origin.y = round(rect.origin.y - HANDLEEXTRATRACKINGSIZE / 2.0);
+	rect.size.width = HANDLESIZE + HANDLEEXTRATRACKINGSIZE;
+	rect.size.height = HANDLESIZE + HANDLEEXTRATRACKINGSIZE;	
 	self.midHandleTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"midHandle" forKey:@"name"]];	
 	[self addTrackingArea:self.midHandleTA];
 	[bP fill];
@@ -797,13 +879,10 @@
 		
 		// ... thickened corner handle
 		phi = 0.5 * pi + pi / self.theDocument.cornerCount;
-		ESPolarPoint polar = [self polarPointForPoint:self.midmidPoint origin:self.middle];
-		polar.r = (- self.theDocument.thickenedCorner + 1.0) / 2.0 * polar.r ; 
-		NSPoint middleMidmidPoint = [self pointForPolarPoint:polar origin:self.middle];
-		lineStart = NSMakePoint(middleMidmidPoint.x - cos(phi) * lineHandleWidth,
-								middleMidmidPoint.y - sin(phi) * lineHandleWidth);
-		lineEnd = NSMakePoint(middleMidmidPoint.x + cos(phi) * lineHandleWidth,
-							  middleMidmidPoint.y + sin(phi) * lineHandleWidth);
+		lineStart = NSMakePoint(self.middleMidmidPoint.x - cos(phi) * lineHandleWidth,
+								self.middleMidmidPoint.y - sin(phi) * lineHandleWidth);
+		lineEnd = NSMakePoint(self.middleMidmidPoint.x + cos(phi) * lineHandleWidth,
+							  self.middleMidmidPoint.y + sin(phi) * lineHandleWidth);
 		
 		NSBezierPath * bP2 = [NSBezierPath bezierPath];
 		[bP2 moveToPoint:lineStart];
@@ -843,15 +922,15 @@
 	[bP lineToPoint:NSMakePoint(self.midPoint.x, self.midPoint.y - 0.5 * pSize)];
 	[bP closePath];
 	rect = [bP bounds];
-	rect.origin.x = round(rect.origin.x);
-	rect.origin.y = round(rect.origin.y);
-	rect.size.width = round(rect.size.width);
-	rect.size.height = round(rect.size.height);
+	rect.origin.x = round(rect.origin.x - HANDLEEXTRATRACKINGSIZE / 2.0);
+	rect.origin.y = round(rect.origin.y - HANDLEEXTRATRACKINGSIZE / 2.0);
+	rect.size.width = round(rect.size.width + HANDLEEXTRATRACKINGSIZE);
+	rect.size.height = round(rect.size.height + HANDLEEXTRATRACKINGSIZE);
 	self.midPointTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"midPoint" forKey:@"name"]];
 	[self addTrackingArea:self.midPointTA];
 	
 	if (( [self.clickedPointName isEqualTo:@"midPoint"] && self.theDocument.twoMidPoints)
-			|| self.currentDemoStep == 2 || self.currentDemoStep == 3 || self.currentDemoStep == 9 || self.currentDemoStep == 10) {
+			|| self.currentDemoStep == 3 || self.currentDemoStep == 4 || self.currentDemoStep == 10 || self.currentDemoStep == 11) {
 		// we are dragging with two mid points -> draw the oder mid point as well
 		[bP moveToPoint:NSMakePoint(self.otherMidPoint.x + 0.5 * pSize, self.otherMidPoint.y)];
 		[bP lineToPoint:NSMakePoint(self.otherMidPoint.x, self.otherMidPoint.y + 0.5 * pSize)];
@@ -867,12 +946,16 @@
 					  POINTSIZE, 
 					  POINTSIZE);
 	[bP appendBezierPathWithRect:rect];
+	rect.origin.x = round(rect.origin.x - HANDLEEXTRATRACKINGSIZE / 2.0);
+	rect.origin.y = round(rect.origin.y - HANDLEEXTRATRACKINGSIZE / 2.0);
+	rect.size.width = round(rect.size.width + HANDLEEXTRATRACKINGSIZE);
+	rect.size.height = round(rect.size.height + HANDLEEXTRATRACKINGSIZE);
 	self.endPointTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"endPoint" forKey:@"name"]];
 	[self addTrackingArea:self.endPointTA];
 	[bP fill];
 
 	
-	if (self.useCoreAnimation) {
+	if (usingCoreAnimation) {
 		[image unlockFocus];
 		// put into layer	
 		CGImageRef imageRef = [image cgImage];
@@ -918,13 +1001,13 @@
 	
 	// draw
 	
-	//[theDocument.backgroundColor set];
-	//NSRectFill(self.bounds);
+	[theDocument.backgroundColor set];
+	NSRectFill(self.bounds);
 	
 	// background
 	if (spaceOut) {
-		NSColor * startColor = [NSColor colorWithCalibratedHue:1.0 - [theDocument normalisePolarAngle: 3.0 * theDocument.straightTangentDirection + 2.0 * theDocument.diagonalTangentDirection] / (2.0 * pi)  saturation:0.8 - theDocument.size * 0.3  brightness:0.7 alpha:0.9];
-		NSColor * endColor = [NSColor colorWithCalibratedHue:1.0 - [theDocument normalisePolarAngle: 3.0 * theDocument.straightTangentDirection - theDocument.diagonalTangentDirection + 2.0 * pi] / (2.0 * pi)  saturation:1.0 - theDocument.size * 0.3  brightness:0.7 alpha:0.9];
+		NSColor * startColor = [NSColor colorWithCalibratedHue:1.0 - [theDocument normalisePolarAngle: 1.0 * theDocument.straightTangentDirection + 1.0 * theDocument.diagonalTangentDirection] / (2.0 * pi)  saturation:0.8 - theDocument.size * 0.3  brightness:0.7 alpha:0.9];
+		NSColor * endColor = [NSColor colorWithCalibratedHue:1.0 - [theDocument normalisePolarAngle: 2.0 * theDocument.straightTangentDirection - theDocument.diagonalTangentDirection + 2.0 * pi] / (2.0 * pi)  saturation:1.0 - theDocument.size * 0.3  brightness:0.7 alpha:0.9];
 		NSGradient * gradient = [[NSGradient alloc] initWithStartingColor:startColor endingColor:endColor];
 		[gradient drawInRect:self.bounds relativeCenterPosition:NSMakePoint(0.0, 0.0)];
 	}
@@ -938,9 +1021,9 @@
 		}
 		else{
 			CGFloat saturation = 1.0 - theDocument.size * 0.2;
-			NSColor * startColor = [NSColor colorWithCalibratedHue: [theDocument normalisePolarAngle: 2.0 * theDocument.straightTangentDirection + 3.0 * theDocument.diagonalTangentDirection] / (2.0 * pi)  saturation:saturation brightness:0.9 alpha:1.0];
+			NSColor * startColor = [NSColor colorWithCalibratedHue: [theDocument normalisePolarAngle: 2.0 * theDocument.straightTangentDirection + theDocument.diagonalTangentDirection] / (2.0 * pi)  saturation:saturation brightness:0.9 alpha:1.0];
 			NSColor * midColor = [NSColor colorWithCalibratedHue: [theDocument normalisePolarAngle: theDocument.straightTangentDirection + theDocument.diagonalTangentDirection] / ( 2.0 * pi) saturation:saturation brightness:0.9 alpha:0.8];
-			NSColor * endColor = [NSColor colorWithCalibratedHue:[theDocument normalisePolarAngle: 4.0 * theDocument.straightTangentDirection - 2.0 * theDocument.diagonalTangentDirection] / (2.0 * pi)  saturation:saturation brightness:0.9 alpha:1.0];
+			NSColor * endColor = [NSColor colorWithCalibratedHue:[theDocument normalisePolarAngle: theDocument.straightTangentDirection -  theDocument.diagonalTangentDirection] / (2.0 * pi)  saturation:saturation brightness:0.9 alpha:1.0];
 			NSGradient * gradient = [[NSGradient alloc] initWithColorsAndLocations: startColor, 0.0, midColor, 0.5 * 0.2 * theDocument.cornerFraction, endColor, 1.0, nil];
 			[gradient drawInBezierPath:thePath relativeCenterPosition:NSMakePoint(0.0, 0.0)];
 		}
@@ -967,7 +1050,7 @@
 			self.handleLayer.opacity = 0.0;
 		}
 		// Window resize widget
-		[[NSImage imageNamed:@"resize.png"] drawAtPoint:NSMakePoint(self.window.frame.size.width - 13.0,  1.0) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction: 1.0];
+		[[NSImage imageNamed:@"Resize Widget.png"] drawAtPoint:NSMakePoint(self.window.frame.size.width - 13.0,  1.0) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction: 1.0];
 	}
 }
 
@@ -1027,13 +1110,17 @@
 */
 - (void) updateCursor {
 	NSString * TAName = [self trackingAreaNameForMouseLocation];
-
-	if (TAName) {
-		[[NSCursor openHandCursor] set];
-	}
+	NSCursor * theCursor;
+	
+	if ([TAName isEqualToString:@"endPoint"]) {
+		theCursor = [ESCursors crossCursorForAngle:2.0 * pi / self.theDocument.cornerCount withSize: 16.0];
+	} else if ([TAName isEqualToString:@"midPoint"]) {
+		theCursor = [ESCursors crossCursorForAngle: pi / self.theDocument.cornerCount withSize: 16.0];
+	} 
 	else {
-		[[NSCursor arrowCursor] set];
+		theCursor = [NSCursor arrowCursor];
 	}
+	[theCursor set];
 }
 
 
@@ -1157,14 +1244,19 @@
 	return points[2];
 }
 
+- (NSPoint) widthHandle {
+	return self.innerEndPoint;
+}
+
 	
 - (NSPoint) innerMidmidPoint {
 	ESPolarPoint midmidPolar;
 	midmidPolar.phi = pi / (theDocument.cornerCount); 
 	midmidPolar.r = theDocument.cornerFraction * self.shapeRadius * sqrt(2.0) * (1-self.theDocument.thickness) * (1- self.theDocument.thickenedCorner);
-	NSPoint midmidPoint = [self pointForPolarPoint:midmidPolar origin:self.middle];
-	return midmidPoint;
+	NSPoint immp = [self pointForPolarPoint:midmidPolar origin:self.middle];
+	return immp;
 }
+
 
 	
 /* this one doesn't actually exist */
@@ -1174,6 +1266,18 @@
 	midmidPolar.r = theDocument.cornerFraction * self.shapeRadius * sqrt(2.0) * (1-self.theDocument.thickness);
 	NSPoint midmidPoint = [self pointForPolarPoint:midmidPolar origin:self.middle];
 	return midmidPoint;	
+}
+
+
+- (NSPoint) middleMidmidPoint {
+	ESPolarPoint polar = [self polarPointForPoint:self.midmidPoint origin:self.middle];
+	polar.r = (- self.theDocument.thickenedCorner + 1.0) / 2.0 * polar.r ; 
+	NSPoint pt = [self pointForPolarPoint:polar origin:self.middle];
+	return pt;
+}
+
+- (NSPoint) thickCornerHandle{
+	return self.middleMidmidPoint;
 }
 
 

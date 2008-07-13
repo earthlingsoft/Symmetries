@@ -92,6 +92,7 @@ typedef struct {
 @property (readonly) NSPoint middle;
 @property (readonly) NSPoint innerEndPoint;
 @property (readonly) NSPoint innerMidmidPoint;
+@property (readonly) NSPoint middleMidmidPoint;
 @property (readonly) BOOL useCoreAnimation;
 @property (readonly) NSColor * guideColor;
 

@@ -99,7 +99,7 @@
 	else if ([key isEqualToString:@"cornerCount"]) {
 		min = self.cornerCount - 0.02;
 		max = self.cornerCount + 1.02 ;
-		NSLog(@"newCornerTarget: %f - %f", min, max); 
+		// NSLog(@"newCornerTarget: %f - %f", min, max); 
 	}
 	else if ([key isEqualToString:@"cornerFraction"]) {
 		min = 0.0;

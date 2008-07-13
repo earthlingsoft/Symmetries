@@ -27,20 +27,23 @@
 		1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD582A0DA1D0D100B32029 /* MainMenu.xib */; };
 		6C3BE82B0DE8268D0064BCE7 /* NSBezierPath+Points.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+Points.m */; };
 		6C3FE2190DE9762100EAB959 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C3FE2180DE9762100EAB959 /* QuartzCore.framework */; };
+		6C544A410E2951C900ACDF60 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6C544A3F0E2951C900ACDF60 /* Localizable.strings */; };
 		6C5935040DEA0441000B3428 /* NSImage+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5935030DEA0441000B3428 /* NSImage+Extras.m */; };
 		6C5A79BB0E11B5D200A3D6E1 /* ESSymmetryAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5A79BA0E11B5D200A3D6E1 /* ESSymmetryAnimation.m */; };
 		6C5A7ABD0E15419800A3D6E1 /* ESSymmetryView+Intro.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5A7ABC0E15419800A3D6E1 /* ESSymmetryView+Intro.m */; };
 		6C5A7AE60E1544DD00A3D6E1 /* AttributedStrings.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6C5A7AE40E1544DD00A3D6E1 /* AttributedStrings.rtf */; };
+		6C6A9FF10E241E80007AF9C6 /* SSCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C6A9FF00E241E80007AF9C6 /* SSCrypto.framework */; };
+		6C6A9FF80E241E97007AF9C6 /* SSCrypto.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C6A9FF00E241E80007AF9C6 /* SSCrypto.framework */; };
 		6C73CF3A0E0B079C00749440 /* NSBezierPath+ESSymmetry.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */; };
 		6C82F99D0DF7614F005CF008 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C82F99C0DF7614F005CF008 /* AppDelegate.m */; };
 		6C92E0BA0E1A283700BEE063 /* Primel.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6C92E0B90E1A283700BEE063 /* Primel.icns */; };
 		6CBC479C0DEAE2610073B214 /* ESSymmetryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */; };
 		6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */; };
 		6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC20D00E17E4AC00772100 /* MyDocument+Animation.m */; };
-		6CDC23980E185DAA00772100 /* resize.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CDC23970E185DAA00772100 /* resize.png */; };
+		6CDC23980E185DAA00772100 /* Resize Widget.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CDC23970E185DAA00772100 /* Resize Widget.png */; };
 		6CDC23C30E18DE6E00772100 /* Symmetries.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 6CDC23C20E18DE6E00772100 /* Symmetries.sdef */; };
-		6CE60E830E0D54C800BFE3F3 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CE60E820E0D54C800BFE3F3 /* Sparkle.framework */; };
-		6CE60E860E0D54D100BFE3F3 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CE60E820E0D54C800BFE3F3 /* Sparkle.framework */; };
+		6CE60E830E0D54C800BFE3F3 /* SparkleGC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CE60E820E0D54C800BFE3F3 /* SparkleGC.framework */; };
+		6CE60E860E0D54D100BFE3F3 /* SparkleGC.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CE60E820E0D54C800BFE3F3 /* SparkleGC.framework */; };
 		6CE610BE0E0DBC5B00BFE3F3 /* Symmetries.qlgenerator in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CE610BD0E0DBC4700BFE3F3 /* Symmetries.qlgenerator */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -83,7 +86,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				6CE60E860E0D54D100BFE3F3 /* Sparkle.framework in CopyFiles */,
+				6C6A9FF80E241E97007AF9C6 /* SSCrypto.framework in CopyFiles */,
+				6CE60E860E0D54D100BFE3F3 /* SparkleGC.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,9 +106,15 @@
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32DBCF750370BD2300C91783 /* RoundRect_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoundRect_Prefix.pch; sourceTree = "<group>"; };
 		6C0012A70DE6244B0016ABB5 /* ESSymmetryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryView.h; sourceTree = "<group>"; };
+		6C18A1C90E29104000A25A56 /* ESCursors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESCursors.h; sourceTree = "<group>"; };
+		6C18A1CA0E29104000A25A56 /* ESCursors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESCursors.m; sourceTree = "<group>"; };
 		6C3BE8290DE8268D0064BCE7 /* NSBezierPath+Points.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+Points.h"; sourceTree = "<group>"; };
 		6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+Points.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+Points.m"; sourceTree = "<group>"; };
 		6C3FE2180DE9762100EAB959 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
+		6C544A110E294ECD00ACDF60 /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		6C544A3D0E29514100ACDF60 /* German */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = German; path = German.lproj/MyDocument.xib; sourceTree = "<group>"; };
+		6C544A400E2951C900ACDF60 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6C544A420E2951D100ACDF60 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6C5935030DEA0441000B3428 /* NSImage+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Extras.m"; sourceTree = "<group>"; };
 		6C59350D0DEA0449000B3428 /* NSImage+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+Extras.h"; sourceTree = "<group>"; };
 		6C5A79B90E11B5D200A3D6E1 /* ESSymmetryAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryAnimation.h; sourceTree = "<group>"; };
@@ -112,6 +122,7 @@
 		6C5A7ABB0E15419800A3D6E1 /* ESSymmetryView+Intro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ESSymmetryView+Intro.h"; sourceTree = "<group>"; };
 		6C5A7ABC0E15419800A3D6E1 /* ESSymmetryView+Intro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ESSymmetryView+Intro.m"; sourceTree = "<group>"; };
 		6C5A7AE50E1544DD00A3D6E1 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/AttributedStrings.rtf; sourceTree = "<group>"; };
+		6C6A9FF00E241E80007AF9C6 /* SSCrypto.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SSCrypto.framework; path = "../../../Shared/builds/Deployment GC/SSCrypto.framework"; sourceTree = SOURCE_ROOT; };
 		6C73CF380E0B079C00749440 /* NSBezierPath+ESSymmetry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+ESSymmetry.h"; sourceTree = "<group>"; };
 		6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+ESSymmetry.m"; sourceTree = "<group>"; };
 		6C82F99B0DF7614F005CF008 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -123,12 +134,11 @@
 		6CDC209D0E17E2D400772100 /* PLANS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PLANS; sourceTree = "<group>"; };
 		6CDC20CF0E17E4AC00772100 /* MyDocument+Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MyDocument+Animation.h"; sourceTree = "<group>"; };
 		6CDC20D00E17E4AC00772100 /* MyDocument+Animation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MyDocument+Animation.m"; sourceTree = "<group>"; };
-		6CDC22850E18168500772100 /* Symmetries.scriptSuite */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = Symmetries.scriptSuite; sourceTree = "<group>"; };
-		6CDC22860E18168500772100 /* Symmetries.scriptTerminology */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = Symmetries.scriptTerminology; sourceTree = "<group>"; };
-		6CDC23970E185DAA00772100 /* resize.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = resize.png; sourceTree = "<group>"; };
+		6CDC23970E185DAA00772100 /* Resize Widget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Resize Widget.png"; sourceTree = "<group>"; };
 		6CDC23C20E18DE6E00772100 /* Symmetries.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.sdef; path = Symmetries.sdef; sourceTree = "<group>"; };
 		6CE607150E0BA48300BFE3F3 /* Symmetries QuickLook.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Symmetries QuickLook.xcodeproj"; path = "QuickLook/Symmetries QuickLook.xcodeproj"; sourceTree = "<group>"; };
-		6CE60E820E0D54C800BFE3F3 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = ../../../Shared/builds/Deployment/Sparkle.framework; sourceTree = SOURCE_ROOT; };
+		6CE60E820E0D54C800BFE3F3 /* SparkleGC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkleGC.framework; path = "../../../Shared/builds/Release (GC dual-mode; 10.5-only)/SparkleGC.framework"; sourceTree = SOURCE_ROOT; };
+		6CF369780E28E623003F1D67 /* net.earthlingsoft.symmetries.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = net.earthlingsoft.symmetries.plist; path = ../../Library/Preferences/net.earthlingsoft.symmetries.plist; sourceTree = SOURCE_ROOT; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* Symmetries.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Symmetries.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -140,7 +150,8 @@
 			files = (
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
 				6C3FE2190DE9762100EAB959 /* QuartzCore.framework in Frameworks */,
-				6CE60E830E0D54C800BFE3F3 /* Sparkle.framework in Frameworks */,
+				6CE60E830E0D54C800BFE3F3 /* SparkleGC.framework in Frameworks */,
+				6C6A9FF10E241E80007AF9C6 /* SSCrypto.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,7 +161,8 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6CE60E820E0D54C800BFE3F3 /* Sparkle.framework */,
+				6C6A9FF00E241E80007AF9C6 /* SSCrypto.framework */,
+				6CE60E820E0D54C800BFE3F3 /* SparkleGC.framework */,
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
 			);
 			name = "Linked Frameworks";
@@ -178,6 +190,7 @@
 			isa = PBXGroup;
 			children = (
 				6CDC209D0E17E2D400772100 /* PLANS */,
+				6CF369780E28E623003F1D67 /* net.earthlingsoft.symmetries.plist */,
 				6CE607150E0BA48300BFE3F3 /* Symmetries QuickLook.xcodeproj */,
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
 				2A37F4AFFDCFA73011CA2CEA /* Other Sources */,
@@ -203,6 +216,8 @@
 				6C5A7ABC0E15419800A3D6E1 /* ESSymmetryView+Intro.m */,
 				6C73CF380E0B079C00749440 /* NSBezierPath+ESSymmetry.h */,
 				6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */,
+				6C18A1C90E29104000A25A56 /* ESCursors.h */,
+				6C18A1CA0E29104000A25A56 /* ESCursors.m */,
 				6C3BE8290DE8268D0064BCE7 /* NSBezierPath+Points.h */,
 				6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+Points.m */,
 				6C5A79B90E11B5D200A3D6E1 /* ESSymmetryAnimation.h */,
@@ -230,11 +245,10 @@
 				6C5A7AE40E1544DD00A3D6E1 /* AttributedStrings.rtf */,
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
-				6CDC23970E185DAA00772100 /* resize.png */,
-				6CDC22850E18168500772100 /* Symmetries.scriptSuite */,
+				6CDC23970E185DAA00772100 /* Resize Widget.png */,
 				6CDC23C20E18DE6E00772100 /* Symmetries.sdef */,
 				6C92E0B90E1A283700BEE063 /* Primel.icns */,
-				6CDC22860E18168500772100 /* Symmetries.scriptTerminology */,
+				6C544A3F0E2951C900ACDF60 /* Localizable.strings */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				1DDD58280DA1D0D100B32029 /* MyDocument.xib */,
 				1DDD582A0DA1D0D100B32029 /* MainMenu.xib */,
@@ -361,9 +375,10 @@
 				1DDD582C0DA1D0D100B32029 /* MyDocument.xib in Resources */,
 				1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */,
 				6C5A7AE60E1544DD00A3D6E1 /* AttributedStrings.rtf in Resources */,
-				6CDC23980E185DAA00772100 /* resize.png in Resources */,
+				6CDC23980E185DAA00772100 /* Resize Widget.png in Resources */,
 				6CDC23C30E18DE6E00772100 /* Symmetries.sdef in Resources */,
 				6C92E0BA0E1A283700BEE063 /* Primel.icns in Resources */,
+				6C544A410E2951C900ACDF60 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,6 +455,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				1DDD58290DA1D0D100B32029 /* English */,
+				6C544A3D0E29514100ACDF60 /* German */,
 			);
 			name = MyDocument.xib;
 			sourceTree = "<group>";
@@ -448,6 +464,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				1DDD582B0DA1D0D100B32029 /* English */,
+				6C544A110E294ECD00ACDF60 /* German */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -458,6 +475,15 @@
 				2A37F4BAFDCFA73011CA2CEA /* English */,
 			);
 			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		6C544A3F0E2951C900ACDF60 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6C544A400E2951C900ACDF60 /* English */,
+				6C544A420E2951D100ACDF60 /* German */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		6C5A7AE40E1544DD00A3D6E1 /* AttributedStrings.rtf */ = {
@@ -501,6 +527,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../Sparkle 1.5b1\"",
 					"\"$(SRCROOT)/../../../Shared/builds/Release (GC dual-mode; 10.5-only)\"",
+					"\"$(SRCROOT)/../../../Shared/builds/Deployment GC\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -526,6 +553,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../Sparkle 1.5b1\"",
 					"\"$(SRCROOT)/../../../Shared/builds/Release (GC dual-mode; 10.5-only)\"",
+					"\"$(SRCROOT)/../../../Shared/builds/Deployment GC\"",
 				);
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_MODEL_TUNING = G5;

@@ -58,7 +58,7 @@
 			[property setObject:newEndTime forKey:@"endTime"];
 			[property setObject:currentValueNumber forKey:@"startValue"];
 			[property setObject:newTargetNumber forKey:@"endValue"];
-			NSLog(@" new target in %f\" for %@: %@", [newEndTime timeIntervalSinceReferenceDate] - nowTI, key, newTargetNumber);
+			// NSLog(@" new target in %f\" for %@: %@", [newEndTime timeIntervalSinceReferenceDate] - nowTI, key, newTargetNumber);
 		}
 		
 		NSTimeInterval startTime = [(NSDate*)[property objectForKey:@"startTime"] timeIntervalSinceReferenceDate];

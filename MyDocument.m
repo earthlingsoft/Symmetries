@@ -11,7 +11,7 @@
 #import "NSBezierPath+ESSymmetry.h"
 #import "ESSymmetryView+Intro.h"
 #import "ESSymmetryTotalAnimation.h"
-
+#import "AppDelegate.h"
 
 @implementation MyDocument
 
@@ -243,9 +243,16 @@
 
 #pragma mark ACCESSORS
 
+- (BOOL) registeredMode {
+	AppDelegate * aD = [NSApp delegate];
+	return aD.isRegistered || (self.cornerCount == SYMMETRIESUNREGISTEREDCORNERCOUNT);
+}
+
+
 - (BOOL) runningDemo {
 	return (((ESSymmetryView*)self.myView).currentDemoStep >= 0);
 }
+
 
 - (BOOL) runningAnimation {
 	return [self.totalAnimation isAnimating];
@@ -409,12 +416,30 @@
 #pragma mark PASTEBOARDS
 
 - (void) copy: (id) sender {
-	NSData * pdfData = [NSBezierPath PDFDataForDictionary:[self dictionary]];
-	NSPasteboard * pb = [NSPasteboard generalPasteboard];
-	[pb declareTypes:[NSArray arrayWithObjects: NSPDFPboardType, nil] owner:self];
-	[pb setData:pdfData forType:NSPDFPboardType];
+	NSPasteboard * pB = [NSPasteboard generalPasteboard];
+
+	if (self.registeredMode) {
+		// PDF pasteboard for registered users
+		NSData * pdfData = [NSBezierPath PDFDataForDictionary:[self dictionary]];
+		[pB declareTypes:[NSArray arrayWithObjects: NSPDFPboardType, nil] owner:self];
+		[pB setData:pdfData forType:NSPDFPboardType];
+	}
+	else {
+		// otherwise just a small bitmap
+		[pB declareTypes:[NSArray arrayWithObjects:NSTIFFPboardType, nil] owner: self];
+		[pB setData:[self demoTIFFData] forType:NSTIFFPboardType];
+	}
 }
 
+
+/*
+ returns small bitmap representation of the path for demo copying
+*/
+- (NSData *) demoTIFFData {
+	NSImage * image = [[NSImage alloc] initWithData: [NSBezierPath PDFDataForDictionary:[self dictionary]]];
+	image.size = NSMakeSize(384.0, 384.0);
+	return image.TIFFRepresentation;
+}
 
 
 
@@ -422,7 +447,15 @@
 #pragma mark MENU BAR
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
-	if ([menuItem action] == @selector(setHandles:)) {
+	if (menuItem.action == @selector(exportAsPDF:)) {
+		if (self.registeredMode) {
+			return YES;
+		}
+		else {
+			return NO;
+		}
+	}
+	else if ([menuItem action] == @selector(setHandles:)) {
 		if (self.runningDemo) {
 			// cannot change handle setting while demo is running
 			menuItem.toolTip = NSLocalizedString(@"This setting cannot be changed while the Demo is running.", @"This setting cannot be changed while the Demo is running");
@@ -504,8 +537,11 @@
 
 - (IBAction) setHandles:(id) sender {
 	if ([sender isKindOfClass:[NSMenuItem class]]) {
-		if (self.showHandles != [sender tag]) {
-			self.showHandles = [sender tag];
+		if (self.showHandles == 0) {
+			self.showHandles = 1;
+		}
+		else {
+			self.showHandles = 0;
 		}
 	}
 }

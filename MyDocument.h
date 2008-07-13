@@ -87,8 +87,10 @@
 
 @property (retain) ESSymmetryTotalAnimation * totalAnimation;
 
+@property (readonly) BOOL registeredMode;
 @property (readonly) BOOL runningDemo;
 @property (readonly) BOOL runningAnimation;
+
 
 - (id) init;
 - (id) initWithDictionary: (NSDictionary*) dict;
@@ -112,5 +114,7 @@
 - (IBAction) twoLines:(id) sender;
 - (IBAction) sliderMoved: (id) sender;
 - (IBAction) bogusAction: (id) sender;
+
+- (NSData *) demoTIFFData;
 
 @end
