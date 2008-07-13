@@ -1,0 +1,54 @@
+﻿/* Animate Path */
+"Animate Path" = "Pfad animieren";
+
+/* Space Out (Option Animate Path menu item) */
+"Space Out" = "Space Out";
+
+/* Stop Animation (Replaces Animate Path menu item while Animation is running) */
+"Stop Animation" = "Animation anhalten";
+
+/* Whoah – stop spacing out! (Option Animate Path menu item while Animation is running) */
+"Whoa – stop spacing out!" = "Whoa – genug gespaced!";
+
+
+
+
+/* Show Demo */
+"Start Demo" = "Anleitung abspielen";
+
+/* Stop Demo */
+"Stop Demo" = "Anleitung beenden";
+
+
+/* Tooltip for inactive Display and Path menu items while the demo is running  */
+"This setting cannot be changed while the Demo is running." = "Diese Einstellung kann nicht verändert werden, während die Anleitung abgespielt wird.";
+
+/* Tooltip for inactive Animate command while Demo is running */
+"Animations cannot be started while the Demo is running. Please wait until the Demo has ended or use the Stop Demo command to do so." = "Die Animation kann nicht gestartet werden, solange die Anleitung angezeigt wird. Bitte warten Sie bis die Anleitung zu Ende ist oder verwenden Sie den ‚Anleitung beenden‘ Befehl.";
+
+
+
+
+/* OK (in successful registration dialogue) */
+"OK" = "OK";
+
+/* Successful Registration Dialogue Title */
+"Symmetries is registered." = "Symmetries wurde registriert.";
+
+/* Successful Registration Dialogue Explanation */
+"Thank you for your support.\n\nThe full range of export features is now available." = "Vielen Dank für Ihre Unterstützung.\n\nAlle Exportfunktionen sind nun verfügbar.";
+
+/* Failed Registration Dialogue Explanation */
+"The registration code Symmetries received was invalid." = "Die an Symmetries übergebenen Registrierungsdatan sind ungültig.\n\nSollte der Link im E-Mail Programm nicht vollständig klickbar sein, er Registrierungslink dort auch ausgewählt und in die Zwischenablage kopiert werden. Beim erneuten Umschalten zu Symmetries, wird der Registriercode dann erkannt.";
+
+/* Failed Registration Dialogue Title */
+"Invalid registration code." = "Ungültige Registrierung";
+
+/* Failed Registration Button */
+"Bummer" = "Mist";
+
+
+
+
+/* Save button in Export as PDF sheet */
+"Export" = "Exportieren";

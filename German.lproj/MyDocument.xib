@@ -26,11 +26,12 @@
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{18, 192}, {603, 559}}</string>
 				<int key="NSWTFlags">1886912512</int>
-				<string key="NSWindowTitle">Window</string>
+				<string key="NSWindowTitle">Symmetrie</string>
 				<string key="NSWindowClass">NSWindow</string>
 				<string key="NSViewClass">View</string>
+				<string key="NSWindowContentMinSize">{540, 350}</string>
 				<object class="NSView" key="NSWindowView" id="568628114">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -39,16 +40,13 @@
 							<int key="NSvFlags">274</int>
 							<string key="NSFrameSize">{603, 559}</string>
 							<reference key="NSSuperview" ref="568628114"/>
-							<reference key="NSWindow"/>
 							<string key="NSClassName">ESSymmetryView</string>
 						</object>
 					</object>
 					<string key="NSFrameSize">{603, 559}</string>
-					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
-				<string key="NSMinSize">{0, 22}</string>
+				<string key="NSMinSize">{540, 372}</string>
 				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSFrameAutosaveName"/>
 			</object>
@@ -56,11 +54,6 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSUserDefaultsController" id="1061726955">
-				<object class="NSMutableArray" key="NSDeclaredKeys">
-					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>horizontalTangentLength</string>
-					<string>horizontalTangenDirection</string>
-				</object>
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
 			<object class="NSWindowTemplate" id="1000303677">
@@ -1635,8 +1628,8 @@
 					<reference ref="6"/>
 					<string>{{509, 48}, {301, 284}}</string>
 					<reference ref="6"/>
-					<integer value="1" id="5"/>
-					<reference ref="5"/>
+					<integer value="1" id="9"/>
+					<reference ref="9"/>
 					<string>{800, 284}</string>
 					<string>{301, 284}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1702,11 +1695,11 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{16, 188}, {603, 559}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<integer value="1" id="9"/>
+					<reference ref="9"/>
 					<string>{{16, 188}, {603, 559}}</string>
 					<reference ref="9"/>
 					<string>{{201, 387}, {507, 413}}</string>
-					<integer value="0"/>
+					<reference ref="6"/>
 					<reference ref="9"/>
 					<string>{540, 540}</string>
 					<string>{540, 350}</string>
