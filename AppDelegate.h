@@ -14,6 +14,7 @@
 @interface AppDelegate : NSObject {
 	IBOutlet NSMenuItem * startAnimationMenuItem;
 	IBOutlet NSMenuItem * spaceOutMenuItem;	
+	IBOutlet NSMenuItem * demoMenuItem;
 	
 	BOOL registrationWasVerified;
 }
@@ -24,6 +25,11 @@
 @property (readonly) BOOL isRegistered;
 
 - (IBAction) demo:(id) sender;
+- (void) demoStarted;
+- (void) demoStopped;
+
+- (IBAction) bogusAction: (id) sender;
+
 - (void) readme:(id) sender;
 - (NSString *) myVersionString;
 

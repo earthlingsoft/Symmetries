@@ -8,6 +8,7 @@
 
 #import "ESSymmetryView+Intro.h"
 #import "ESSymmetryAnimation.h"
+#import "AppDelegate.h"
 
 @implementation ESSymmetryView (Intro)
 
@@ -79,13 +80,18 @@
 #define DEMOPAGECOUNT 13
 
 - (void) startDemo:(id) sender {
-	NSLog(@"-startDemo:");
+	NSLog(@"[ESSymmetryView+Intro startDemo:]");
 	
-	// If demo is already running, stop it
+	// If demo is already running, stop it -- this shouldn't happen
 	if (self.currentDemoStep >= 0) {
+		NSLog(@"[ESSymmetryView+Intro startDemo:] demo already running! stopping it.");
 		[self endDemo:nil];
 		return;
 	}
+	
+	// make sure menu item is changed
+	AppDelegate * aD = [NSApplication sharedApplication].delegate;
+	[aD demoStarted];
 	
 	// store previous values
 	self.preAnimationDocumentValues = self.theDocument.dictionary;
@@ -139,7 +145,7 @@
 
 
 - (void) endDemo: (id) sender {
-	NSLog(@"-endDemo:");
+	NSLog(@"[ESSymmetryView+Intro endDemo:]");
 	// clean up whatever may need to be cleaned up
 	for (NSAnimation* animation in self.lastAnimations) {
 		if (animation.isAnimating) {
@@ -147,8 +153,12 @@
 		}
 	}
 	self.currentDemoStep = -1;
+	
 	[self.demoLayer removeFromSuperlayer];
 	self.demoLayer = nil;
+	
+	
+	
 	if (! [self.theDocument.dictionary  isEqualToDictionary:self.preAnimationDocumentValues] ) {
 		ESSymmetryAnimation * animation = [[ESSymmetryAnimation alloc] initWithDuration:0.3 animationCurve:NSAnimationEaseInOut];
 		animation.valueObject = self.theDocument;
@@ -158,7 +168,10 @@
 		
 		[animation startAnimation];
 	}
-
+	
+	// restore demo menu item
+	AppDelegate * ad = [NSApplication sharedApplication].delegate;
+	[ad demoStopped];
 }
 
 

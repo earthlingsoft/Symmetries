@@ -98,10 +98,11 @@
 		// demo menu item, change text to reflect current state
 		if (![self demoIsRunning]) {
 			menuItem.title = NSLocalizedString(@"Start Demo", @"Show Demo");
-			menuItem.keyEquivalent = @"";
+			NSLog(@"[AppDelegate validateMenuItem:] new name is %@",  NSLocalizedString(@"Start Demo", @"Show Demo"));
 		}
 		else {
 			menuItem.title = NSLocalizedString(@"Stop Demo", @"Stop Demo");
+			NSLog(@"[AppDelegate validateMenuItem:] new name is %@",  NSLocalizedString(@"Stop Demo", @"Stop Demo"));
 		}
 	}
 	return [NSApp validateMenuItem:menuItem];
@@ -120,30 +121,54 @@
 }
 
 
+
+
 - (IBAction) demo:(id) sender {
-	NSLog(@"[AppDelegate demo:] started");
-	
-	if ([sender isKindOfClass:[NSMenuItem class]]) {
-		((NSMenuItem *) sender).keyEquivalent = @".";
-		((NSMenuItem *) sender).keyEquivalentModifierMask = NSCommandKeyMask;
-	}
-	
-	NSDocumentController * dC = [NSDocumentController sharedDocumentController];
-	if (dC.documents.count == 0 ) {
-		// create a document if there is none
-		[dC openUntitledDocumentAndDisplay:YES error:NULL];
-	}
+	if (self.demoIsRunning) {
+		NSLog(@"[AppDelegate demo:] stopping Demo");
+		// stop demo
 		
-	MyDocument * document = (MyDocument *) dC.currentDocument;
-	
-	if (document.runningAnimation) {
-		// turn off animation if necessary
-		[document stopAnimation:self];
+		MyDocument * doc;
+		for (doc in [[NSDocumentController sharedDocumentController] documents]) {
+			if (doc.runningDemo) {
+				[doc.myView endDemo:sender];
+				break;
+			}
+		}
 	}
-	
-	[(ESSymmetryView*) document.myView startDemo:sender];
+	else {
+		NSLog(@"[AppDelegate demo:] starting Demo");
+		// start demo
+				
+		NSDocumentController * dC = [NSDocumentController sharedDocumentController];
+		if (dC.documents.count == 0 ) {
+			// create a document if there is none
+			[dC openUntitledDocumentAndDisplay:YES error:NULL];
+		}
+			
+		MyDocument * document = (MyDocument *) dC.currentDocument;
+		
+		if (document.runningAnimation) {
+			// turn off animation if necessary
+			[document stopAnimation:self];
+		}
+		
+		[(ESSymmetryView*) document.myView startDemo:sender];
+	}
 }
 
+
+- (void) demoStarted {
+	demoMenuItem.keyEquivalent = @".";
+	demoMenuItem.keyEquivalentModifierMask = NSCommandKeyMask;
+}
+
+
+- (void) demoStopped {
+	if (!self.demoIsRunning) {
+		demoMenuItem.keyEquivalent = @"";
+	}
+}
 
 
 - (IBAction) bogusAction: (id) sender {
