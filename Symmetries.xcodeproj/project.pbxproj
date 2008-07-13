@@ -25,6 +25,7 @@
 /* Begin PBXBuildFile section */
 		1DDD582C0DA1D0D100B32029 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58280DA1D0D100B32029 /* MyDocument.xib */; };
 		1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD582A0DA1D0D100B32029 /* MainMenu.xib */; };
+		6C129FE80E2A138C00C0FD35 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 6C129FE60E2A138C00C0FD35 /* Credits.html */; };
 		6C3BE82B0DE8268D0064BCE7 /* NSBezierPath+Points.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+Points.m */; };
 		6C3FE2190DE9762100EAB959 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C3FE2180DE9762100EAB959 /* QuartzCore.framework */; };
 		6C544A410E2951C900ACDF60 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6C544A3F0E2951C900ACDF60 /* Localizable.strings */; };
@@ -37,6 +38,8 @@
 		6C73CF3A0E0B079C00749440 /* NSBezierPath+ESSymmetry.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */; };
 		6C82F99D0DF7614F005CF008 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C82F99C0DF7614F005CF008 /* AppDelegate.m */; };
 		6C92E0BA0E1A283700BEE063 /* Primel.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6C92E0B90E1A283700BEE063 /* Primel.icns */; };
+		6CB3F7FE0E29878D00B005BF /* Primel-Document.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6CB3F7FD0E29878D00B005BF /* Primel-Document.icns */; };
+		6CB3F8020E2987CC00B005BF /* ESCursors.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C18A1CA0E29104000A25A56 /* ESCursors.m */; };
 		6CBC479C0DEAE2610073B214 /* ESSymmetryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */; };
 		6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */; };
 		6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC20D00E17E4AC00772100 /* MyDocument+Animation.m */; };
@@ -45,7 +48,6 @@
 		6CE60E830E0D54C800BFE3F3 /* SparkleGC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CE60E820E0D54C800BFE3F3 /* SparkleGC.framework */; };
 		6CE60E860E0D54D100BFE3F3 /* SparkleGC.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CE60E820E0D54C800BFE3F3 /* SparkleGC.framework */; };
 		6CE610BE0E0DBC5B00BFE3F3 /* Symmetries.qlgenerator in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CE610BD0E0DBC4700BFE3F3 /* Symmetries.qlgenerator */; };
-		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8D15AC310486D014006FF6A4 /* MyDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
@@ -101,11 +103,14 @@
 		2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDocument.m; sourceTree = "<group>"; };
 		2A37F4AEFDCFA73011CA2CEA /* MyDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDocument.h; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		2A37F4BAFDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32DBCF750370BD2300C91783 /* RoundRect_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoundRect_Prefix.pch; sourceTree = "<group>"; };
 		6C0012A70DE6244B0016ABB5 /* ESSymmetryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryView.h; sourceTree = "<group>"; };
+		6C129FE70E2A138C00C0FD35 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = English; path = English.lproj/Credits.html; sourceTree = "<group>"; };
+		6C129FFA0E2A15EA00C0FD35 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		6C12A0720E2A224200C0FD35 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = German; path = German.lproj/AttributedStrings.rtf; sourceTree = "<group>"; };
+		6C12A0AE0E2A339F00C0FD35 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = German; path = German.lproj/Credits.html; sourceTree = "<group>"; };
 		6C18A1C90E29104000A25A56 /* ESCursors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESCursors.h; sourceTree = "<group>"; };
 		6C18A1CA0E29104000A25A56 /* ESCursors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESCursors.m; sourceTree = "<group>"; };
 		6C3BE8290DE8268D0064BCE7 /* NSBezierPath+Points.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+Points.h"; sourceTree = "<group>"; };
@@ -127,7 +132,8 @@
 		6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+ESSymmetry.m"; sourceTree = "<group>"; };
 		6C82F99B0DF7614F005CF008 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6C82F99C0DF7614F005CF008 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		6C92E0B90E1A283700BEE063 /* Primel.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Primel.icns; sourceTree = "<group>"; };
+		6C92E0B90E1A283700BEE063 /* Primel.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Primel.icns; path = Icons/Primel.icns; sourceTree = "<group>"; };
+		6CB3F7FD0E29878D00B005BF /* Primel-Document.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "Primel-Document.icns"; path = "Icons/Primel-Document.icns"; sourceTree = "<group>"; };
 		6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryView.m; sourceTree = "<group>"; };
 		6CDC1ED70E17935B00772100 /* ESSymmetryTotalAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryTotalAnimation.h; sourceTree = "<group>"; };
 		6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryTotalAnimation.m; sourceTree = "<group>"; };
@@ -243,11 +249,12 @@
 			isa = PBXGroup;
 			children = (
 				6C5A7AE40E1544DD00A3D6E1 /* AttributedStrings.rtf */,
-				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
+				6C129FE60E2A138C00C0FD35 /* Credits.html */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				6CDC23970E185DAA00772100 /* Resize Widget.png */,
 				6CDC23C20E18DE6E00772100 /* Symmetries.sdef */,
 				6C92E0B90E1A283700BEE063 /* Primel.icns */,
+				6CB3F7FD0E29878D00B005BF /* Primel-Document.icns */,
 				6C544A3F0E2951C900ACDF60 /* Localizable.strings */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				1DDD58280DA1D0D100B32029 /* MyDocument.xib */,
@@ -370,7 +377,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */,
 				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
 				1DDD582C0DA1D0D100B32029 /* MyDocument.xib in Resources */,
 				1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */,
@@ -379,6 +385,8 @@
 				6CDC23C30E18DE6E00772100 /* Symmetries.sdef in Resources */,
 				6C92E0BA0E1A283700BEE063 /* Primel.icns in Resources */,
 				6C544A410E2951C900ACDF60 /* Localizable.strings in Resources */,
+				6CB3F7FE0E29878D00B005BF /* Primel-Document.icns in Resources */,
+				6C129FE80E2A138C00C0FD35 /* Credits.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -388,6 +396,7 @@
 		6CE60D5A0E0D4E2700BFE3F3 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
+			comments = zip;
 			files = (
 			);
 			inputPaths = (
@@ -429,6 +438,7 @@
 				6C5A7ABD0E15419800A3D6E1 /* ESSymmetryView+Intro.m in Sources */,
 				6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */,
 				6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */,
+				6CB3F8020E2987CC00B005BF /* ESCursors.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,6 +457,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				089C1660FE840EACC02AAC07 /* English */,
+				6C129FFA0E2A15EA00C0FD35 /* German */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -469,12 +480,13 @@
 			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
-		2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */ = {
+		6C129FE60E2A138C00C0FD35 /* Credits.html */ = {
 			isa = PBXVariantGroup;
 			children = (
-				2A37F4BAFDCFA73011CA2CEA /* English */,
+				6C129FE70E2A138C00C0FD35 /* English */,
+				6C12A0AE0E2A339F00C0FD35 /* German */,
 			);
-			name = Credits.rtf;
+			name = Credits.html;
 			sourceTree = "<group>";
 		};
 		6C544A3F0E2951C900ACDF60 /* Localizable.strings */ = {
@@ -490,6 +502,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				6C5A7AE50E1544DD00A3D6E1 /* English */,
+				6C12A0720E2A224200C0FD35 /* German */,
 			);
 			name = AttributedStrings.rtf;
 			sourceTree = "<group>";
@@ -548,6 +561,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "earthlingsoft Software";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -563,6 +577,7 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = Symmetries;
+				PROVISIONING_PROFILE = DefaultProfileUuid;
 				SDKROOT = macosx10.5;
 			};
 			name = Release;

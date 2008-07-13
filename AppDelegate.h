@@ -27,6 +27,8 @@
 - (void) readme:(id) sender;
 - (NSString *) myVersionString;
 
+- (IBAction) orderFrontStandardAboutPanel:(id)sender;
+
 - (void) processRegistration: (NSString *) s;
 
 @end

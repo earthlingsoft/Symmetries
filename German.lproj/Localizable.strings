@@ -13,7 +13,7 @@
 
 
 
-/* Show Demo */
+/* Show Demo (Make sure this is the same as the string in the 1st page of Attributed Strings.rtf) */
 "Start Demo" = "Anleitung abspielen";
 
 /* Stop Demo */
@@ -33,19 +33,24 @@
 "OK" = "OK";
 
 /* Successful Registration Dialogue Title */
-"Symmetries is registered." = "Symmetries wurde registriert.";
+"Symmetries is registered." = "Symmetries ist nun registriert.";
 
 /* Successful Registration Dialogue Explanation */
-"Thank you for your support.\n\nThe full range of export features is now available." = "Vielen Dank für Ihre Unterstützung.\n\nAlle Exportfunktionen sind nun verfügbar.";
+"Thank you for your support.\n\nThe full range of export features is now available." = "Alle Exportfunktionen sind nun verfügbar.\n\nVielen Dank für Ihre Unterstützung.";
 
 /* Failed Registration Dialogue Explanation */
-"The registration code Symmetries received was invalid." = "Die an Symmetries übergebenen Registrierungsdatan sind ungültig.\n\nSollte der Link im E-Mail Programm nicht vollständig klickbar sein, er Registrierungslink dort auch ausgewählt und in die Zwischenablage kopiert werden. Beim erneuten Umschalten zu Symmetries, wird der Registriercode dann erkannt.";
+"The registration code Symmetries received was invalid." = "Die an Symmetries übergebenen Registrierungsdaten sind ungültig.\n\nSollte der Link im E-Mail Programm nicht vollständig klickbar sein, er Registrierungslink dort auch ausgewählt und in die Zwischenablage kopiert werden. Beim erneuten Umschalten zu Symmetries, wird der Registriercode dann erkannt.";
 
 /* Failed Registration Dialogue Title */
 "Invalid registration code." = "Ungültige Registrierung";
 
 /* Failed Registration Button */
 "Bummer" = "Mist";
+
+/* Heading for registration info in About box */
+"Registered to" = "Registered to";
+
+
 
 
 

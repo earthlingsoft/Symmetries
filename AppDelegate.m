@@ -114,13 +114,15 @@
 	for (MyDocument * doc in [[NSDocumentController sharedDocumentController] documents]) {
 		isRunning = isRunning || doc.runningDemo;
 	}
-	// NSLog(@"[AppDelegate demoIsRunning] -> %i", isRunning);
+	NSLog(@"[AppDelegate demoIsRunning] -> %i", isRunning);
 
 	return isRunning;
 }
 
 
 - (IBAction) demo:(id) sender {
+	NSLog(@"[AppDelegate demo:] started");
+	
 	if ([sender isKindOfClass:[NSMenuItem class]]) {
 		((NSMenuItem *) sender).keyEquivalent = @".";
 		((NSMenuItem *) sender).keyEquivalentModifierMask = NSCommandKeyMask;
@@ -178,17 +180,56 @@
 }
 
 
+- (IBAction) orderFrontStandardAboutPanel:(id)sender {
+	NSString * HTMLPath = [[NSBundle mainBundle] pathForResource:@"Credits" ofType:@"html"];
+	NSString * HTML = [NSString stringWithContentsOfFile:HTMLPath encoding:NSUTF8StringEncoding error:nil];
+	NSString * registrationInfo = @"";
+	if (self.isRegistered) {
+		NSString * registeredName = @"";
+		NSDictionary * regDict = [[NSUserDefaults standardUserDefaults] valueForKey:SYMMETRIESREGISTRATIONDEFAULTSKEY];
+		if (regDict) {
+			registeredName = [regDict objectForKey: SYMMETRIESREGISTRATIONNAMEKEY];
+			if (!registeredName) {
+				registeredName = @"";
+			}
+		}
+		
+		registrationInfo = [NSString stringWithFormat:@"<h3>%@</h3>\n<p>%@<br></p>\n",
+							NSLocalizedString(@"Registered to", @"Heading for registration info in About box"),
+							registeredName];
+	}
+
+	HTML = [HTML stringByReplacingOccurrencesOfString:@"@@@@@" withString:registrationInfo];
+	NSAttributedString * HTMLString = [[NSAttributedString alloc] initWithHTML:[HTML dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
+	
+	NSDictionary * options = [NSDictionary dictionaryWithObjectsAndKeys:HTMLString, @"Credits", nil];
+	[NSApp orderFrontStandardAboutPanelWithOptions:options];
+}
+
+
+
+
 
 #pragma mark REGISTRATION 
 
 - (void) processRegistration: (NSString*) s {
 	NSString * decodedURL = (NSString*) CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef) s, CFSTR(""), kCFStringEncodingUTF8);
-	NSArray * a = [decodedURL componentsSeparatedByString:@":"];
-	// URL is of form symmetries-registration:NAME::EMAIL::SERIAL
-	NSString * name = [a objectAtIndex:1];
-	NSString * mail = [a objectAtIndex:3];
-	NSString * serial = [a objectAtIndex:5];
-
+	NSScanner * scanner = [NSScanner scannerWithString:decodedURL];
+	// URL is of form symmetries-registration://NAME/EMAIL/SERIAL
+	// ignore protocol
+	scanner.scanLocation = [SYMMETRIESREGISTRATIONPROTOCOLNAME length] + 3;
+	// get name and mail, omitting the /
+	NSString * name;
+	[scanner scanUpToString:@"/" intoString:&name];
+	scanner.scanLocation = scanner.scanLocation + 1;
+	NSString * mail;
+	[scanner scanUpToString:@"/" intoString:&mail];
+	scanner.scanLocation = scanner.scanLocation + 1;
+	NSString * serial;
+	// make the somewhat silly assumption that our serial code always ends in ==
+	[scanner scanUpToString:@"==" intoString:&serial];
+	serial = [serial stringByAppendingString:@"=="];
+	
 	BOOL FAIL = !(name && mail && serial);
 
 	
@@ -269,6 +310,11 @@
 					registered = YES;
 					registrationWasVerified = YES;
 				}
+				else {
+					// the registration was wrong -> delete from defaults
+					[[NSUserDefaults standardUserDefaults] removeObjectForKey:SYMMETRIESREGISTRATIONDEFAULTSKEY];
+					NSLog(@"Removed invalid registration information from preferences");
+				}
 
 				[crypto release];
 			}
@@ -287,9 +333,11 @@
 		NSPasteboard * pB = [NSPasteboard generalPasteboard];
 		NSString * pboardString = [pB stringForType:NSStringPboardType];
 		if ([pboardString length] > [SYMMETRIESREGISTRATIONPROTOCOLNAME length]) {
-			if ([[pboardString substringToIndex: [SYMMETRIESREGISTRATIONPROTOCOLNAME length]] isEqualToString:SYMMETRIESREGISTRATIONPROTOCOLNAME]) {
-					// this could be a serial number, pass the string on to the verification 
-				[self processRegistration:pboardString];
+			NSRange protocolRange = [pboardString rangeOfString:SYMMETRIESREGISTRATIONPROTOCOLNAME];
+			if (protocolRange.location != NSNotFound) {
+				// found our protocol name
+				NSString * trimmedString = [pboardString substringFromIndex:protocolRange.location];			
+				[self processRegistration:trimmedString];
 			}
 		}
 	}	

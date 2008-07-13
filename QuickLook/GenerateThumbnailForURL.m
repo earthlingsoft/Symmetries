@@ -14,7 +14,7 @@ OSStatus DrawStuff(CFURLRef url, CGFloat size) {
 		[thePath transformUsingAffineTransform:moveToMiddle]; 
 		
 		// Create the shadow below and to the right of the shape.
-		NSShadow* theShadow = [[NSShadow alloc] init];
+		NSShadow* theShadow = [[[NSShadow alloc] init] autorelease];
 		[theShadow setShadowOffset:NSMakeSize(size/100.0, -size/100.0)];
 		[theShadow setShadowBlurRadius:size/25.0];		
 		[theShadow setShadowColor:[[NSColor whiteColor] colorWithAlphaComponent:0.3]]; 
