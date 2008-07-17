@@ -21,7 +21,10 @@
 #define LENGTH(point) sqrt(point.x * point.x + point.y * point.y)
 #define STICKYANGLE 0.13
 #define	STICKYLENGTH 6.0
-
+#define POINTCOLOR [NSColor redColor]
+#define HANDLECOLOR [NSColor colorWithCalibratedRed:0.35 green:1.0 blue:0.3 alpha:1.0]
+#define HANDLECOLOR2 [NSColor colorWithDeviceRed:0.0 green:0.88 blue:0.0 alpha:1.0]
+#define HANDLECOLOR3 [NSColor colorWithDeviceRed:0.3 green:0.85 blue:0.0 alpha:1.0]
 
 @implementation ESSymmetryView
 
@@ -208,8 +211,8 @@
 		
 	if (TAName) {
 		self.clickedPointName = TAName;
-		[[NSCursor closedHandCursor] set];
 		[self setNeedsDisplay: YES];
+		[self updateCursor];
 		
 		// store current values of the document before changes happen
 		self.oldDocumentValues = [self.theDocument dictionary];
@@ -224,6 +227,7 @@
 - (void) mouseUp: (NSEvent*) event {
 	NSString * TAName = [self trackingAreaNameForMouseLocation];
 	//NSLog(@"mouseUp");
+
 	// handle double (multiple) clicks
 	if ([event clickCount] > 1) {
 		// a multi-click
@@ -405,6 +409,197 @@
 		[self handleDragForEvent:event];
 	}
 }
+
+
+
+
+
+
+#pragma mark MOUSE TRACKING
+
+- (NSString*) trackingAreaNameForMouseLocation {
+	NSPoint mouseLocation = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
+	//	NSLog (@"mouse: %f, %f", mouseLocation.x, mouseLocation.y);
+	
+	if ([self point:mouseLocation inRect:[self.endPointTA rect]]) {
+		return @"endPoint";
+	}
+	else if ([self point:mouseLocation inRect:[self.endHandleTA rect]]) {
+		return @"endHandle";
+	}
+	else if ([self point:mouseLocation inRect:[self.midPointTA rect]]) {
+		return @"midPoint";
+	}
+	else if ([self point:mouseLocation inRect:[self.midHandleTA rect]]) {
+		return @"midHandle";											
+	}
+	else if ([self point:mouseLocation inRect:[self.widthHandleTA rect]]) {
+		return @"widthHandle";											
+	}
+	else if ([self point:mouseLocation inRect:[self.thickCornerHandleTA rect]]) {
+		return @"thickCornerHandle";											
+	}
+	return nil;
+}
+
+
+
+/*
+ Custom pointInRect method to work just right for mouse tracking
+ (may be the same as NSMouseInRect)
+*/
+- (BOOL) point: (NSPoint) point inRect:(NSRect) rect {
+	return (point.x >= rect.origin.x)
+	&& (point.x < rect.origin.x + rect.size.width)
+	&& (point.y > rect.origin.y)
+	&& (point.y <= rect.origin.y + rect.size.height);
+}
+
+
+
+
+/*
+ Set the mouse cursor to be a fancypants arrow appropriate to the current location and the standard pointer otherwise
+*/
+- (void) updateCursor {
+	NSString * TAName;
+	const BOOL isDragging = (clickedPointName != nil);
+	
+	if (isDragging) {
+		TAName = self.clickedPointName;
+	}
+	else {
+		TAName = [self trackingAreaNameForMouseLocation];
+	}
+
+	NSLog (@"[ESSymmetryView updateCursor] for point %@", TAName);
+		
+	NSCursor * theCursor = [NSCursor arrowCursor];
+	const CGFloat cursorSize = 16.0;
+	
+	if ([TAName isEqualToString:@"endPoint"]) {
+		NSImage * redDot = nil;
+		if (isDragging) {
+			redDot = [[NSImage alloc] initWithSize:NSMakeSize(POINTSIZE, POINTSIZE)];
+			[redDot lockFocus];
+			[[POINTCOLOR colorWithAlphaComponent:0.6] set];
+			NSRectFill(NSMakeRect(0.0, 0.0, POINTSIZE, POINTSIZE));
+			[redDot unlockFocus];
+		}
+		
+		if (self.theDocument.size == ESSYM_SIZE_MIN) {
+			// doesn't actually happen
+//			theCursor = [ESCursors curvedThreeProngedInnerCursorForAngle: 2.0 * pi / self.theDocument.cornerCount withSize:cursorSize];
+			theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:NO leftArrow:YES downArrow:YES forAngle: 2.0 * pi +  2.0 * pi / self.theDocument.cornerCount size:cursorSize underlay:redDot];
+		}
+		else if (self.theDocument.size == ESSYM_SIZE_MAX) {
+			if (self.theDocument.cornerCount == ESSYM_CORNERCOUNT_MIN) {
+				theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:NO leftArrow:NO downArrow:YES forAngle:1.5 * pi +  2.0 * pi / self.theDocument.cornerCount size:cursorSize underlay:redDot];
+			}
+			else if (self.theDocument.cornerCount == ESSYM_CORNERCOUNT_MAX) {
+				theCursor = [ESCursors curvedCursorWithRightArrow:NO upArrow:NO leftArrow:YES downArrow:YES forAngle:1.5 * pi +  2.0 * pi / self.theDocument.cornerCount size:cursorSize underlay:redDot];
+			}
+			else {
+				theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:NO leftArrow:YES downArrow:YES forAngle:1.5 * pi +  2.0 * pi / self.theDocument.cornerCount size:cursorSize underlay:redDot];
+			}
+		}
+		else {
+			if (self.theDocument.cornerCount == ESSYM_CORNERCOUNT_MIN) {
+				theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:YES leftArrow:NO downArrow:YES forAngle:1.5 * pi +  2.0 * pi / self.theDocument.cornerCount size:cursorSize underlay:redDot];
+			}
+			else if (self.theDocument.cornerCount == ESSYM_CORNERCOUNT_MAX) {
+				theCursor = [ESCursors curvedCursorWithRightArrow:NO upArrow:YES leftArrow:YES downArrow:YES forAngle:1.5 * pi +  2.0 * pi / self.theDocument.cornerCount size:cursorSize underlay:redDot];
+			}
+			else {
+				theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:YES leftArrow:YES downArrow:YES forAngle:1.5 * pi +  2.0 * pi / self.theDocument.cornerCount size:cursorSize underlay:redDot];
+			}
+		}
+	} 
+	else if ([TAName isEqualToString:@"midPoint"]) {
+		if (self.theDocument.twoMidPoints) {
+			// two midpoints => draw variations of cross cursor
+			if (self.theDocument.cornerFraction == ESSYM_CORNERFRACTION_MIN) {
+				if (self.theDocument.midPointsDistance == ESSYM_MIDPOINTSDISTANCE_MIN) {
+					theCursor = [ESCursors angleCursorForAngle: pi / self.theDocument.cornerCount withSize: cursorSize];					
+				}
+				else if (self.theDocument.midPointsDistance == ESSYM_MIDPOINTSDISTANCE_MAX) {
+					theCursor = [ESCursors angleCursorForAngle: - pi / 2.0 + pi / self.theDocument.cornerCount withSize: cursorSize];					
+				}
+				else {
+					theCursor = [ESCursors threeProngedCursorForAngle: pi + pi / 2.0 + pi / self.theDocument.cornerCount withSize: cursorSize];					
+				}
+			}
+			else if (self.theDocument.cornerFraction == ESSYM_CORNERFRACTION_MAX) {
+				if (self.theDocument.midPointsDistance == ESSYM_MIDPOINTSDISTANCE_MIN) {
+					theCursor = [ESCursors angleCursorForAngle: .5 * pi + pi / self.theDocument.cornerCount withSize: cursorSize];					
+				}
+				else if (self.theDocument.midPointsDistance == ESSYM_MIDPOINTSDISTANCE_MAX) {
+					theCursor = [ESCursors angleCursorForAngle: -.5 * pi - pi / 2.0 + pi / self.theDocument.cornerCount withSize: cursorSize];					
+				}
+				else {
+					theCursor = [ESCursors threeProngedCursorForAngle: pi / 2.0 + pi / self.theDocument.cornerCount withSize: cursorSize];					
+				}
+			}
+			else {
+				if (self.theDocument.midPointsDistance == ESSYM_MIDPOINTSDISTANCE_MIN) {
+					theCursor = [ESCursors threeProngedCursorForAngle: -0.5 * pi + pi / 2.0 + pi / self.theDocument.cornerCount withSize: cursorSize];					
+					
+				}
+				else if (self.theDocument.midPointsDistance == ESSYM_MIDPOINTSDISTANCE_MAX) {
+					theCursor = [ESCursors threeProngedCursorForAngle: 0.5 * pi + pi / 2.0 + pi / self.theDocument.cornerCount withSize: cursorSize];					
+				}
+				else {
+					// standard cross cursor away from the borders
+					theCursor = [ESCursors crossCursorForAngle: pi / 2.0 + pi / self.theDocument.cornerCount withSize: cursorSize];					
+				}				
+			}
+		}
+		else {
+			// just a single midpoint => only draw cursor for cornerFraction direction
+			if (self.theDocument.cornerFraction == ESSYM_CORNERFRACTION_MIN) {
+				theCursor = [ESCursors halfStraightCursorForAngle: pi / self.theDocument.cornerCount  withSize:cursorSize];
+			}
+			else if (self.theDocument.cornerFraction == ESSYM_CORNERFRACTION_MAX) {
+				theCursor = [ESCursors halfStraightCursorForAngle: pi + pi / self.theDocument.cornerCount  withSize:cursorSize];				
+			}
+			else {
+				theCursor = [ESCursors straightCursorForAngle: pi / self.theDocument.cornerCount withSize:cursorSize];
+			}
+		}
+	}
+	else if ([TAName isEqualToString:@"endHandle"] || [TAName isEqualToString:@"midHandle"] ) {
+		theCursor = [ESCursors crossCursorForAngle: 0.0 withSize:cursorSize];
+	}
+	else if ([TAName isEqualToString:@"widthHandle"]) {
+		if (self.theDocument.thickness == ESSYM_THICKNESS_MIN) {
+			theCursor = [ESCursors halfStraightCursorForAngle: pi + 2.0 * pi / self.theDocument.cornerCount  withSize:cursorSize];
+		}
+		else if (self.theDocument.thickness == ESSYM_THICKNESS_MAX) {
+			theCursor = [ESCursors halfStraightCursorForAngle: 2.0 * pi / self.theDocument.cornerCount  withSize:cursorSize];			
+		}
+		else {
+			theCursor = [ESCursors straightCursorForAngle: 2.0 * pi / self.theDocument.cornerCount withSize:cursorSize];
+		}
+	}
+	else if ([TAName isEqualToString:@"thickCornerHandle"]) {
+		if (self.theDocument.thickenedCorner == ESSYM_THICKENEDCORNER_MIN) {
+			theCursor = [ESCursors halfStraightCursorForAngle: pi + pi / self.theDocument.cornerCount withSize:cursorSize];
+		}
+		else if (self.theDocument.thickenedCorner == ESSYM_THICKENEDCORNER_MAX) {
+			theCursor = [ESCursors halfStraightCursorForAngle: pi / self.theDocument.cornerCount withSize:cursorSize];			
+		}
+		else {
+			theCursor = [ESCursors straightCursorForAngle: pi / self.theDocument.cornerCount withSize:cursorSize];
+		}
+	}
+	else {
+		theCursor = [NSCursor arrowCursor];
+	}
+	
+	[theCursor set];
+}
+
+
 
 
 
@@ -779,10 +974,7 @@
  Draws handles for the fundamental area of the path and sets up its tracking areas.
 */
 - (void) drawHandlesForFundamentalPath {
-	NSColor * pointColor = [NSColor redColor];
-	NSColor * handleColor = [NSColor colorWithCalibratedRed:0.35 green:1.0 blue:0.3 alpha:1.0];
 	[NSBezierPath setDefaultLineWidth:HANDLELINEWIDTH];
-	// NSColor * irrelevantColor = [NSColor lightGrayColor];
 	
 	// clear out old tracking areas
 	[self removeTrackingArea:self.midHandleTA];
@@ -820,7 +1012,7 @@
 		
 	// Handles first...
 	//
-	[handleColor set];
+	[HANDLECOLOR set];
 	[NSBezierPath strokeLineFromPoint:self.endPoint toPoint:self.endHandle];
 	[NSBezierPath strokeLineFromPoint:self.midPoint toPoint:self.midHandle];
 	
@@ -896,14 +1088,14 @@
 		[self addTrackingArea:self.thickCornerHandleTA];
 			
 		[bP appendBezierPath:bP2];
-		[handleColor set];
+		[HANDLECOLOR set];
 		[bP stroke];
 		
 		// a little bit of structure
-		[[NSColor colorWithDeviceRed:0.0 green:0.88 blue:0.0 alpha:1.0] set];
+		[HANDLECOLOR2 set];
 		bP.lineWidth = 3.0;
 		[bP stroke];
-		[[NSColor colorWithDeviceRed:0.3 green:0.85 blue:0.0 alpha:1.0] set];
+		[HANDLECOLOR3 set];
 		bP.lineWidth = 1.0;
 		[bP stroke];
 		
@@ -912,7 +1104,7 @@
 
 	// anchor points on top
 	bP = [NSBezierPath bezierPath];
-	[pointColor set];
+	[POINTCOLOR set];
 	
 	// a diamond for the mid point
 	CGFloat pSize = POINTSIZE * sqrt(2);
@@ -970,6 +1162,7 @@
 		self.handleLayer.opacity = 0.0;
 	}
 	// debugging -- draw trackingareas' rects when caps lock is pressed
+/*
 	if ([[NSApp currentEvent] modifierFlags] & NSAlphaShiftKeyMask) {
 		[[NSColor orangeColor] set];
 		[NSBezierPath strokeRect:self.endPointTA.rect];
@@ -981,6 +1174,7 @@
 			[NSBezierPath strokeRect:self.thickCornerHandleTA.rect];
 		}
 	}
+*/ 
 }
 
 
@@ -1059,68 +1253,6 @@
 	[[NSColor orangeColor] set];
 	NSRect myRect = NSMakeRect(pt.x - 2.0, pt.y -2.0, 4.0, 4.0);
 	[NSBezierPath fillRect:myRect];
-}
-
-
-	
-
-#pragma mark MOUSE TRACKING
-
-- (NSString*) trackingAreaNameForMouseLocation {
-	NSPoint mouseLocation = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
-	//	NSLog (@"mouse: %f, %f", mouseLocation.x, mouseLocation.y);
-
-	if ([self point:mouseLocation inRect:[self.endPointTA rect]]) {
-		return @"endPoint";
-	}
-	else if ([self point:mouseLocation inRect:[self.endHandleTA rect]]) {
-		return @"endHandle";
-	}
-	else if ([self point:mouseLocation inRect:[self.midPointTA rect]]) {
-		return @"midPoint";
-	}
-	else if ([self point:mouseLocation inRect:[self.midHandleTA rect]]) {
-		return @"midHandle";											
-	}
-	else if ([self point:mouseLocation inRect:[self.widthHandleTA rect]]) {
-		return @"widthHandle";											
-	}
-	else if ([self point:mouseLocation inRect:[self.thickCornerHandleTA rect]]) {
-		return @"thickCornerHandle";											
-	}
-	return nil;
-}
-
-
-
-/*
-	Custom pointInRect method to work just right for mouse tracking
-	(may be the same as NSMouseInRect)
-*/
-- (BOOL) point: (NSPoint) point inRect:(NSRect) rect {
-	return (point.x >= rect.origin.x)
-			&& (point.x < rect.origin.x + rect.size.width)
-			&& (point.y > rect.origin.y)
-			&& (point.y <= rect.origin.y + rect.size.height);
-}
-
-
-/*
-	Set the mouse cursor to be open hand inside one of the tracking areas and arrow outside them
-*/
-- (void) updateCursor {
-	NSString * TAName = [self trackingAreaNameForMouseLocation];
-	NSCursor * theCursor;
-	
-	if ([TAName isEqualToString:@"endPoint"]) {
-		theCursor = [ESCursors crossCursorForAngle:2.0 * pi / self.theDocument.cornerCount withSize: 16.0];
-	} else if ([TAName isEqualToString:@"midPoint"]) {
-		theCursor = [ESCursors crossCursorForAngle: pi / self.theDocument.cornerCount withSize: 16.0];
-	} 
-	else {
-		theCursor = [NSCursor arrowCursor];
-	}
-	[theCursor set];
 }
 
 

@@ -1,10 +1,28 @@
-v14:
+v15
 
 
+Help Menu Mystery
 
-?? Better Cursors
+NSError für ESLicense mit Recovery Option
 
-??  Help Menu
+NSError für ESLicense mit kaputter Datei
+
+Document icon registration
+
+Document icon B&W
+
+Linienendstil
+
+Reduce Welcome screen on subsequent launches
+
+No Welcome screen when launching with document
+
+cursor tracking for size handle close to 0
+
+- During the "start point" adjustment in the demo, the red handle appears to wobble back and forth.
+
+UpdateSystemActivity().
+
 
 
 

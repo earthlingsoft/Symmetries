@@ -12,11 +12,37 @@
 @interface ESCursors : NSObject {
 }
 
+
++ (NSBezierPath *) curvedCursorBezierPathWithRightArrow:(BOOL) rightArrow upArrow:(BOOL) upArrow leftArrow:(BOOL) leftArrow downArrow: (BOOL) downArrow forAngle: (CGFloat) angle;
++ (NSCursor *) curvedCursorWithRightArrow:(BOOL) rightArrow upArrow:(BOOL) upArrow leftArrow:(BOOL) leftArrow downArrow: (BOOL) downArrow forAngle: (CGFloat) angle size: (CGFloat) size;
++ (NSCursor *) curvedCursorWithRightArrow:(BOOL) rightArrow upArrow:(BOOL) upArrow leftArrow:(BOOL) leftArrow downArrow: (BOOL) downArrow forAngle: (CGFloat) angle size: (CGFloat) size underlay:(NSImage*) underlay;
+
+
+/*
++ (NSCursor *) curvedCrossCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
++ (NSCursor *) curvedThreeProngedInnerCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
++ (NSCursor *) curvedThreeProngedOuterCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
++ (NSCursor *) curvedLineCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
+
++ (NSBezierPath *) curvedAngleCursorBezierPathForAngle: (CGFloat) angle;
++ (NSCursor *) curvedAngleCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
+*/
+
 + (NSBezierPath *) crossCursorBezierPathForAngle: (CGFloat) angle;
 + (NSCursor *) crossCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
+
++ (NSBezierPath *) threeProngedCursorBezierPathForAngle: (CGFloat) angle;
++ (NSCursor *) threeProngedCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
+
++ (NSBezierPath *) angleCursorBezierPathForAngle: (CGFloat) angle;
++ (NSCursor *) angleCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
 
 + (NSBezierPath *) straightCursorBezierPathForAngle: (CGFloat) angle;
 + (NSCursor *) straightCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
 
++ (NSBezierPath *) halfStraightCursorBezierPathForAngle: (CGFloat) angle;
++ (NSCursor *) halfStraightCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
+
++ (NSCursor *) cursorForBezierPath: (NSBezierPath *) bP withRotation: (CGFloat) angle size: (CGFloat) size andUnderlay:(NSImage *) underlay;
 + (NSCursor *) cursorForBezierPath: (NSBezierPath *) path withRotation: (CGFloat) angle andSize: (CGFloat) size;
 @end

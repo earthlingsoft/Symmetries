@@ -227,13 +227,56 @@
 	trigger redraw when one of our values is changed
 */
  - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-//	NSLog(@"[MyDocument observeValueForKeyPath: %@ ...]", keyPath);
+	// NSLog(@"[MyDocument observeValueForKeyPath: %@ ...]", keyPath);
 	 if ([object isEqual:self]) {
 		 [self.myView setNeedsDisplay:YES];
-		 if ([keyPath isEqualToString:@"strokeThickness"]) {
+		 NSNumber * oldNumber = [change objectForKey:NSKeyValueChangeOldKey];
+		 NSNumber * newNumber = [change objectForKey:NSKeyValueChangeNewKey];
+		 if ([keyPath isEqualToString:@"cornerCount"]) {
+			 if (![newNumber isEqualToNumber:oldNumber]) {
+				 [self.myView updateCursor];
+			 }
+		 }
+		 else if ([keyPath isEqualToString:@"size"]) {
+			 if (![newNumber isEqualToNumber:oldNumber]) {
+				 if ([newNumber floatValue] == ESSYM_SIZE_MIN || [newNumber floatValue] == ESSYM_SIZE_MAX || [oldNumber floatValue] == ESSYM_SIZE_MIN || [oldNumber floatValue] == ESSYM_SIZE_MAX ) {
+					 [self.myView updateCursor];
+				 }
+			 }
+		 }
+		 else if ([keyPath isEqualToString:@"cornerFraction"]) {
+			 if (![newNumber isEqualToNumber:oldNumber]) {
+				 if ([newNumber floatValue] == ESSYM_CORNERFRACTION_MIN || [newNumber floatValue] == ESSYM_CORNERFRACTION_MAX || [oldNumber floatValue] == ESSYM_CORNERFRACTION_MIN || [oldNumber floatValue] == ESSYM_CORNERFRACTION_MAX ) {
+					 [self.myView updateCursor];
+				 }
+			 }
+		 }
+		 else if ([keyPath isEqualToString:@"midPointsDistance"]) {
+			 if (![newNumber isEqualToNumber:oldNumber]) {
+				 NSLog(@"%@", newNumber);
+				 if ([newNumber floatValue] == ESSYM_MIDPOINTSDISTANCE_MIN || [newNumber floatValue] == ESSYM_MIDPOINTSDISTANCE_MAX || [oldNumber floatValue] == ESSYM_MIDPOINTSDISTANCE_MIN || [oldNumber floatValue] == ESSYM_MIDPOINTSDISTANCE_MAX ) {
+					 [self.myView updateCursor];
+				 }
+			 }
+		 }
+		 else if ([keyPath isEqualToString:@"thickness"]) {
+			 if (![newNumber isEqualToNumber:oldNumber]) {
+				 if ([newNumber floatValue] == ESSYM_THICKNESS_MIN || [newNumber floatValue] == ESSYM_THICKNESS_MAX || [oldNumber floatValue] == ESSYM_THICKNESS_MIN || [oldNumber floatValue] == ESSYM_THICKNESS_MAX ) {
+					 [self.myView updateCursor];
+				 }
+			 }
+		 }
+		 else if ([keyPath isEqualToString:@"thickenedCorner"]) {
+			 if (![newNumber isEqualToNumber:oldNumber]) {
+				 if ([newNumber floatValue] == ESSYM_THICKENEDCORNER_MIN || [newNumber floatValue] == ESSYM_THICKENEDCORNER_MAX || [oldNumber floatValue] == ESSYM_THICKENEDCORNER_MIN || [oldNumber floatValue] == ESSYM_THICKENEDCORNER_MAX ) {
+					 [self.myView updateCursor];
+				 }
+			 }
+		 }
+		 else if ([keyPath isEqualToString:@"strokeThickness"]) {
 			 self.previousStrokeThickness = [[change objectForKey:NSKeyValueChangeOldKey] floatValue];
 		 }
-		 if ([keyPath isEqualToString:@"backgroundColor"]) {
+		 else if ([keyPath isEqualToString:@"backgroundColor"]) {
 			 self.myView.layer.backgroundColor = (CGColorRef) self.backgroundColor;
 		 }
 	 }

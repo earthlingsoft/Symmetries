@@ -2,10 +2,37 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>---URL types</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>Symmetries registration URL</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>symmetries-registration</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
+		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>Primel-Document.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Symmetries License</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>net.earthlingsoft.symmetries.license</string>
+			</array>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSDocumentClass</key>
+			<string>ESLicenseDocument</string>
+		</dict>
 		<dict>
 			<key>CFBundleTypeIconFile</key>
 			<string>Primel-Document.icns</string>
@@ -23,8 +50,6 @@
 			</array>
 			<key>NSDocumentClass</key>
 			<string>MyDocument</string>
-			<key>NSPersistentStoreTypeKey</key>
-			<string>XML</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
@@ -40,22 +65,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1b3</string>
+	<string>1b4</string>
 	<key>CFBundleSignature</key>
 	<string>esRR</string>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLName</key>
-			<string>Symmetries registration URL</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>symmetries-registration</string>
-			</array>
-		</dict>
-	</array>
 	<key>CFBundleVersion</key>
-	<string>15</string>
+	<string>16</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>10.5.0</string>
 	<key>NSAppleScriptEnabled</key>
@@ -74,13 +88,27 @@
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>com.apple.property-list</string>
+				<string>net.earthlingsoft.license</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>net.earthlingsoft.symmetries.license</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>symmetries-license</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.property-list</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Symmetric Path</string>
 			<key>UTTypeIconFile</key>
 			<string>Primel-Document.icns</string>
 			<key>UTTypeIdentifier</key>
-			<string>net.earthlingsoft.symmetry.document</string>
+			<string>net.earthlingsoft.symmetries.document</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>com.apple.ostype</key>

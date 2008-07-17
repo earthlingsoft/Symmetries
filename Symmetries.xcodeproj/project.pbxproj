@@ -26,6 +26,8 @@
 		1DDD582C0DA1D0D100B32029 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58280DA1D0D100B32029 /* MyDocument.xib */; };
 		1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD582A0DA1D0D100B32029 /* MainMenu.xib */; };
 		6C129FE80E2A138C00C0FD35 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 6C129FE60E2A138C00C0FD35 /* Credits.html */; };
+		6C12A6140E2E913000C0FD35 /* ESLicense.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C12A6130E2E913000C0FD35 /* ESLicense.m */; };
+		6C12A72C0E2EC12D00C0FD35 /* ESLicense.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6C12A72B0E2EC12D00C0FD35 /* ESLicense.strings */; };
 		6C3BE82B0DE8268D0064BCE7 /* NSBezierPath+Points.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+Points.m */; };
 		6C3FE2190DE9762100EAB959 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C3FE2180DE9762100EAB959 /* QuartzCore.framework */; };
 		6C544A410E2951C900ACDF60 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6C544A3F0E2951C900ACDF60 /* Localizable.strings */; };
@@ -111,6 +113,10 @@
 		6C129FFA0E2A15EA00C0FD35 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6C12A0720E2A224200C0FD35 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = German; path = German.lproj/AttributedStrings.rtf; sourceTree = "<group>"; };
 		6C12A0AE0E2A339F00C0FD35 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = German; path = German.lproj/Credits.html; sourceTree = "<group>"; };
+		6C12A6120E2E913000C0FD35 /* ESLicense.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESLicense.h; path = "../ESLicenser/ESLicense Class/ESLicense.h"; sourceTree = "<group>"; };
+		6C12A6130E2E913000C0FD35 /* ESLicense.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESLicense.m; path = "../ESLicenser/ESLicense Class/ESLicense.m"; sourceTree = "<group>"; };
+		6C12A6180E2E971700C0FD35 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = "../ESLicenser/ESLicense Class/English.lproj/ESLicense.strings"; sourceTree = "<group>"; };
+		6C12A72E0E2EC15100C0FD35 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = "../ESLicenser/ESLicense Class/German.lproj/ESLicense.strings"; sourceTree = "<group>"; };
 		6C18A1C90E29104000A25A56 /* ESCursors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESCursors.h; sourceTree = "<group>"; };
 		6C18A1CA0E29104000A25A56 /* ESCursors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESCursors.m; sourceTree = "<group>"; };
 		6C3BE8290DE8268D0064BCE7 /* NSBezierPath+Points.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+Points.h"; sourceTree = "<group>"; };
@@ -232,6 +238,8 @@
 				6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */,
 				6C5935030DEA0441000B3428 /* NSImage+Extras.m */,
 				6C59350D0DEA0449000B3428 /* NSImage+Extras.h */,
+				6C12A6120E2E913000C0FD35 /* ESLicense.h */,
+				6C12A6130E2E913000C0FD35 /* ESLicense.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -256,6 +264,7 @@
 				6C92E0B90E1A283700BEE063 /* Primel.icns */,
 				6CB3F7FD0E29878D00B005BF /* Primel-Document.icns */,
 				6C544A3F0E2951C900ACDF60 /* Localizable.strings */,
+				6C12A72B0E2EC12D00C0FD35 /* ESLicense.strings */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				1DDD58280DA1D0D100B32029 /* MyDocument.xib */,
 				1DDD582A0DA1D0D100B32029 /* MainMenu.xib */,
@@ -287,8 +296,8 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "Symmetries" */;
 			buildPhases = (
-				8D15AC2B0486D014006FF6A4 /* Resources */,
 				8D15AC300486D014006FF6A4 /* Sources */,
+				8D15AC2B0486D014006FF6A4 /* Resources */,
 				6CE60C660E0D493800BFE3F3 /* CopyFiles */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
 				6CE607320E0BA4AD00BFE3F3 /* CopyFiles */,
@@ -378,15 +387,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
+				6C544A410E2951C900ACDF60 /* Localizable.strings in Resources */,
+				6C12A72C0E2EC12D00C0FD35 /* ESLicense.strings in Resources */,
+				6C5A7AE60E1544DD00A3D6E1 /* AttributedStrings.rtf in Resources */,
+				6C129FE80E2A138C00C0FD35 /* Credits.html in Resources */,
 				1DDD582C0DA1D0D100B32029 /* MyDocument.xib in Resources */,
 				1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */,
-				6C5A7AE60E1544DD00A3D6E1 /* AttributedStrings.rtf in Resources */,
 				6CDC23980E185DAA00772100 /* Resize Widget.png in Resources */,
 				6CDC23C30E18DE6E00772100 /* Symmetries.sdef in Resources */,
 				6C92E0BA0E1A283700BEE063 /* Primel.icns in Resources */,
-				6C544A410E2951C900ACDF60 /* Localizable.strings in Resources */,
 				6CB3F7FE0E29878D00B005BF /* Primel-Document.icns in Resources */,
-				6C129FE80E2A138C00C0FD35 /* Credits.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,6 +449,7 @@
 				6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */,
 				6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */,
 				6CB3F8020E2987CC00B005BF /* ESCursors.m in Sources */,
+				6C12A6140E2E913000C0FD35 /* ESLicense.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,6 +498,15 @@
 				6C12A0AE0E2A339F00C0FD35 /* German */,
 			);
 			name = Credits.html;
+			sourceTree = "<group>";
+		};
+		6C12A72B0E2EC12D00C0FD35 /* ESLicense.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6C12A6180E2E971700C0FD35 /* English */,
+				6C12A72E0E2EC15100C0FD35 /* German */,
+			);
+			name = ESLicense.strings;
 			sourceTree = "<group>";
 		};
 		6C544A3F0E2951C900ACDF60 /* Localizable.strings */ = {

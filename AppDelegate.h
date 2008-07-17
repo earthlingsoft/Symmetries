@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#define SYMMETRIESREGISTRATIONPROTOCOLNAME @"symmetries-registration"
+// #define SYMMETRIESREGISTRATIONPROTOCOLNAME @"symmetries-registration"
 #define SYMMETRIESUNREGISTEREDCORNERCOUNT 4
 
 @interface AppDelegate : NSObject {
@@ -16,7 +16,7 @@
 	IBOutlet NSMenuItem * spaceOutMenuItem;	
 	IBOutlet NSMenuItem * demoMenuItem;
 	
-	BOOL registrationWasVerified;
+//	BOOL registrationWasVerified;
 }
 
 @property (readonly) NSDocument * firstDocument;
@@ -34,7 +34,5 @@
 - (NSString *) myVersionString;
 
 - (IBAction) orderFrontStandardAboutPanel:(id)sender;
-
-- (void) processRegistration: (NSString *) s;
 
 @end

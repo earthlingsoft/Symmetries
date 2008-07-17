@@ -11,13 +11,9 @@
 #import "MyDocument+Animation.h"
 #import "ESSymmetryView.h"
 #import "ESSymmetryView+Intro.h"
-#import <SSCrypto/SSCrypto.h>
+#import "ESLicense.h"
 
-#define SYMMETRIESREGISTRATIONNAMEKEY @"name"
-#define SYMMETRIESREGISTRATIONMAILKEY @"e-mail"
-#define SYMMETRIESREGISTRATIONSERIALKEY @"registration code"
-#define SYMMETRIESREGISTRATIONDEFAULTSKEY @"registration"
-#define SYMMETRIESPUBLICKEY @"-----BEGIN PUBLIC KEY-----\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBANV1q4F0HhfEWCuKp29Z/JuruPj/8AH6\nMNUhBNfXu/kh+fQCj64W7CkRfdZXIOn/Q/dmmRueFwKu7QcNB+lKJacCAwEAAQ==\n-----END PUBLIC KEY-----" 
+#define SYMMETRIESPUBLICKEY @"-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw257efIv+R8VMH+lwtDA\nSwiGIDutsCWS0WzmaJmtb/Uy4LHAAqe8z8Do7A2QUf3cfyfkvI2Ci45dq+YHx6Vf\n2+78rAmKUxgcEAOa/ZHF5AgofV+rMQS5oOrWgWXVeru8seqMOyeic7y50prAf04m\nrRvBAnPqKLpXxaI+00NggpZcHcryvTFxefKo29atD420o36aYLmjuUqoq3kF4ok6\n9tC1ecTMWcxtqS2Qw9on1SnNs8Y6S6qdH0Mm1rx1TgBlI7X5zbUtuuieU0ftZidB\nsfS6MG+Z6Aav+EALrRcGtlUweF/BsAIn98163gPr0nRIL++5yUpVR7bazurNIUs1\nVQIDAQAB\n-----END PUBLIC KEY-----" 
 
 @implementation AppDelegate
 
@@ -35,7 +31,7 @@
 }
 
 
-
+/*
 #pragma mark URL handling
 
 - (void)handleGetURLEvent:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent{
@@ -56,7 +52,7 @@
         [self processRegistration:theURLString];
 	}        
 }
-
+*/
 
 
 #pragma mark PROPERTIES
@@ -210,14 +206,7 @@
 	NSString * HTML = [NSString stringWithContentsOfFile:HTMLPath encoding:NSUTF8StringEncoding error:nil];
 	NSString * registrationInfo = @"";
 	if (self.isRegistered) {
-		NSString * registeredName = @"";
-		NSDictionary * regDict = [[NSUserDefaults standardUserDefaults] valueForKey:SYMMETRIESREGISTRATIONDEFAULTSKEY];
-		if (regDict) {
-			registeredName = [regDict objectForKey: SYMMETRIESREGISTRATIONNAMEKEY];
-			if (!registeredName) {
-				registeredName = @"";
-			}
-		}
+		NSString * registeredName = [[ESLicenser licenser] userName];
 		
 		registrationInfo = [NSString stringWithFormat:@"<h3>%@</h3>\n<p>%@<br></p>\n",
 							NSLocalizedString(@"Registered to", @"Heading for registration info in About box"),
@@ -233,80 +222,14 @@
 
 
 
-
-
-#pragma mark REGISTRATION 
-
-- (void) processRegistration: (NSString*) s {
-	NSString * decodedURL = (NSString*) CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (CFStringRef) s, CFSTR(""), kCFStringEncodingUTF8);
-	NSScanner * scanner = [NSScanner scannerWithString:decodedURL];
-	// URL is of form symmetries-registration://NAME/EMAIL/SERIAL
-	// ignore protocol
-	scanner.scanLocation = [SYMMETRIESREGISTRATIONPROTOCOLNAME length] + 3;
-	// get name and mail, omitting the /
-	NSString * name;
-	[scanner scanUpToString:@"/" intoString:&name];
-	scanner.scanLocation = scanner.scanLocation + 1;
-	NSString * mail;
-	[scanner scanUpToString:@"/" intoString:&mail];
-	scanner.scanLocation = scanner.scanLocation + 1;
-	NSString * serial;
-	// make the somewhat silly assumption that our serial code always ends in ==
-	[scanner scanUpToString:@"==" intoString:&serial];
-	serial = [serial stringByAppendingString:@"=="];
-	
-	BOOL FAIL = !(name && mail && serial);
-
-	
-	if (!FAIL) {
-		NSData *publicKeyData = [SYMMETRIESPUBLICKEY dataUsingEncoding:NSASCIIStringEncoding];
-		
-		NSString *details = [NSString stringWithFormat:@"%@::%@", name, mail];
-		NSData *number = [[serial dataUsingEncoding:NSUTF8StringEncoding] decodeBase64WithNewLines:NO];
-		
-		SSCrypto *crypto = [[SSCrypto alloc] initWithPublicKey:publicKeyData];
-		[crypto setCipherText:number];
-		
-		[crypto verify];
-		BOOL signatureVerified = [[crypto clearTextAsString] isEqualToString:details];
-		[crypto release];
-		
-		if(signatureVerified) {
-			// registration succeeded
-			NSDictionary * dict = [NSDictionary dictionaryWithObjectsAndKeys:
-				name, SYMMETRIESREGISTRATIONNAMEKEY,
-				mail, SYMMETRIESREGISTRATIONMAILKEY,
-				serial, SYMMETRIESREGISTRATIONSERIALKEY,
-								   nil];
-			
-			[[NSUserDefaults standardUserDefaults] setValue:dict forKey:SYMMETRIESREGISTRATIONDEFAULTSKEY];
-			[[NSUserDefaults standardUserDefaults] synchronize];
-			
-			NSAlert * alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Symmetries is registered.", @"Successful Registration Dialogue Title") 
-					defaultButton:NSLocalizedString(@"OK", @"OK")
-					alternateButton:nil
-					otherButton:nil 
-					informativeTextWithFormat:NSLocalizedString(@"Thank you for your support.\n\nThe full range of export features is now available.", @"Successful Registration Dialogue Explanation")
-							   ];
-			[alert runModal];
-		}
-		else {
-			// registration failed
-			FAIL = YES;
-		}
-	}
-
-	if (FAIL) {		
-		NSAlert * alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Invalid registration code.", @"Failed Registration Dialogue Title") 
-											  defaultButton:NSLocalizedString(@"Bummer", @"Bummer")
-											alternateButton:nil
-												otherButton:nil 
-								  informativeTextWithFormat:NSLocalizedString(@"The registration code Symmetries received was invalid.", @"Failed Registration Dialogue Explanation")
-							   ];
-			[alert runModal];
-	}
-	
+- (BOOL) isRegistered {
+	return [[ESLicenser licenser] isLicensed];
 }
+
+
+
+/*
+#pragma mark REGISTRATION 
 
 
 - (BOOL) isRegistered {
@@ -368,7 +291,11 @@
 	}	
 }
 
+ */
 
+- (NSString *) publicKey {
+	return SYMMETRIESPUBLICKEY;
+}
 
 
 @end
