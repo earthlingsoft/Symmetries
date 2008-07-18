@@ -1,6 +1,6 @@
 //
 //  MyDocument.m
-//  Symmetry
+//  Symmetries
 //
 //  Created by  Sven on 22.05.08.
 //  Copyright earthlingsoft 2008 . All rights reserved.
@@ -18,6 +18,8 @@
 @synthesize twoMidPoints, twoLines, backgroundColor, strokeColor, fillColor, strokeThickness, showHandles, myView, strokeThicknessRecentChange, previousStrokeThickness, totalAnimation;
 @dynamic cornerCount, size, cornerFraction, straightTangentLength, straightTangentDirection, diagonalTangentLength, diagonalTangentDirection, midPointsDistance, thickness, rotation;
 
+
+
 # pragma mark HOUSEKEEPING
 
 - (id)init
@@ -26,6 +28,7 @@
 	unsigned int time = round((double)[NSDate timeIntervalSinceReferenceDate]);
 	srandom(time);
 }
+
 
 
 - (id) initWithDictionary: (NSDictionary*) dict {
@@ -43,6 +46,7 @@
     }
     return self;
 }
+
 
 
 - (NSDictionary*) initialValues {
@@ -68,12 +72,14 @@
 }
 
 
+
 - (void) close {
 	// NSLog(@"[MyDocument close]");
 	[self stopAnimation:self];
 	[(ESSymmetryView*) self.myView endDemo:self];
 	[super close];
 }
+
 
 
 - (NSDictionary*) dictionary {
@@ -84,6 +90,7 @@
 	}		
 	return valueDictionary;
 }
+
 
 
 - (NSDictionary*) plistDictionary {
@@ -100,6 +107,7 @@
 }
 
 
+
 - (void) setValuesFromDictionary: (NSDictionary*) dict {
 	NSDictionary * defaultValues = [self initialValues];
 	for (NSString * key in dict) {
@@ -110,10 +118,12 @@
 }
 
 
+
 - (void) setValuesForUndoFromDictionary: (NSDictionary *) dict {
 	[self.undoManager registerUndoWithTarget:self selector:@selector(setValuesForUndoFromDictionary:) object:[self dictionary]];
 	[self setValuesFromDictionary:dict];
 }
+
 
 
 /*
@@ -124,9 +134,11 @@
 }
 
 
+
 - (void) intro {
 	[(ESSymmetryView*) myView intro];
 }
+
 
 
 
@@ -140,11 +152,13 @@
 }
 
 
+
 - (void)windowControllerDidLoadNib:(NSWindowController *) aController
 {
     [super windowControllerDidLoadNib:aController];
     // Add any code here that needs to be executed once the windowController has loaded the document's window.
 }
+
 
 
 - (BOOL)writeToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
@@ -220,6 +234,15 @@
 
 
 
+#pragma mark WINDOW DELEGATE
+- (NSRect)windowWillUseStandardFrame:(NSWindow *)window defaultFrame:(NSRect)defaultFrame {
+	const CGFloat margin = 2.0;
+	const CGFloat windowSize = MIN(defaultFrame.size.width, defaultFrame.size.height) -  2.0 * margin;
+
+	return NSMakeRect(margin, margin, windowSize, windowSize);
+}
+
+
 
 #pragma mark KVO
 
@@ -253,7 +276,7 @@
 		 }
 		 else if ([keyPath isEqualToString:@"midPointsDistance"]) {
 			 if (![newNumber isEqualToNumber:oldNumber]) {
-				 NSLog(@"%@", newNumber);
+				 // NSLog(@"%@", newNumber);
 				 if ([newNumber floatValue] == ESSYM_MIDPOINTSDISTANCE_MIN || [newNumber floatValue] == ESSYM_MIDPOINTSDISTANCE_MAX || [oldNumber floatValue] == ESSYM_MIDPOINTSDISTANCE_MIN || [oldNumber floatValue] == ESSYM_MIDPOINTSDISTANCE_MAX ) {
 					 [self.myView updateCursor];
 				 }

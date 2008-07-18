@@ -1,6 +1,6 @@
 //
 //  MyDocument.h
-//  Symmetry
+//  Symmetries
 //
 //  Created by  Sven on 22.05.08.
 //  Copyright earthlingsoft 2008 . All rights reserved.
@@ -9,7 +9,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#define FILETYPEUTI @"net.earthlingsoft.symmetry.document"
+#define FILETYPEUTI @"net.earthlingsoft.symmetries.document"
 
 #define ESSYM_SIZE_MIN 0.0
 #define ESSYM_SIZE_MAX 1.0

@@ -16,117 +16,6 @@
 
 #pragma mark CURVED CURSORS 
 
-+ (NSBezierPath *) curvedCursorBezierPathWithUpArrow:(BOOL) upArrow downArrow:(BOOL) downArrow forAngle: (CGFloat) angle {
-	CGFloat handleFraction = 0.14;
-	CGFloat phi = pi / 15.0;
-	NSAffineTransform * rotate = [NSAffineTransform transform];
-	[rotate rotateByRadians:-phi];
-	NSAffineTransform * rotate2 = [NSAffineTransform transform];
-	[rotate2 rotateByRadians:- 1.5 * phi];
-	NSPoint pt, pt2, pt3;
-	NSPoint previousPoint;
-	
-	NSBezierPath * bP = [NSBezierPath bezierPath];
-	pt = [rotate transformPoint: NSMakePoint(1.0, 0.0)];
-	[bP moveToPoint:pt];
-	pt = [rotate transformPoint:NSMakePoint(-ARROWSIZE, ARROWSIZE)];
-	[bP relativeLineToPoint:pt];
-	pt = [rotate transformPoint:NSMakePoint(0.0, - (ARROWSIZE - LINETHICKNESS))];
-	[bP relativeLineToPoint:pt];
-	
-	previousPoint = bP.currentPoint;
-	pt2 = NSMakePoint(-handleFraction, 0.0);
-	pt = [rotate transformPoint: pt2];
-	pt3 = [rotate2 transformPoint:pt2];
-	pt2 = NSMakePoint(previousPoint.x + pt3.x , previousPoint.y + pt3.y);
-	
-	if (upArrow) {
-		// draw the arrow towards the top (slightly imprecise)		
-		CGFloat theta = asin(LINETHICKNESS);
-		CGFloat correction = 1 - cos(theta);
-		CGFloat topOfCurve = LINETHICKNESS - correction;
-		[bP curveToPoint:NSMakePoint(LINETHICKNESS, topOfCurve)
-		   controlPoint1:pt2
-		   controlPoint2:NSMakePoint(LINETHICKNESS - pt.x, topOfCurve - correction)];
-		
-		[bP lineToPoint:NSMakePoint(LINETHICKNESS, 1.0 - ARROWSIZE)];
-		[bP lineToPoint:NSMakePoint(ARROWSIZE, 1.0 - ARROWSIZE)];
-		[bP lineToPoint:NSMakePoint(0.0, 1.0)];
-		[bP lineToPoint:NSMakePoint(- ARROWSIZE, 1.0 - ARROWSIZE)];
-		[bP lineToPoint:NSMakePoint(-LINETHICKNESS, 1.0 - ARROWSIZE)];
-		[bP lineToPoint:NSMakePoint(-LINETHICKNESS, topOfCurve)];
-		
-		[bP curveToPoint:NSMakePoint(-previousPoint.x, previousPoint.y) 
-		   controlPoint1:NSMakePoint(-LINETHICKNESS + pt.x, topOfCurve - correction)
-		   controlPoint2:NSMakePoint(-pt2.x, pt2.y)];		
-	}
-	else {
-		// no upwards arrow, just the curve
-		[bP curveToPoint:NSMakePoint(0.0, LINETHICKNESS)
-		   controlPoint1:pt2
-		   controlPoint2:NSMakePoint(0.0 - pt.x * sqrt(2.0), LINETHICKNESS)];
-		[bP curveToPoint:NSMakePoint(-previousPoint.x, previousPoint.y) 
-		   controlPoint1:NSMakePoint(0.0 + pt.x * sqrt(2.0), LINETHICKNESS)
-		   controlPoint2:NSMakePoint(-pt2.x, pt2.y)];
-	}
-	
-	
-	
-	[rotate invert];
-	[rotate2 invert]; 
-	pt = [rotate transformPoint:NSMakePoint(0.0, ARROWSIZE - LINETHICKNESS)];
-	[bP relativeLineToPoint:pt];
-	pt = [rotate transformPoint:NSMakePoint(-ARROWSIZE, -ARROWSIZE)];
-	[bP relativeLineToPoint:pt];
-	pt = [rotate transformPoint:NSMakePoint(ARROWSIZE, -ARROWSIZE)];
-	[bP relativeLineToPoint:pt];
-	pt = [rotate transformPoint:NSMakePoint(0.0, ARROWSIZE - LINETHICKNESS)];
-	[bP relativeLineToPoint:pt];
-	
-	previousPoint = bP.currentPoint;
-	pt2 = NSMakePoint(handleFraction, 0.0);
-	pt = [rotate transformPoint:pt2];
-	pt3 = [rotate2 transformPoint:pt2];
-	pt2 = NSMakePoint(previousPoint.x + pt3.x, previousPoint.y + pt3.y);
-
-	if (downArrow) {
-		// draw the arrow towards the bottom (slightly imprecise)		
-		CGFloat theta = asin(LINETHICKNESS);
-		CGFloat correction = 1 - cos(theta);
-		CGFloat bottomOfCurve = - LINETHICKNESS - correction;
-		[bP curveToPoint:NSMakePoint(-LINETHICKNESS, bottomOfCurve)
-		   controlPoint1:pt2
-		   controlPoint2:NSMakePoint(-LINETHICKNESS - pt.x, bottomOfCurve - correction)];
-		
-		[bP lineToPoint:NSMakePoint(-LINETHICKNESS, -1.0 + ARROWSIZE)];
-		[bP lineToPoint:NSMakePoint(-ARROWSIZE, -1.0 + ARROWSIZE)];
-		[bP lineToPoint:NSMakePoint(0.0, -1.0)];
-		[bP lineToPoint:NSMakePoint(ARROWSIZE, -1.0 + ARROWSIZE)];
-		[bP lineToPoint:NSMakePoint(LINETHICKNESS, -1.0 + ARROWSIZE)];
-		[bP lineToPoint:NSMakePoint(LINETHICKNESS, bottomOfCurve)];
-		
-		[bP curveToPoint:NSMakePoint(-previousPoint.x, previousPoint.y) 
-		   controlPoint1:NSMakePoint(LINETHICKNESS + pt.x, bottomOfCurve - correction)
-		   controlPoint2:NSMakePoint(-pt2.x, pt2.y)];		
-	}
-	else {
-		// no downwards arrow, just the curve
-		[bP curveToPoint:NSMakePoint(0.0, -LINETHICKNESS) 
-		   controlPoint1:pt2 
-		   controlPoint2:NSMakePoint(0.0 - pt.x, -LINETHICKNESS)];
-		[bP curveToPoint:NSMakePoint(-previousPoint.x, previousPoint.y)
-		   controlPoint1:NSMakePoint(0.0 + pt.x,  -LINETHICKNESS) 
-		   controlPoint2:NSMakePoint(-pt2.x, pt2.y)];
-	}
-	
-	[rotate invert];
-	pt = [rotate transformPoint:NSMakePoint(0.0, - (ARROWSIZE -LINETHICKNESS))];
-	[bP relativeLineToPoint:pt];
-	[bP closePath];
-	
-	return bP;
-}
-
 
 + (NSBezierPath *) curvedCursorBezierPathWithRightArrow:(BOOL) rightArrow upArrow:(BOOL) upArrow leftArrow:(BOOL) leftArrow downArrow: (BOOL) downArrow forAngle: (CGFloat) angle {
 	const CGFloat handleFraction = 1.0 / 8.0;
@@ -312,111 +201,6 @@
 
 
 
-/*
-
-+ (NSCursor *) curvedCrossCursorForAngle: (CGFloat) angle withSize: (CGFloat) size {
-	NSBezierPath * bP = [ESCursors curvedCursorBezierPathWithUpArrow:YES downArrow:YES forAngle: angle];
-	
-	return [ESCursors cursorForBezierPath:bP withRotation: angle andSize: size];	
-}
-
-
-+ (NSCursor *) curvedThreeProngedInnerCursorForAngle: (CGFloat) angle withSize: (CGFloat) size {
-	NSBezierPath * bP = [ESCursors curvedCursorBezierPathWithUpArrow:NO downArrow:YES forAngle: angle];
-	
-	return [ESCursors cursorForBezierPath:bP withRotation: angle andSize: size];	
-}
-
-
-+ (NSCursor *) curvedThreeProngedOuterCursorForAngle: (CGFloat) angle withSize: (CGFloat) size {
-	NSBezierPath * bP = [ESCursors curvedCursorBezierPathWithUpArrow:YES downArrow:NO forAngle: angle];
-	
-	return [ESCursors cursorForBezierPath:bP withRotation: angle andSize: size];	
-}
-
-+ (NSBezierPath *) curvedAngleCursorBezierPathForAngle: (CGFloat) angle {
-	CGFloat handleFraction = 0.14;
-	CGFloat phi = pi / 15.0;
-	NSAffineTransform * rotate = [NSAffineTransform transform];
-	[rotate rotateByRadians:-phi];
-	NSAffineTransform * rotate2 = [NSAffineTransform transform];
-	[rotate2 rotateByRadians:- 1.5 * phi];
-	NSPoint pt, pt2, pt3;
-	NSPoint previousPoint;
-	
-	NSBezierPath * bP = [NSBezierPath bezierPath];
-	
-	pt = [rotate transformPoint: NSMakePoint(1.0, 0.0)];
-	[bP moveToPoint:pt];
-	pt = [rotate transformPoint:NSMakePoint(-ARROWSIZE, ARROWSIZE)];
-	[bP relativeLineToPoint:pt];
-	pt = [rotate transformPoint:NSMakePoint(0.0, - (ARROWSIZE - LINETHICKNESS))];
-	[bP relativeLineToPoint:pt];
-	
-	previousPoint = bP.currentPoint;
-	pt2 = NSMakePoint(-handleFraction, 0.0);
-	pt = [rotate transformPoint: pt2];
-	pt3 = [rotate2 transformPoint:pt2];
-	pt2 = NSMakePoint(previousPoint.x + pt3.x , previousPoint.y + pt3.y);
-	
-	[bP curveToPoint:NSMakePoint(0.0, LINETHICKNESS)
-	   controlPoint1:pt2
-	   controlPoint2:NSMakePoint(0.0 - pt.x * sqrt(2.0), LINETHICKNESS)];
-	[bP lineToPoint:NSMakePoint(-LINETHICKNESS, LINETHICKNESS)];
-	[bP lineToPoint:NSMakePoint(-LINETHICKNESS, -LINETHICKNESS)];
-	
-	[rotate invert];
-	[rotate2 invert]; 
-
-	previousPoint = bP.currentPoint;
-	pt2 = NSMakePoint(handleFraction, 0.0);
-	pt = [rotate transformPoint:pt2];
-	pt3 = [rotate2 transformPoint:pt2];
-	pt2 = NSMakePoint(previousPoint.x + pt3.x, previousPoint.y + pt3.y);
-	
-	// draw the arrow towards the bottom (slightly imprecise)		
-	CGFloat theta = asin(LINETHICKNESS);
-	CGFloat correction = 1 - cos(theta);
-	CGFloat bottomOfCurve = - LINETHICKNESS - correction;
-	[bP curveToPoint:NSMakePoint(-LINETHICKNESS, bottomOfCurve)
-	   controlPoint1:pt2
-	   controlPoint2:NSMakePoint(-LINETHICKNESS - pt.x, bottomOfCurve - correction)];
-	
-	[bP lineToPoint:NSMakePoint(-LINETHICKNESS, -1.0 + ARROWSIZE)];
-	[bP lineToPoint:NSMakePoint(-ARROWSIZE, -1.0 + ARROWSIZE)];
-	[bP lineToPoint:NSMakePoint(0.0, -1.0)];
-	[bP lineToPoint:NSMakePoint(ARROWSIZE, -1.0 + ARROWSIZE)];
-	[bP lineToPoint:NSMakePoint(LINETHICKNESS, -1.0 + ARROWSIZE)];
-	[bP lineToPoint:NSMakePoint(LINETHICKNESS, bottomOfCurve)];
-	
-	[bP curveToPoint:NSMakePoint(-previousPoint.x, previousPoint.y) 
-	   controlPoint1:NSMakePoint(LINETHICKNESS + pt.x, bottomOfCurve - correction)
-	   controlPoint2:NSMakePoint(-pt2.x, pt2.y)];		
-
-	[rotate invert];
-	pt = [rotate transformPoint:NSMakePoint(0.0, - (ARROWSIZE -LINETHICKNESS))];
-	[bP relativeLineToPoint:pt];
-	[bP closePath];
-	
-	return bP;
-}
-
-
-+ (NSCursor *) curvedAngleCursorForAngle: (CGFloat) angle withSize: (CGFloat) size {
-	NSBezierPath * bP = [ESCursors curvedAngleCursorBezierPathForAngle: angle];
-
-	return [ESCursors cursorForBezierPath:bP withRotation: angle andSize: size];	
-}
-
-
-+ (NSCursor *) curvedLineCursorForAngle: (CGFloat) angle withSize: (CGFloat) size {
-	NSBezierPath * bP = [ESCursors curvedCursorBezierPathWithUpArrow:NO downArrow:NO forAngle: angle];
-	
-	return [ESCursors cursorForBezierPath:bP withRotation: angle andSize: size];	
-}
-
-
-*/
 
 #pragma mark CROSSED CURSORS
 
@@ -455,6 +239,7 @@
 
 
 
+
 #pragma mark THREE PRONGED CURSORS
 
 
@@ -472,8 +257,8 @@
 	pointArray[9] = NSMakePoint(-1.0 + ARROWSIZE, LINETHICKNESS);
 	pointArray[10] = NSMakePoint(-1.0 + ARROWSIZE, ARROWSIZE);
 	pointArray[11] = NSMakePoint(-1.0 , 0.0);
-	pointArray[12] = NSMakePoint(-1.0 * ARROWSIZE, - ARROWSIZE);
-	pointArray[13] = NSMakePoint(-1.0 * ARROWSIZE, - LINETHICKNESS);
+	pointArray[12] = NSMakePoint(- ARROWSIZE, - ARROWSIZE);
+	pointArray[13] = NSMakePoint(- ARROWSIZE, - LINETHICKNESS);
 	pointArray[14] = NSMakePoint(1.0 - ARROWSIZE, - LINETHICKNESS);
 	pointArray[15] = NSMakePoint(1.0 - ARROWSIZE, - ARROWSIZE);
 	pointArray[16] = NSMakePoint(1.0, 0.0);
@@ -599,6 +384,7 @@
 
 
 
+#pragma mark CONVENIENCE METHODS
 
 #define OUTLINEWIDTH 1.0
 

@@ -1,6 +1,6 @@
 //
 //  AppDelegate.m
-//  Symmetry
+//  Symmetries
 //
 //  Created by  Sven on 05.06.08.
 //  Copyright 2008 earthlingsoft. All rights reserved.
@@ -12,6 +12,7 @@
 #import "ESSymmetryView.h"
 #import "ESSymmetryView+Intro.h"
 #import "ESLicense.h"
+
 
 #define SYMMETRIESPUBLICKEY @"-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw257efIv+R8VMH+lwtDA\nSwiGIDutsCWS0WzmaJmtb/Uy4LHAAqe8z8Do7A2QUf3cfyfkvI2Ci45dq+YHx6Vf\n2+78rAmKUxgcEAOa/ZHF5AgofV+rMQS5oOrWgWXVeru8seqMOyeic7y50prAf04m\nrRvBAnPqKLpXxaI+00NggpZcHcryvTFxefKo29atD420o36aYLmjuUqoq3kF4ok6\n9tC1ecTMWcxtqS2Qw9on1SnNs8Y6S6qdH0Mm1rx1TgBlI7X5zbUtuuieU0ftZidB\nsfS6MG+Z6Aav+EALrRcGtlUweF/BsAIn98163gPr0nRIL++5yUpVR7bazurNIUs1\nVQIDAQAB\n-----END PUBLIC KEY-----" 
 
@@ -25,34 +26,22 @@
 
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-	[[NSAppleEventManager sharedAppleEventManager] setEventHandler:self andSelector:@selector(handleGetURLEvent:withReplyEvent:) forEventClass:kInternetEventClass andEventID:kAEGetURL];
+	const NSUInteger launchCount = [[NSUserDefaults standardUserDefaults] integerForKey:ESSYM_LAUNCHCOUNT_KEY];
+	[[NSUserDefaults standardUserDefaults] setInteger: launchCount + 1 forKey:ESSYM_LAUNCHCOUNT_KEY];
 
-	[(MyDocument*)[[NSDocumentController sharedDocumentController] currentDocument] intro];
+	if (launchCount < 10) {
+		// not a long time user
+		MyDocument * doc = [[NSDocumentController sharedDocumentController] currentDocument];
+		if (! doc.fileURL) {
+			// the document is an untitled one (we didn't launch by opening an existing file)
+			[doc intro];
+		}
+		
+	}
+	
 }
 
 
-/*
-#pragma mark URL handling
-
-- (void)handleGetURLEvent:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent{
-    NSString *theURLString = [[event descriptorForKeyword:keyDirectObject] stringValue];
-    NSURL *theURL = nil;
-    
-    if (theURLString) {
-        if ([theURLString hasPrefix:@"<"] && [theURLString hasSuffix:@">"])
-            theURLString = [theURLString substringWithRange:NSMakeRange(0, [theURLString length] - 2)];
-        if ([theURLString hasPrefix:@"URL:"])
-            theURLString = [theURLString substringFromIndex:4];
-        theURL = [NSURL URLWithString:theURLString];
-        if (theURL == nil)
-            theURL = [NSURL URLWithString:theURLString];
-    }
-    
-    if ([[theURL scheme] isEqualToString:@"symmetries-registration"]) {
-        [self processRegistration:theURLString];
-	}        
-}
-*/
 
 
 #pragma mark PROPERTIES
@@ -72,10 +61,12 @@
 }
 
 
-
 - (NSDocument*) firstDocument {
 	return (NSDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
 }
+
+
+
 
 
 #pragma mark ACTIONS & MENUS
@@ -85,7 +76,7 @@
 	if ([menuItem tag] == 100) {
 		// NSLog(@"AppDelegate -validateMenuItem: slider");
 		// menu item with slider
-		NSSlider * slider = [menuItem.view.subviews objectAtIndex:0];
+		const NSSlider * slider = [menuItem.view.subviews objectAtIndex:0];
 		[slider setEnabled:NO];
 		[slider setFloatValue:0.0];
 		return NO;
@@ -105,17 +96,17 @@
 }
 
 
+
 - (BOOL) demoIsRunning {
 	BOOL isRunning = NO;
 
 	for (MyDocument * doc in [[NSDocumentController sharedDocumentController] documents]) {
 		isRunning = isRunning || doc.runningDemo;
 	}
-	NSLog(@"[AppDelegate demoIsRunning] -> %i", isRunning);
+	// NSLog(@"[AppDelegate demoIsRunning] -> %i", isRunning);
 
 	return isRunning;
 }
-
 
 
 
@@ -154,10 +145,12 @@
 }
 
 
+
 - (void) demoStarted {
 	demoMenuItem.keyEquivalent = @".";
 	demoMenuItem.keyEquivalentModifierMask = NSCommandKeyMask;
 }
+
 
 
 - (void) demoStopped {
@@ -167,14 +160,16 @@
 }
 
 
+
 - (IBAction) bogusAction: (id) sender {
 }
 
 
+
 // for the various actions in the help menu
 - (void) readme:(id) sender {
-	NSWorkspace * WORKSPACE = [NSWorkspace sharedWorkspace];
-	int tag = [sender tag];
+	const NSWorkspace * WORKSPACE = [NSWorkspace sharedWorkspace];
+	const NSInteger tag = [sender tag];
 	switch (tag) {
 		case 1: // earthlingsoft
 			[WORKSPACE openURL:[NSURL URLWithString:@"http://earthlingsoft.net/"]];
@@ -186,7 +181,7 @@
 			[WORKSPACE openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:earthlingsoft%%40earthlingsoft.net?subject=Symmetries%%20%@", [self myVersionString]]]];
 			break;
 		case 4: // Paypal
-			[WORKSPACE openURL: [NSURL URLWithString:@"https://www.paypal.com/xclick/business=earthlingsoft%40earthlingsoft.net&item_name=Symmetries&no_shipping=1&cn=Comments&tax=0&currency_code=EUR"]];
+			[WORKSPACE openURL: [NSURL URLWithString:self.payPalURL]];
 			break;
 		case 5: // Readme
 			[WORKSPACE openFile:[[NSBundle mainBundle] pathForResource:@"readme" ofType:@"html"]];
@@ -195,25 +190,34 @@
 }
 
 
+
 // return version string
 - (NSString*) myVersionString {
 	return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 }
 
 
+
 - (IBAction) orderFrontStandardAboutPanel:(id)sender {
 	NSString * HTMLPath = [[NSBundle mainBundle] pathForResource:@"Credits" ofType:@"html"];
 	NSString * HTML = [NSString stringWithContentsOfFile:HTMLPath encoding:NSUTF8StringEncoding error:nil];
 	NSString * registrationInfo = @"";
+	NSString * startComment = @"";
+	NSString * endComment = @"";
+	
 	if (self.isRegistered) {
 		NSString * registeredName = [[ESLicenser licenser] userName];
 		
 		registrationInfo = [NSString stringWithFormat:@"<h3>%@</h3>\n<p>%@<br></p>\n",
 							NSLocalizedString(@"Registered to", @"Heading for registration info in About box"),
 							registeredName];
+		startComment = @"<!-- ";	
+		endComment = @" -->";
 	}
-
-	HTML = [HTML stringByReplacingOccurrencesOfString:@"@@@@@" withString:registrationInfo];
+	
+	// adjust Credits text for current licensing status
+	HTML = [NSString stringWithFormat:HTML, startComment, endComment, registrationInfo, self.payPalURL];
+	
 	NSAttributedString * HTMLString = [[NSAttributedString alloc] initWithHTML:[HTML dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
 	
 	NSDictionary * options = [NSDictionary dictionaryWithObjectsAndKeys:HTMLString, @"Credits", nil];
@@ -222,80 +226,46 @@
 
 
 
+- (NSString *) payPalURL {
+	return NSLocalizedString(@"PayPalURL", @"the URL to go to when selecting to register in the about box or help menu");	
+}
+
+
 - (BOOL) isRegistered {
 	return [[ESLicenser licenser] isLicensed];
 }
 
-
-
-/*
-#pragma mark REGISTRATION 
-
-
-- (BOOL) isRegistered {
-	BOOL registered = NO;
-	
-	if (registrationWasVerified) {
-		registered = YES;
-	}
-	else {
-		// verify registration
-		NSDictionary * regDict = [[NSUserDefaults standardUserDefaults] valueForKey:SYMMETRIESREGISTRATIONDEFAULTSKEY];
-		if (regDict) {
-			NSData * publicKeyData = [SYMMETRIESPUBLICKEY dataUsingEncoding:NSASCIIStringEncoding];
-			NSString * name = [regDict objectForKey: SYMMETRIESREGISTRATIONNAMEKEY];
-			NSString * mail = [regDict objectForKey: SYMMETRIESREGISTRATIONMAILKEY];
-			NSString * serial = [regDict objectForKey: SYMMETRIESREGISTRATIONSERIALKEY];
-			if (publicKeyData && name && mail && serial) {
-				NSString * details = [NSString stringWithFormat:@"%@::%@", name, mail];
-				NSData * number = [[serial dataUsingEncoding:NSUTF8StringEncoding] decodeBase64WithNewLines:NO];
-				SSCrypto *crypto = [[SSCrypto alloc] initWithPublicKey:publicKeyData];
-				[crypto setCipherText: number];
-				[crypto verify];
-				
-				if ([[crypto clearTextAsString] isEqualToString:details]) {
-					// We're good
-					registered = YES;
-					registrationWasVerified = YES;
-				}
-				else {
-					// the registration was wrong -> delete from defaults
-					[[NSUserDefaults standardUserDefaults] removeObjectForKey:SYMMETRIESREGISTRATIONDEFAULTSKEY];
-					NSLog(@"Removed invalid registration information from preferences");
-				}
-
-				[crypto release];
-			}
-		}
-	}
-	
-	return registered;
-}
+@end
 
 
 
+#pragma mark ESLICENSING PROTOCOLS
 
-- (void)applicationWillBecomeActive:(NSNotification *)aNotification {
-	// check whether there is a serial number in the clipboard
-	if (!self.isRegistered) {
-		NSPasteboard * pB = [NSPasteboard generalPasteboard];
-		NSString * pboardString = [pB stringForType:NSStringPboardType];
-		if ([pboardString length] > [SYMMETRIESREGISTRATIONPROTOCOLNAME length]) {
-			NSRange protocolRange = [pboardString rangeOfString:SYMMETRIESREGISTRATIONPROTOCOLNAME];
-			if (protocolRange.location != NSNotFound) {
-				// found our protocol name
-				NSString * trimmedString = [pboardString substringFromIndex:protocolRange.location];			
-				[self processRegistration:trimmedString];
-			}
-		}
-	}	
-}
 
- */
+@implementation AppDelegate (ESLicensingKeyProvider)
 
 - (NSString *) publicKey {
 	return SYMMETRIESPUBLICKEY;
 }
 
-
 @end
+
+
+@implementation AppDelegate (ESLicensingErrorButtons)
+- (NSArray*) licenseFailureRecoveryButtons {
+	return [NSArray arrayWithObject:NSLocalizedString(@"E-Mail earthlingsoft", @"E-Mail earthlingsoft button when failing to open registration file.")];
+}
+@end
+
+
+@implementation AppDelegate (NSErrorRecoveryAttempting)
+/* we won't have errors in sheets, so this method is sufficient */
+- (BOOL) attemptRecoveryFromError:(NSError *)error optionIndex:(NSUInteger)recoveryOptionIndex {
+	if ([error.domain isEqualToString:ESLICENSE_ERRORDOMAIN]) {
+		NSString * subject = NSLocalizedString(@"Symmetries license problem", @"Subject of e-mail sent when there is a problem with the license");
+		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:earthlingsoft%%40earthlingsoft.net?subject=%@", [subject stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]];
+	}
+	return YES;
+}
+@end
+

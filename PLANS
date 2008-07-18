@@ -1,27 +1,18 @@
-v15
+v17
 
+Improved window zooming
+Made sure registration documents are properly closed
+Red anchor points can't get in the way of the green handles being clicked anymore
+Mid point handle now snaps properly to all four 90° steps
+Welcome screen is less likely to appear now
+Screen shouldn't dim while animation / demo is running
 
 Help Menu Mystery
 
-NSError für ESLicense mit Recovery Option
-
-NSError für ESLicense mit kaputter Datei
 
 Document icon registration
 
 Document icon B&W
-
-Linienendstil
-
-Reduce Welcome screen on subsequent launches
-
-No Welcome screen when launching with document
-
-cursor tracking for size handle close to 0
-
-- During the "start point" adjustment in the demo, the red handle appears to wobble back and forth.
-
-UpdateSystemActivity().
 
 
 

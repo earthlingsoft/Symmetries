@@ -18,16 +18,6 @@
 + (NSCursor *) curvedCursorWithRightArrow:(BOOL) rightArrow upArrow:(BOOL) upArrow leftArrow:(BOOL) leftArrow downArrow: (BOOL) downArrow forAngle: (CGFloat) angle size: (CGFloat) size underlay:(NSImage*) underlay;
 
 
-/*
-+ (NSCursor *) curvedCrossCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
-+ (NSCursor *) curvedThreeProngedInnerCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
-+ (NSCursor *) curvedThreeProngedOuterCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
-+ (NSCursor *) curvedLineCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
-
-+ (NSBezierPath *) curvedAngleCursorBezierPathForAngle: (CGFloat) angle;
-+ (NSCursor *) curvedAngleCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
-*/
-
 + (NSBezierPath *) crossCursorBezierPathForAngle: (CGFloat) angle;
 + (NSCursor *) crossCursorForAngle: (CGFloat) angle withSize: (CGFloat) size;
 

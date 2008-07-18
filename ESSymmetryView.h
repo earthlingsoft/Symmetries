@@ -1,6 +1,6 @@
 //
 //  ESSymmetryView.h
-//  Symmetry
+//  Symmetries
 //
 //  Created by  Sven on 22.05.08.
 //  Copyright 2008 earthlingsoft. All rights reserved.

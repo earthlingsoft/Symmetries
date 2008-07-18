@@ -1,6 +1,6 @@
 //
 //  ESSymmetryView.m
-//  Symmetry
+//  Symmetries
 //
 //  Created by  Sven on 22.05.08.
 //  Copyright 2008 earthlingsoft. All rights reserved.
@@ -421,17 +421,17 @@
 	NSPoint mouseLocation = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
 	//	NSLog (@"mouse: %f, %f", mouseLocation.x, mouseLocation.y);
 	
-	if ([self point:mouseLocation inRect:[self.endPointTA rect]]) {
-		return @"endPoint";
-	}
-	else if ([self point:mouseLocation inRect:[self.endHandleTA rect]]) {
+	if ([self point:mouseLocation inRect:[self.endHandleTA rect]]) {
 		return @"endHandle";
-	}
-	else if ([self point:mouseLocation inRect:[self.midPointTA rect]]) {
-		return @"midPoint";
 	}
 	else if ([self point:mouseLocation inRect:[self.midHandleTA rect]]) {
 		return @"midHandle";											
+	}
+	else if ([self point:mouseLocation inRect:[self.endPointTA rect]]) {
+		return @"endPoint";
+	}
+	else if ([self point:mouseLocation inRect:[self.midPointTA rect]]) {
+		return @"midPoint";
 	}
 	else if ([self point:mouseLocation inRect:[self.widthHandleTA rect]]) {
 		return @"widthHandle";											
@@ -472,12 +472,13 @@
 		TAName = [self trackingAreaNameForMouseLocation];
 	}
 
-	NSLog (@"[ESSymmetryView updateCursor] for point %@", TAName);
+	// NSLog (@"[ESSymmetryView updateCursor] for point %@", TAName);
 		
 	NSCursor * theCursor = [NSCursor arrowCursor];
-	const CGFloat cursorSize = 16.0;
+	CGFloat cursorSize = 16.0;
 	
 	if ([TAName isEqualToString:@"endPoint"]) {
+		cursorSize = cursorSize + 2.0;
 		NSImage * redDot = nil;
 		if (isDragging) {
 			redDot = [[NSImage alloc] initWithSize:NSMakeSize(POINTSIZE, POINTSIZE)];
@@ -489,7 +490,6 @@
 		
 		if (self.theDocument.size == ESSYM_SIZE_MIN) {
 			// doesn't actually happen
-//			theCursor = [ESCursors curvedThreeProngedInnerCursorForAngle: 2.0 * pi / self.theDocument.cornerCount withSize:cursorSize];
 			theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:NO leftArrow:YES downArrow:YES forAngle: 2.0 * pi +  2.0 * pi / self.theDocument.cornerCount size:cursorSize underlay:redDot];
 		}
 		else if (self.theDocument.size == ESSYM_SIZE_MAX) {
@@ -970,6 +970,8 @@
 }
 
 
+
+
 /* 
  Draws handles for the fundamental area of the path and sets up its tracking areas.
 */
@@ -1001,15 +1003,8 @@
 		image = [[NSImage alloc] initWithSize:self.frame.size];
 		[image lockFocus];
 	}
+
 	
-	/*
-	NSShadow * shadow = [[NSShadow alloc] init];
-	shadow.shadowOffset = NSMakeSize(1.0,-1.5);
-	shadow.shadowBlurRadius = 3.0;
-	shadow.shadowColor = [NSColor colorWithDeviceWhite:0.1 alpha:0.6];
-	[shadow set];
-	*/
-		
 	// Handles first...
 	//
 	[HANDLECOLOR set];
@@ -1042,9 +1037,6 @@
 	[bP fill];
 	
 	if (self.theDocument.twoLines) {
-	/*	shadow.shadowBlurRadius = 4.5;
-		shadow.shadowOffset = NSMakeSize(-1, 1.5);
-		[shadow set]; */
 		// handles for thickness and thickened corner
 		CGFloat lineHandleWidth = 12.0;
 		CGFloat lineHandleThickness = 6.0;
@@ -1245,6 +1237,11 @@
 		}
 		// Window resize widget
 		[[NSImage imageNamed:@"Resize Widget.png"] drawAtPoint:NSMakePoint(self.window.frame.size.width - 13.0,  1.0) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction: 1.0];
+	}
+	
+	// make sure the screen doesn't dim while we are in the foreground or the demo is running, may keep the screen from sleeping while running AppleScript	
+	if ( [NSApp isActive] || self.theDocument.runningDemo) {
+		UpdateSystemActivity(UsrActivity);
 	}
 }
 

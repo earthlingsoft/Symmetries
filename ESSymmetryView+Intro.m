@@ -36,7 +36,7 @@
 						  [NSNumber numberWithFloat:0.0],
 						  nil];
 	myAnimation.delegate = self;
-	myAnimation.duration = 7.0;
+	myAnimation.duration = 4.0 + 6.0 / [[NSUserDefaults standardUserDefaults] floatForKey:ESSYM_LAUNCHCOUNT_KEY];
 	myAnimation.removedOnCompletion = NO;
 	myAnimation.fillMode = kCAFillModeForwards;
 	[self.introLayer addAnimation:myAnimation forKey:@"textFadeOut"];	
@@ -45,7 +45,16 @@
 
 
 - (NSAttributedString*) introString {
-	return [self.stringsFromFile objectAtIndex:0];
+	NSAttributedString * aS;
+
+	if ([[NSUserDefaults standardUserDefaults] integerForKey:ESSYM_LAUNCHCOUNT_KEY] > 8) {
+		aS = [self.stringsFromFile objectAtIndex:1];
+	}
+	else {
+		aS = [self.stringsFromFile objectAtIndex:0];
+	}
+	
+	return aS;
 }
 
 
@@ -977,17 +986,10 @@
 		// need to draw for demo
 		// NSLog(@"-drawLayer: %@ (%f, %f, %f, %f - %f, %f)", layer.name, layer.bounds.origin.x, layer.bounds.origin.y, layer.bounds.size.width, layer.bounds.size.height, layer.position.x, layer.position.y);
 		NSUInteger layerNumber = [[[layer.name componentsSeparatedByString:@"-"] lastObject] intValue];
-		[self drawLayerWithAttributedString:[self.stringsFromFile objectAtIndex:layerNumber + 1] inContext:ctx];
+		[self drawLayerWithAttributedString:[self.stringsFromFile objectAtIndex:layerNumber + 2] inContext:ctx];
 		drew = YES;
 	}
-	else if ([layer.name isEqualToString:@"highlighterLayer"]) {
-		CGFloat rectSize = 12.0;
-		NSBezierPath * bP = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(-rectSize, -rectSize, 2.0 * rectSize, 2.0 * rectSize)];
-		bP.lineWidth = 6.0;
-		[[NSColor orangeColor] set];
-		[bP stroke];
-		drew = YES;
-	}
+
 	[NSGraphicsContext restoreGraphicsState];
 	
 	if(!drew) {
