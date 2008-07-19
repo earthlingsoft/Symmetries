@@ -184,7 +184,7 @@
 			[WORKSPACE openURL: [NSURL URLWithString:self.payPalURL]];
 			break;
 		case 5: // Readme
-			[WORKSPACE openFile:[[NSBundle mainBundle] pathForResource:@"readme" ofType:@"html"]];
+			[WORKSPACE openFile:[[NSBundle mainBundle] pathForResource:@"Help" ofType:@"html"]];
 			break;
 	}
 }

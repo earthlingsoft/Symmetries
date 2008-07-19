@@ -1,14 +1,11 @@
-v17
+v19
+QuickLook should _really_ work now
+Better copy and paste / drag and drop to bitmap image editors
+Added Help
+Improved handling of opening documents after the application launch
 
-Improved window zooming
-Made sure registration documents are properly closed
-Red anchor points can't get in the way of the green handles being clicked anymore
-Mid point handle now snaps properly to all four 90° steps
-Welcome screen is less likely to appear now
-Screen shouldn't dim while animation / demo is running
 
 Help Menu Mystery
-
 
 Document icon registration
 

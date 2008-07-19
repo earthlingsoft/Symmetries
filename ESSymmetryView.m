@@ -234,6 +234,8 @@
 		if ([TAName isEqualToString:@"midPoint"]) {
 			theDocument.twoMidPoints = !theDocument.twoMidPoints;
 		}
+		// the point may have moved away from beneath the mouse => update cursor
+		[self updateCursor];
 	}		
 	
 	self.clickedPointName = nil;
@@ -621,31 +623,31 @@
 	NSPasteboard * draggingPasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
 
 	// prepare dragging in different styles for registered and unregistered users
-	NSString * imagePboardType;
-	NSString * imageType;
-	NSString * imageExtension;
-	NSData * imageData;
+	NSData * TIFFData = [self.theDocument demoTIFFData];
+	NSData * PDFData = [NSBezierPath PDFDataForDictionary:documentDict];
 	
-	if (self.theDocument.registeredMode) {
-		imagePboardType = NSPDFPboardType;
-		imageType = (NSString *) kUTTypePDF;
-		imageExtension = @"pdf";
-		imageData = [NSBezierPath PDFDataForDictionary: documentDict];
-	}
-	else {
-		imagePboardType = NSTIFFPboardType;
-		imageType = (NSString *) kUTTypeTIFF;
-		imageExtension = @"tiff";
-		imageData = [self.theDocument demoTIFFData];
-	}
 
 	// declare Pboard types
-	NSArray * pboardTypes = [NSArray arrayWithObjects:imagePboardType, ESSYMMETRYPBOARDTYPE, NSFilesPromisePboardType, nil];
+	NSArray * pboardTypes = [NSArray arrayWithObjects:NSTIFFPboardType, ESSYMMETRYPBOARDTYPE, NSFilesPromisePboardType, nil];
+	if (self.theDocument.registeredMode) {
+		pboardTypes = [pboardTypes arrayByAddingObject:NSPDFPboardType];
+	}
 	[draggingPasteboard declareTypes:pboardTypes owner:self];
 	
-	// image data (PDF or TIFF)
-	[draggingPasteboard setData:imageData forType:imagePboardType];
+	// add image data 	
+	[draggingPasteboard setData:TIFFData forType:NSTIFFPboardType];
+	if (self.theDocument.registeredMode) {
+		[draggingPasteboard setData:PDFData forType:NSPDFPboardType];
+	}
 	
+		
+	NSString * imageType = (NSString *) kUTTypeTIFF;
+	NSString * imageExtension = @"tiff";
+	if (self.theDocument.registeredMode) {
+		imageType = (NSString *) kUTTypePDF;
+		imageExtension = @"pdf";
+	}
+
 	// File Promise in a format accepted by Preview
 	NSString * errorString;
 	NSData * fileTypesData = [NSPropertyListSerialization dataFromPropertyList:[NSArray arrayWithObject:imageExtension] format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorString];
@@ -654,6 +656,8 @@
 	// File Promise in a format accepted by the Finder or GKON
 	[draggingPasteboard setData:[imageType dataUsingEncoding:NSUTF8StringEncoding] forType:@"com.apple.pasteboard.promised-file-content-type"];
 	
+	
+
 	// internal data format
 	NSData * dictData = [NSArchiver archivedDataWithRootObject:documentDict];
 	[draggingPasteboard setData:dictData forType:ESSYMMETRYPBOARDTYPE];
@@ -1222,7 +1226,7 @@
 	}
 	
 	
-	if ( [NSGraphicsContext currentContextDrawingToScreen] ) {
+	if ([NSGraphicsContext currentContextDrawingToScreen] ) {
 		// draw handles and guides to the screen (only)
 		if (theDocument.showHandles != 0) {
 			self.handleLayer.opacity = 1.0;

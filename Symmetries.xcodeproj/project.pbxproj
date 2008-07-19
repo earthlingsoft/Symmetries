@@ -43,6 +43,13 @@
 		6CB3F7FE0E29878D00B005BF /* Primel-Document.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6CB3F7FD0E29878D00B005BF /* Primel-Document.icns */; };
 		6CB3F8020E2987CC00B005BF /* ESCursors.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C18A1CA0E29104000A25A56 /* ESCursors.m */; };
 		6CBC479C0DEAE2610073B214 /* ESSymmetryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */; };
+		6CC7E0240E32174F00E3C849 /* Help.html in Resources */ = {isa = PBXBuildFile; fileRef = 6CC7E0220E32174F00E3C849 /* Help.html */; };
+		6CC7E0270E32177F00E3C849 /* TwoMidpointShape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CC7E0250E32177F00E3C849 /* TwoMidpointShape.png */; };
+		6CC7E0280E32177F00E3C849 /* SingleMidpointShape.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CC7E0260E32177F00E3C849 /* SingleMidpointShape.png */; };
+		6CC7E0D10E32470300E3C849 /* Primel.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CC7E0D00E32470300E3C849 /* Primel.png */; };
+		6CC7E0DB0E324FBB00E3C849 /* Herzchen.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CC7E0DA0E324FBB00E3C849 /* Herzchen.png */; };
+		6CC7E0DD0E32506300E3C849 /* Primel-mini.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CC7E0DC0E32506300E3C849 /* Primel-mini.png */; };
+		6CC7E1520E326A9100E3C849 /* MyDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC7E1510E326A9100E3C849 /* MyDocumentController.m */; };
 		6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */; };
 		6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC20D00E17E4AC00772100 /* MyDocument+Animation.m */; };
 		6CDC23980E185DAA00772100 /* Resize Widget.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CDC23970E185DAA00772100 /* Resize Widget.png */; };
@@ -141,6 +148,15 @@
 		6C92E0B90E1A283700BEE063 /* Primel.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Primel.icns; path = Icons/Primel.icns; sourceTree = "<group>"; };
 		6CB3F7FD0E29878D00B005BF /* Primel-Document.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "Primel-Document.icns"; path = "Icons/Primel-Document.icns"; sourceTree = "<group>"; };
 		6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryView.m; sourceTree = "<group>"; };
+		6CC7E0230E32174F00E3C849 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = English; path = English.lproj/Help.html; sourceTree = "<group>"; };
+		6CC7E0250E32177F00E3C849 /* TwoMidpointShape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TwoMidpointShape.png; path = Help/TwoMidpointShape.png; sourceTree = "<group>"; };
+		6CC7E0260E32177F00E3C849 /* SingleMidpointShape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SingleMidpointShape.png; path = Help/SingleMidpointShape.png; sourceTree = "<group>"; };
+		6CC7E0D00E32470300E3C849 /* Primel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Primel.png; path = Icons/Primel.png; sourceTree = "<group>"; };
+		6CC7E0DA0E324FBB00E3C849 /* Herzchen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Herzchen.png; path = Help/Herzchen.png; sourceTree = "<group>"; };
+		6CC7E0DC0E32506300E3C849 /* Primel-mini.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Primel-mini.png"; path = "Help/Primel-mini.png"; sourceTree = "<group>"; };
+		6CC7E0DE0E32538F00E3C849 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = German; path = German.lproj/Help.html; sourceTree = "<group>"; };
+		6CC7E1500E326A9100E3C849 /* MyDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDocumentController.h; sourceTree = "<group>"; };
+		6CC7E1510E326A9100E3C849 /* MyDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDocumentController.m; sourceTree = "<group>"; };
 		6CDC1ED70E17935B00772100 /* ESSymmetryTotalAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryTotalAnimation.h; sourceTree = "<group>"; };
 		6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryTotalAnimation.m; sourceTree = "<group>"; };
 		6CDC209D0E17E2D400772100 /* PLANS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PLANS; sourceTree = "<group>"; };
@@ -218,6 +234,8 @@
 			children = (
 				6C82F99B0DF7614F005CF008 /* AppDelegate.h */,
 				6C82F99C0DF7614F005CF008 /* AppDelegate.m */,
+				6CC7E1500E326A9100E3C849 /* MyDocumentController.h */,
+				6CC7E1510E326A9100E3C849 /* MyDocumentController.m */,
 				2A37F4AEFDCFA73011CA2CEA /* MyDocument.h */,
 				2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */,
 				6CDC20CF0E17E4AC00772100 /* MyDocument+Animation.h */,
@@ -256,16 +274,22 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8D15AC360486D014006FF6A4 /* Info.plist */,
+				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				6C5A7AE40E1544DD00A3D6E1 /* AttributedStrings.rtf */,
 				6C129FE60E2A138C00C0FD35 /* Credits.html */,
-				8D15AC360486D014006FF6A4 /* Info.plist */,
+				6CC7E0220E32174F00E3C849 /* Help.html */,
+				6CC7E0250E32177F00E3C849 /* TwoMidpointShape.png */,
+				6CC7E0260E32177F00E3C849 /* SingleMidpointShape.png */,
+				6CC7E0D00E32470300E3C849 /* Primel.png */,
 				6CDC23970E185DAA00772100 /* Resize Widget.png */,
+				6CC7E0DA0E324FBB00E3C849 /* Herzchen.png */,
+				6CC7E0DC0E32506300E3C849 /* Primel-mini.png */,
 				6CDC23C20E18DE6E00772100 /* Symmetries.sdef */,
 				6C92E0B90E1A283700BEE063 /* Primel.icns */,
 				6CB3F7FD0E29878D00B005BF /* Primel-Document.icns */,
 				6C544A3F0E2951C900ACDF60 /* Localizable.strings */,
 				6C12A72B0E2EC12D00C0FD35 /* ESLicense.strings */,
-				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				1DDD58280DA1D0D100B32029 /* MyDocument.xib */,
 				1DDD582A0DA1D0D100B32029 /* MainMenu.xib */,
 			);
@@ -397,6 +421,12 @@
 				6CDC23C30E18DE6E00772100 /* Symmetries.sdef in Resources */,
 				6C92E0BA0E1A283700BEE063 /* Primel.icns in Resources */,
 				6CB3F7FE0E29878D00B005BF /* Primel-Document.icns in Resources */,
+				6CC7E0240E32174F00E3C849 /* Help.html in Resources */,
+				6CC7E0270E32177F00E3C849 /* TwoMidpointShape.png in Resources */,
+				6CC7E0280E32177F00E3C849 /* SingleMidpointShape.png in Resources */,
+				6CC7E0D10E32470300E3C849 /* Primel.png in Resources */,
+				6CC7E0DB0E324FBB00E3C849 /* Herzchen.png in Resources */,
+				6CC7E0DD0E32506300E3C849 /* Primel-mini.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,6 +480,7 @@
 				6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */,
 				6CB3F8020E2987CC00B005BF /* ESCursors.m in Sources */,
 				6C12A6140E2E913000C0FD35 /* ESLicense.m in Sources */,
+				6CC7E1520E326A9100E3C849 /* MyDocumentController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,6 +558,15 @@
 			name = AttributedStrings.rtf;
 			sourceTree = "<group>";
 		};
+		6CC7E0220E32174F00E3C849 /* Help.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6CC7E0230E32174F00E3C849 /* English */,
+				6CC7E0DE0E32538F00E3C849 /* German */,
+			);
+			name = Help.html;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -570,6 +610,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = RoundRect_Prefix.pch;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = NO;
+				IBC_FLATTEN_NIBS = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = Symmetries;
