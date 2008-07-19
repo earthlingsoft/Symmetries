@@ -11,7 +11,7 @@
 			<string>QLGenerator</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>net.earthlingsoft.symmetry.document</string>
+				<string>net.earthlingsoft.symmetries.document</string>
 			</array>
 		</dict>
 	</array>
@@ -20,7 +20,7 @@
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string>net.earthlingsoft.symmetry.qlgenerator.</string>
+	<string>net.earthlingsoft.symmetries.qlgenerator</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -50,7 +50,7 @@
 	<key>QLNeedsToBeRunInMainThread</key>
 	<false/>
 	<key>QLPreviewHeight</key>
-	<real>600</real>
+	<integer>600</integer>
 	<key>QLPreviewWidth</key>
 	<real>800</real>
 	<key>QLSupportsConcurrentRequests</key>
