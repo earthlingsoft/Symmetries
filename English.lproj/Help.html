@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta content="text/html;charset=utf-8">
+		<title>Symmetries Help</title>
+		<style type="text/css">
+			body {font-family: "Hoefler Text"; width:30em; font-size:16px; line-height: 24px; margin:auto; background:url(../Herzchen.png);}
+			.mainicon {width:128px; height:128px; display:block; margin: 2em auto;}
+			h1 {font-family: Zapfino; font-weight:normal; margin-bottom:2em;text-align: center;}
+			h2:before { position:absolute; left: -53px; bottom:-3px; height: 50px; width: 48px; background:url(../Primel-mini.png); content:''; z-index: -2;}
+			h2 {text-transform: uppercase; font-weight: normal; font-size: 100%; margin: 4em 0em 1em 24px; position:relative;}
+			span.heading {font-weight:normal; text-transform: uppercase; }
+			p.image {text-align: center;}
+			p.image img { border:5px #eee solid;}
+			a:link, a:visited { color: #333399; text-decoration:none;}
+			p:hover a:link { color:#3333cc; }
+		</style>
+	</head>
+	<body>
+		<div>
+		<img src="../Primel.png" class="mainicon" alt="Symmetries flower icon">
+		</div>
+		<h1>Symmetries</h1>
+		<h2>Introduction</h2>
+		<p>
+		Symmetries unite mathematics and graphics: The concept is clearly defined, has been thoroughly studied for millennia <em>and</em> it can be used to give beautiful images as well.
+		</p><p>
+		Frequently it seems unnecessarily difficult to create non-trivial perfectly symmetric shapes in graphics applications. And once you managed to do it, it is likely that you have to start all over again if you want a detail of your symmetric shape changed. Symmetries covers this for a limited repertoire of  <a href="http://en.wikipedia.org/wiki/Rotational_symmetry">rotationally symmetric</a> shapes in the plane.
+		</p><p>
+		You define the fundamental shape of the path you want using standard anchor points and handles. Symmetries takes care of rotating things around for you to give a perfect path. It is surprising what a rich variety of shapes you can create with just two control points and handles plus a small chunk of maths.
+		</p><p>
+		When hovering the mouse cursor above the anchor points and handles, Symmetries will show guides to indicate the main directions you can move the points into. The Demo – available from the Help menu – will move things around for you to get a first impression. But simply clicking around a bit and trying things out should be as useful.
+		</p><p>
+		As a bonus Symmetries will also draw a smaller copy of the path you specify inside it, creating a shape enclosed by both paths. You can adjust the distance between both paths and add or subtract a bit of the thickness in corners to make the shape <em>look</em> more regular or more interesting.
+		</p>
+		
+		<h2 class="heading">Technicalities</h2>
+		<p>
+		In Symmetries you set the number of corners you want to have. That determines a fraction of the full circle in which you can set the shape of the path, which Symmetries will then multiply and rotate for you to get the full circle filled.
+		</p><p>
+		The default shape you get to work with is built from four anchor points with handles. You can only adjust two of those, the ‘Start Point’ and the ‘Midpoint’ as the rest of them are automatically positioned by reflecting them along the blue axis in the image below:
+		</p><p class="image">
+		 	<img src="../TwoMidpointShape.png" alt="Screenshot from Symmetries highlighting the section on screen determining the path’s shape.">
+		</p><p>
+		By deselecting the ‘Two Midpoints’ option in the ‘Path’ menu, you can simplify the shape a bit more: Only a single copy of the Midpoint that is equidistant from the Start Point and its reflection will be used in this mode:
+		</p><p class="image">
+		 	<img src="../SingleMidpointShape.png" alt="Screenshot from Symmetries showing the path with a single Midpoint">
+		</p>
+		
+		<h2>Export</h2>
+		<p>
+		Symmetries exports the paths it creates via copy and paste, drag and drop or saving to PDF files, making it easy to use them in graphics applications like <a href="http://www.adobe.com/products/illustrator/">Illustrator</a>,  <a href="http://www.lemkesoft.com/content/193/key-features.html">GraphicConverter</a>, <a href="http://likethought.com/opacity/">Opacity</a>, <a href="http://flyingmeat.com/acorn/">Acorn</a>.
+		</p><p>
+		The export feature will only work on paths with a 4-fold symmetry as long as your copy of Symmetries is not registered. Register or be square.
+		</p>
+		
+		<h2>Please Register</h2>
+		<p>
+		If you enjoy Symmetries, please support us by buying a license. You are required to buy a license if you want to use Symmetries’ output in your graphic work.
+		</p>		
+		
+		<h2>Get in touch</h2>
+		<p>
+		Symmetries should update automatically if you allowed it to do so. Otherwise a menu item to trigger a check for updates is available from the ‘Symmetries’ menu. If in doubt, visit <a href="http://earthlingsoft.net/Symmetries/">Symmetries’ web page</a>.
+		</p><p>
+		In case there are questions, <a href="mailto:earthlingsoft@earthlingsoft.net?subject=Symmetries">send us an e-mail</a>. There’ a menu item for doing that in the Help menu.
+		</p><p>
+		And check out the <a href="http://www.flickr.com/groups/symmetries/">Symmetries flickr group</a>. If you’re in the mood to show off your creations, that’s the place to do it.
+		</p>
+		</body>
+</html>
