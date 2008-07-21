@@ -574,28 +574,24 @@
 						
 		case 6: // Mid point Handle: Rotate and resize a bit
 		{
-			animation = [[ESSymmetryAnimation alloc] initWithDuration:5.0 animationCurve:NSAnimationEaseInOut];
-			animation.valueObject = self.theDocument;
-			animation.animationBlockingMode = NSAnimationNonblocking;
-			animation.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection], 
-									 @"diagonalTangentDirection", 
-									 nil];
-			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: self.theDocument.diagonalTangentDirection - 4.0 * pi], 
-									  @"diagonalTangentDirection", 
-									  nil];
-			
 			animation2 = [[ESSymmetryAnimation alloc] initWithDuration:1.5 animationCurve:NSAnimationEaseInOut];
 			animation2.valueObject = self.theDocument;
 			animation2.animationBlockingMode = NSAnimationNonblocking;
 			animation2.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
 									  [NSNumber numberWithFloat:self.theDocument.diagonalTangentLength], 
 									  @"diagonalTangentLength", 
+									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 2.5 * pi],
+									  @"straightTangentDirection",
+									 [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection], 
+									 @"diagonalTangentDirection", 
 									  nil];
 			animation2.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
 									   [NSNumber numberWithFloat: 0.0], 
 									   @"diagonalTangentLength",  
+									   [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 1.0],
+									   @"straightTangentDirection",
+									 [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - pi], 
+									 @"diagonalTangentDirection", 
 									   nil];
 			
 			animation3 = [[ESSymmetryAnimation alloc] initWithDuration:3.5 animationCurve:NSAnimationEaseInOut];
@@ -606,12 +602,20 @@
 									  @"diagonalTangentLength", 
 									  [NSNumber numberWithFloat: 1.0], 
 									  @"straightTangentLength", 
+									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 1.0],
+									   @"straightTangentDirection",
+									  [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - pi], 
+									  @"diagonalTangentDirection", 
 									  nil];
 			animation3.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
 									   [NSNumber numberWithFloat: 1.0], 
 									   @"diagonalTangentLength", 
 									   [NSNumber numberWithFloat: 0.0], 
 									   @"straightTangentLength", 
+									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection],
+									   @"straightTangentDirection",
+									   [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 4.0 * pi], 
+									   @"diagonalTangentDirection", 
 									   nil];
 			
 			animation4 = [[ESSymmetryAnimation alloc] initWithDuration:3.8 animationCurve:NSAnimationEaseInOut];
@@ -622,22 +626,25 @@
 									  @"diagonalTangentLength", 
 									 [NSNumber numberWithFloat: 0.0], 
 									 @"straightTangentLength", 
+									  [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 4.0 * pi],
+									  @"diagonalTangentDirection",								  
 									  nil];
 			animation4.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
 									   [NSNumber numberWithFloat: 0.3], 
 									   @"diagonalTangentLength", 
 									  [NSNumber numberWithFloat: 0.2], 
 									  @"straightTangentLength", 
+									   [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 3.0 * pi],
+									   @"diagonalTangentDirection",								  
 									   nil];
 			
 			
-			[animation startAnimation];
 			[animation2 startAnimation];
 			[animation3 startWhenAnimation:animation2 reachesProgress:1.0];
 			[animation4 startWhenAnimation:animation3 reachesProgress:1.0];
 			animation4.delegate = self;
 			
-			self.lastAnimations = [NSArray arrayWithObjects:animation, animation2, animation3, animation4, nil];
+			self.lastAnimations = [NSArray arrayWithObjects: animation2, animation3, animation4, nil];
 
 			break;
 		}
