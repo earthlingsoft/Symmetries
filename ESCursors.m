@@ -384,7 +384,7 @@
 
 
 
-#pragma mark CONVENIENCE METHODS
+#pragma mark HELPER METHODS
 
 #define OUTLINEWIDTH 1.0
 

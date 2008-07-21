@@ -8,6 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">352.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="106"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -603,7 +604,6 @@
 								</object>
 								<object class="NSMenuItem" id="782396">
 									<reference key="NSMenu" ref="374024848"/>
-									<bool key="NSIsAlternate">YES</bool>
 									<string key="NSTitle">Show Demo [Not Localised]</string>
 									<string key="NSKeyEquiv"/>
 									<int key="NSMnemonicLoc">2147483647</int>
