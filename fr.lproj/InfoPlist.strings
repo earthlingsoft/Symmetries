@@ -1,0 +1,12 @@
+﻿/* Localized versions of Info.plist keys */
+
+NSHumanReadableCopyright = "© 2008 earthlingsoft
+All rights reserved.";
+
+
+
+
+/* document types */
+
+"Symmetries License" = "Licence Symmetries";
+"Symmetry" = "Symmetry";

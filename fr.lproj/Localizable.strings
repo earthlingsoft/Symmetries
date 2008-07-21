@@ -1,0 +1,46 @@
+﻿/* Animate Path */
+"Animate Path" = "Animer le chemin";
+
+/* Space Out (Option Animate Path menu item) */
+"Space Out" = "Arrière-plan éclaté";
+
+/* Stop Animation (Replaces Animate Path menu item while Animation is running) */
+"Stop Animation" = "Arrêter l'animation";
+
+/* Whoah – stop spacing out! (Option Animate Path menu item while Animation is running) */
+"Whoa – stop spacing out!" = "Woah! Arrêter l'arrière-plan éclaté !";
+
+
+
+
+/* Show Demo (Make sure this is the same as the string in the 1st page of Attributed Strings.rtf) */
+"Start Demo" = "Démarrer la démo";
+
+/* Stop Demo */
+"Stop Demo" = "Arrêter la démo";
+
+/* This setting cannot be changed while the Demo is running */
+"This setting cannot be changed while the Demo is running." = "Ce réglage ne peut plus être changé pendant la démo est en cours d'exécution.";
+
+/* Tooltip for inactive Animate command while Demo is running */
+"Animations cannot be started while the Demo is running. Please wait until the Demo has ended or use the Stop Demo command to do so." = "Les animations ne peuvent pas être démarrées alors que la démo est en cours d'exécution. S’il vous plaît attendre jusqu'à ce que la démo ait pris fin ou utiliser le bouton « Arrêter la démo » pour le faire.";
+
+
+
+/* Heading for registration info in About box */
+"Registered to" = "Enregistrer à";
+
+
+
+/* Save button in Export as PDF sheet */
+"Export" = "Exporter";
+
+/* the URL to go to when selecting to register in the about box or help menu */
+"PayPalURL" = "https://www.paypal.com/xclick/business=earthlingsoft%40earthlingsoft.net&item_name=Symmetries&no_shipping=1&cn=Comments&tax=0&currency_code=EUR";
+
+
+/* E-Mail earthlingsoft button when failing to open a registration file */
+"E-Mail earthlingsoft" = "Écrire à earthlingsoft";
+
+/* Subject of e-mail sent when there is a problem with the license */
+"Symmetries license problem" = "Problème de licence Symmetries";
