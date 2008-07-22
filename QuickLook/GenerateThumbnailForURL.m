@@ -12,14 +12,19 @@ OSStatus DrawStuff(CFURLRef url, CGFloat size) {
 		NSAffineTransform * moveToMiddle = [NSAffineTransform transform];
 		[moveToMiddle translateXBy: size/2.0 yBy: size/2.0];
 		[thePath transformUsingAffineTransform:moveToMiddle]; 
-		
+
+		thePath.lineWidth = [[theDict objectForKey:@"strokeThickness"] floatValue] * size / 2.0 / 10.0 + 3. ;
+
 		// Create the shadow below and to the right of the shape.
 		NSShadow* theShadow = [[[NSShadow alloc] init] autorelease];
-		[theShadow setShadowOffset:NSMakeSize(size/100.0, -size/100.0)];
-		[theShadow setShadowBlurRadius:size/25.0];		
-		[theShadow setShadowColor:[[NSColor whiteColor] colorWithAlphaComponent:0.3]]; 
-		[theShadow set];		
-		
+		[theShadow setShadowOffset:NSMakeSize(0.0, 0.0)];
+		[theShadow setShadowBlurRadius:MAX(size/80.0, 5.0)];		
+		[theShadow setShadowColor:[[NSColor whiteColor] colorWithAlphaComponent:1.]]; 
+//		[theShadow set];		
+		[[NSColor colorWithCalibratedWhite:1.0 alpha:0.6] set];
+		[thePath stroke];
+//		theShadow.shadowColor = [NSColor colorWithCalibratedWhite:1.0 alpha:0.0];
+//		[theShadow set];
 		
 		// draw
 		if ([[theDict objectForKey:@"twoLines"] boolValue]) {
@@ -27,12 +32,12 @@ OSStatus DrawStuff(CFURLRef url, CGFloat size) {
 			[thePath fill];
 		}
 		[[NSColor blackColor] set];
-		[thePath setLineWidth: [[theDict objectForKey:@"strokeThickness"] floatValue] * size / 2.0 / 10.0];
+		thePath.lineWidth = [[theDict objectForKey:@"strokeThickness"] floatValue] * size / 2.0 / 10.0;
 		[thePath stroke];
 		
 		return noErr;
 	}	
-	else {
+	else { 
 		return 1111;
 	}
 }
