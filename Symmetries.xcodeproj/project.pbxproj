@@ -31,6 +31,7 @@
 		6C4DC32E0E336CFC00CFE539 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58290DA1D0D100B32029 /* MyDocument.xib */; };
 		6C4DC3FA0E34EAF500CFE539 /* ESLicense.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6C4DC3F80E34EAF500CFE539 /* ESLicense.strings */; };
 		6C4DC4300E34EC7F00CFE539 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6C4DC4290E34EC7F00CFE539 /* Localizable.strings */; };
+		6C4DC5910E36857A00CFE539 /* Help.css in Resources */ = {isa = PBXBuildFile; fileRef = 6C4DC5900E36857A00CFE539 /* Help.css */; };
 		6C5935040DEA0441000B3428 /* NSImage+Extras.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5935030DEA0441000B3428 /* NSImage+Extras.m */; };
 		6C5A79BB0E11B5D200A3D6E1 /* ESSymmetryAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5A79BA0E11B5D200A3D6E1 /* ESSymmetryAnimation.m */; };
 		6C5A7ABD0E15419800A3D6E1 /* ESSymmetryView+Intro.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5A7ABC0E15419800A3D6E1 /* ESSymmetryView+Intro.m */; };
@@ -143,6 +144,7 @@
 		6C4DC4490E34ECE500CFE539 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/AttributedStrings.rtf; sourceTree = "<group>"; };
 		6C4DC4550E34ED6900CFE539 /* fr */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = fr; path = fr.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C4DC4580E34EE1000CFE539 /* SUUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SUUpdater.h; path = "../Sparkle 1.5b4/Extras/Source Code/SUUpdater.h"; sourceTree = SOURCE_ROOT; };
+		6C4DC5900E36857A00CFE539 /* Help.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = Help.css; sourceTree = "<group>"; };
 		6C5935030DEA0441000B3428 /* NSImage+Extras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Extras.m"; sourceTree = "<group>"; };
 		6C59350D0DEA0449000B3428 /* NSImage+Extras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+Extras.h"; sourceTree = "<group>"; };
 		6C5A79B90E11B5D200A3D6E1 /* ESSymmetryAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryAnimation.h; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				6CF369780E28E623003F1D67 /* net.earthlingsoft.symmetries.plist */,
 				6CE607150E0BA48300BFE3F3 /* Symmetries QuickLook.xcodeproj */,
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
+				6C4DC5D90E368CB800CFE539 /* ESLicense */,
 				2A37F4AFFDCFA73011CA2CEA /* Other Sources */,
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
@@ -263,8 +266,6 @@
 				6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */,
 				6C5935030DEA0441000B3428 /* NSImage+Extras.m */,
 				6C59350D0DEA0449000B3428 /* NSImage+Extras.h */,
-				6C12A6120E2E913000C0FD35 /* ESLicense.h */,
-				6C12A6130E2E913000C0FD35 /* ESLicense.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -297,9 +298,9 @@
 				6CDC23C20E18DE6E00772100 /* Symmetries.sdef */,
 				6C92E0B90E1A283700BEE063 /* Primel.icns */,
 				6CB3F7FD0E29878D00B005BF /* Primel-Document.icns */,
-				6C4DC3F80E34EAF500CFE539 /* ESLicense.strings */,
 				1DDD58290DA1D0D100B32029 /* MyDocument.xib */,
 				1DDD582A0DA1D0D100B32029 /* MainMenu.xib */,
+				6C4DC5900E36857A00CFE539 /* Help.css */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -311,6 +312,16 @@
 				1058C7A8FEA54F5311CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6C4DC5D90E368CB800CFE539 /* ESLicense */ = {
+			isa = PBXGroup;
+			children = (
+				6C12A6130E2E913000C0FD35 /* ESLicense.m */,
+				6C12A6120E2E913000C0FD35 /* ESLicense.h */,
+				6C4DC3F80E34EAF500CFE539 /* ESLicense.strings */,
+			);
+			name = ESLicense;
 			sourceTree = "<group>";
 		};
 		6CE610B90E0DBC4700BFE3F3 /* Products */ = {
@@ -435,6 +446,7 @@
 				6CC7E0DD0E32506300E3C849 /* Primel-mini.png in Resources */,
 				6C4DC3FA0E34EAF500CFE539 /* ESLicense.strings in Resources */,
 				6C4DC4300E34EC7F00CFE539 /* Localizable.strings in Resources */,
+				6C4DC5910E36857A00CFE539 /* Help.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

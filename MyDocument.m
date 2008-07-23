@@ -120,7 +120,7 @@
 
 
 - (void) setValuesForUndoFromDictionary: (NSDictionary *) dict {
-	[self.undoManager registerUndoWithTarget:self selector:@selector(setValuesForUndoFromDictionary:) object:[self dictionary]];
+	[self.undoManager registerUndoWithTarget:self selector:@selector(setValuesForUndoFromDictionary:) object:self.dictionary];
 	[self setValuesFromDictionary:dict];
 }
 
@@ -167,17 +167,23 @@
 
 	if ([typeName isEqualToString:FILETYPEUTI]) {
 		// our own file type
-		NSDictionary * dict = [self plistDictionary];
+		NSDictionary * dict = self.plistDictionary;
 		if (dict) {
 			writeOK = [dict writeToURL:absoluteURL atomically:YES];
 		}
 	}
-	else if ([typeName isEqualToString:(NSString *) 
-			  kUTTypePDF]) {
+	else if ([typeName isEqualToString:(NSString *) kUTTypePDF]) {
 		// export a PDF file
-		NSData * pdfData = [NSBezierPath PDFDataForDictionary:[self dictionary]];
+		NSData * pdfData = [NSBezierPath PDFDataForDictionary:self.dictionary];
 		if (pdfData) {
 			writeOK = [pdfData writeToURL:absoluteURL atomically:YES];	
+		}
+	}
+	else if ([typeName isEqualToString:(NSString *) kUTTypeTIFF]) {
+		// export a TIFF file, large for registered users, small otherwise
+		NSData * TIFFData = [NSBezierPath TIFFDataForDictionary:self.dictionary size:self.bitmapSize];
+		if (TIFFData) {
+			writeOK = [TIFFData writeToURL:absoluteURL atomically:YES];
 		}
 	}
 	
@@ -323,6 +329,18 @@
 - (BOOL) runningAnimation {
 	return [self.totalAnimation isAnimating];
 }
+
+
+- (CGFloat) bitmapSize {
+	CGFloat bitmapSize = 384.; 
+	if (self.registeredMode) {
+		bitmapSize = 1024.;
+	}
+	
+	return bitmapSize;
+}
+
+
 
 
 /*
@@ -486,25 +504,17 @@
 
 	if (self.registeredMode) {
 		// PDF pasteboard for registered users
-		NSData * pdfData = [NSBezierPath PDFDataForDictionary:[self dictionary]];
-		[pB declareTypes:[NSArray arrayWithObjects: NSPDFPboardType, nil] owner:self];
+		NSData * pdfData = [NSBezierPath PDFDataForDictionary:self.dictionary];
+		[pB declareTypes:[NSArray arrayWithObjects: NSPDFPboardType, NSTIFFPboardType, nil] owner:self];
 		[pB setData:pdfData forType:NSPDFPboardType];
 	}
 	else {
-		// otherwise just a small bitmap
-		[pB declareTypes:[NSArray arrayWithObjects:NSTIFFPboardType, nil] owner: self];
-		[pB setData:[self demoTIFFData] forType:NSTIFFPboardType];
+		[pB declareTypes:[NSArray arrayWithObjects: NSTIFFPboardType, nil] owner:self];
 	}
-}
 
-
-/*
- returns small bitmap representation of the path for demo copying
-*/
-- (NSData *) demoTIFFData {
-	NSImage * image = [[NSImage alloc] initWithData: [NSBezierPath PDFDataForDictionary:[self dictionary]]];
-	image.size = NSMakeSize(384.0, 384.0);
-	return image.TIFFRepresentation;
+	// bitmaps for everyone
+	[pB declareTypes:[NSArray arrayWithObjects:NSTIFFPboardType, nil] owner: self];
+	[pB setData:[NSBezierPath TIFFDataForDictionary:self.dictionary size:self.bitmapSize] forType:NSTIFFPboardType];
 }
 
 

@@ -90,6 +90,7 @@
 @property (readonly) BOOL registeredMode;
 @property (readonly) BOOL runningDemo;
 @property (readonly) BOOL runningAnimation;
+@property (readonly) CGFloat bitmapSize;
 
 
 - (id) init;
@@ -114,7 +115,5 @@
 - (IBAction) twoLines:(id) sender;
 - (IBAction) sliderMoved: (id) sender;
 - (IBAction) bogusAction: (id) sender;
-
-- (NSData *) demoTIFFData;
 
 @end

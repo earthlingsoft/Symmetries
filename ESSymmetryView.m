@@ -215,7 +215,7 @@
 		[self updateCursor];
 		
 		// store current values of the document before changes happen
-		self.oldDocumentValues = [self.theDocument dictionary];
+		self.oldDocumentValues = self.theDocument.dictionary;
 	}
 	else {
 		self.clickedPointName = nil;
@@ -242,7 +242,7 @@
 	[self updateCursor];
 	[self setNeedsDisplay:YES];	
 	
-	if (self.oldDocumentValues && ![self.oldDocumentValues isEqualToDictionary: [self.theDocument dictionary]]) {
+	if (self.oldDocumentValues && ![self.oldDocumentValues isEqualToDictionary: self.theDocument.dictionary]) {
 		// the document's values changed since the last mouse down => setup undo
 		[self.theDocument.undoManager registerUndoWithTarget:self.theDocument selector:@selector(setValuesForUndoFromDictionary:) object:self.oldDocumentValues]; 
 	}
@@ -610,20 +610,20 @@
 #pragma mark DRAG & DROP 
 
 /* We want to do drag and drop */
-- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal  {
+- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal {
 	return NSDragOperationCopy;
 }
 
 
 - (void) handleDragForEvent: (NSEvent*) event {
 	//NSLog(@"-handleDragForEvent:");
-	NSDictionary * documentDict = [self.theDocument dictionary];
+	NSDictionary * documentDict = self.theDocument.dictionary;
 	NSImage * image = [[NSImage alloc] initWithData:[NSBezierPath PDFDataForDictionary: documentDict]];
 	
 	NSPasteboard * draggingPasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
 
 	// prepare dragging in different styles for registered and unregistered users
-	NSData * TIFFData = [self.theDocument demoTIFFData];
+	NSData * TIFFData = [NSBezierPath TIFFDataForDictionary:documentDict size:self.theDocument.bitmapSize];
 	NSData * PDFData = [NSBezierPath PDFDataForDictionary:documentDict];
 	
 
@@ -657,7 +657,6 @@
 	[draggingPasteboard setData:[imageType dataUsingEncoding:NSUTF8StringEncoding] forType:@"com.apple.pasteboard.promised-file-content-type"];
 	
 	
-
 	// internal data format
 	NSData * dictData = [NSArchiver archivedDataWithRootObject:documentDict];
 	[draggingPasteboard setData:dictData forType:ESSYMMETRYPBOARDTYPE];
@@ -667,9 +666,22 @@
 	NSPoint imagePosition = NSMakePoint(eventMousePosition.x - image.size.width /2.0,
 										eventMousePosition.y - image.size.height / 2.0);
 
+	NSMutableParagraphStyle * stringParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+	stringParagraphStyle.alignment = NSCenterTextAlignment;
+	NSDictionary * stringAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+		[NSFont fontWithName:@"Lucida Grande Bold" size:24.], NSFontAttributeName,
+		stringParagraphStyle, NSParagraphStyleAttributeName,
+									   nil];
+	NSAttributedString * aS = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"Please Register", @"Message superimposed on drag image during the drag operation in unregistered version") attributes: stringAttributes];
+	NSSize stringSize = aS.size;
+
 	NSImage * dragProxyImage = [[NSImage alloc] initWithSize: image.size];
 	[dragProxyImage lockFocus];
 	[image compositeToPoint:NSZeroPoint operation:NSCompositeCopy fraction: 0.5];
+	if (!self.theDocument.registeredMode) {
+		[aS drawInRect:NSMakeRect( 0, (image.size.height - stringSize.height) / 2. , 
+							  image.size.width, stringSize.height)];
+	}
 	[dragProxyImage unlockFocus];
 	
 	[self dragImage:dragProxyImage at:imagePosition offset:NSZeroSize event:event pasteboard:draggingPasteboard source:self slideBack:YES];	
@@ -713,7 +725,7 @@
 			[self.theDocument writeToURL:destinationURL ofType: (NSString *) kUTTypePDF error:&myError];
 		}
 		else {
-			[[self.theDocument demoTIFFData] writeToURL:destinationURL options:0 error:&myError];
+			[self.theDocument writeToURL:destinationURL ofType: (NSString *) kUTTypeTIFF error:&myError];
 		}
 		
 		if (myError) {

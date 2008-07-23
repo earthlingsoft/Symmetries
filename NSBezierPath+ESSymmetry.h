@@ -12,8 +12,9 @@
 @interface NSBezierPath (ESSymmetry)
 
 + (NSBezierPath*) bezierPathWithDictionary: (NSDictionary*) dict size: (CGFloat) s;
-+ (NSData*) PDFDataForDictionary: (NSDictionary *) dict;
-
 + (NSBezierPath*) bezierPathWithDictionary: (NSDictionary*) dict size: (CGFloat) s cornerDelta: (CGFloat) cornerDelta;
+
++ (NSData*) PDFDataForDictionary: (NSDictionary *) dict;
++ (NSData *) TIFFDataForDictionary: (NSDictionary *) dict size: (CGFloat) size;
 
 @end

@@ -1,0 +1,68 @@
+body {
+	width:30em; 
+	font-family: "Hoefler Text"; 
+	font-size:16px; 
+	line-height: 24px; 
+	margin:auto; 
+	background:url(Herzchen.png);
+}
+
+h1 {
+	font-family: Zapfino; 
+	font-weight: normal; 
+	margin: 1em auto 3em auto;
+	text-align: center;
+	padding-top: 164px;
+	background: url(Primel.png) 50% top no-repeat;
+}
+
+h2:before { 
+	position:absolute; 
+	left: -53px; 
+	bottom: -3px; 
+	height: 50px; 
+	width: 48px; 
+	background: url(Primel-mini.png); 
+	content:''; 
+	z-index: -2;
+}
+
+h2 {
+	text-transform: uppercase; 
+	font-weight: normal; 
+	font-size: 100%; 
+	margin: 4em 0em 1em 24px; 
+	position:relative;
+}
+
+/*
+p {
+	text-indent: 24px;
+} 
+
+h2+p {
+	text-indent: 0em;
+}
+*/
+
+p.image {
+	text-align: center;
+}
+
+p.image img { 
+	border:5px #eee solid;
+}
+
+a:link, a:visited { 
+	color: #333399; 
+	text-decoration:none;
+}
+
+p:hover a:link { 
+	color:#3333cc; 
+}
+
+a[hreflang]:after { 
+	content: "[" attr(hreflang) "]";
+	margin-left: 0.3em; 
+}
