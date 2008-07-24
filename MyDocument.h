@@ -9,7 +9,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-#define FILETYPEUTI @"net.earthlingsoft.symmetries.document"
+#define ESSYM_SYMMETRY_UTI @"net.earthlingsoft.symmetries.document"
 
 #define ESSYM_SIZE_MIN 0.0
 #define ESSYM_SIZE_MAX 1.0

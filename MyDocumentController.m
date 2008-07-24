@@ -7,6 +7,7 @@
 //
 
 #import "MyDocumentController.h"
+#import "MyDocument.h"
 
 
 /* Mostly nicked from TextEdit and slightly adapted */
@@ -48,24 +49,31 @@
 
 
 
-/* When a document is opened, check to see whether there is a document that is already open, and whether it is transient. If so, transfer the document's window controllers and close the transient document. 
+/* When a document is opened, first checker whether it is a registration file. Then check to see whether there is a document that is already open, and whether it is transient. If so, transfer the document's window controllers and close the transient document. 
 */
 - (id)openDocumentWithContentsOfURL:(NSURL *)absoluteURL display:(BOOL)displayDocument error:(NSError **)outError {
 	
-    NSDocument *transientDoc = [self transientDocumentToReplace];
 	NSDocument *doc = nil;
-	NSLog([absoluteURL description]);
-	if (transientDoc) {
-		[transientDoc readFromURL:absoluteURL ofType:[[NSDocumentController sharedDocumentController] typeForContentsOfURL:absoluteURL error:outError] error:outError];
-		doc = transientDoc;
-		[doc setFileURL:absoluteURL];
+	NSString * documentType = [[NSDocumentController sharedDocumentController] typeForContentsOfURL:absoluteURL error:outError];
+
+	if ([documentType isEqualToString: ESSYM_SYMMETRY_UTI]) {	
+		// we are dealing with a document here => special handling
+		NSDocument *transientDoc = [self transientDocumentToReplace];
+		NSLog([absoluteURL description]);
+		if (transientDoc) {
+			[transientDoc readFromURL:absoluteURL ofType:[[NSDocumentController sharedDocumentController] typeForContentsOfURL:absoluteURL error:outError] error:outError];
+			doc = transientDoc;
+			[doc setFileURL:absoluteURL];
+		}
+		if (!doc) { // do this if there is no document to replace OR if replacing failed
+			doc = [super openDocumentWithContentsOfURL:absoluteURL display:(displayDocument && !transientDoc) error:outError];
+		}
 	}
-	if (!doc) { // do this if there is no document to replace OR if replacing failed
-		doc = [super openDocumentWithContentsOfURL:absoluteURL display:(displayDocument && !transientDoc) error:outError];
-    }
-    if (!doc) return nil;
-    
-    
+	else {
+		// not a document (in practice: license file) => standard handling
+		doc = [super openDocumentWithContentsOfURL:absoluteURL display:displayDocument error:outError];
+	}
+
     return doc;
 }
 

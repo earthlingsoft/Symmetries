@@ -72,15 +72,14 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 238491927;
-			PBXWorkspaceStateSaveDate = 238491927;
+			PBXPerProjectTemplateStateSaveDate = 238601233;
+			PBXWorkspaceStateSaveDate = 238601233;
 		};
 		perUserProjectItems = {
 			6C12A1C00E2ACC0800C0FD35 /* PBXTextBookmark */ = 6C12A1C00E2ACC0800C0FD35 /* PBXTextBookmark */;
 			6C4DC6340E36928E00CFE539 /* PBXTextBookmark */ = 6C4DC6340E36928E00CFE539 /* PBXTextBookmark */;
 			6C4DC6350E36928E00CFE539 /* PBXTextBookmark */ = 6C4DC6350E36928E00CFE539 /* PBXTextBookmark */;
 			6C4DC65F0E36971600CFE539 /* PBXTextBookmark */ = 6C4DC65F0E36971600CFE539 /* PBXTextBookmark */;
-			6C4DC6610E36971600CFE539 /* PlistBookmark */ = 6C4DC6610E36971600CFE539 /* PlistBookmark */;
 			6C73CFD00E0B117100749440 /* PlistBookmark */ = 6C73CFD00E0B117100749440 /* PlistBookmark */;
 			6C73CFD10E0B117100749440 /* PBXTextBookmark */ = 6C73CFD10E0B117100749440 /* PBXTextBookmark */;
 			6C73D01F0E0B18B600749440 /* PBXTextBookmark */ = 6C73D01F0E0B18B600749440 /* PBXTextBookmark */;
@@ -88,6 +87,7 @@
 			6CC7E00B0E32035600E3C849 /* PBXTextBookmark */ = 6CC7E00B0E32035600E3C849 /* PBXTextBookmark */;
 			6CC7E00C0E32035600E3C849 /* PBXTextBookmark */ = 6CC7E00C0E32035600E3C849 /* PBXTextBookmark */;
 			6CD8D5990E371A4E009330FD /* PlistBookmark */ = 6CD8D5990E371A4E009330FD /* PlistBookmark */;
+			6CD8D6B70E38C416009330FD /* PlistBookmark */ = 6CD8D6B70E38C416009330FD /* PlistBookmark */;
 			6CDC23E60E18DF3D00772100 /* PBXTextBookmark */ = 6CDC23E60E18DF3D00772100 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 6C73CFC10E0B10DA00749440 /* Source Control */;
@@ -154,18 +154,6 @@
 		rType = 0;
 		vrLen = 1483;
 		vrLoc = 43;
-	};
-	6C4DC6610E36971600CFE539 /* PlistBookmark */ = {
-		isa = PlistBookmark;
-		fRef = 8D576317048677EA00EA77CD /* Info.plist */;
-		fallbackIsa = PBXBookmark;
-		isK = 0;
-		kPath = (
-			QLPreviewWidth,
-		);
-		name = /Users/ssp/Developer/Symmetries/QuickLook/Info.plist;
-		rLen = 0;
-		rLoc = 2147483647;
 	};
 	6C73CFC10E0B10DA00749440 /* Source Control */ = {
 		isa = PBXSourceControlManager;
@@ -266,6 +254,18 @@
 		name = /Users/ssp/Developer/Symmetries/QuickLook/Info.plist;
 		rLen = 0;
 		rLoc = 2147483647;
+	};
+	6CD8D6B70E38C416009330FD /* PlistBookmark */ = {
+		isa = PlistBookmark;
+		fRef = 8D576317048677EA00EA77CD /* Info.plist */;
+		fallbackIsa = PBXBookmark;
+		isK = 0;
+		kPath = (
+			QLPreviewWidth,
+		);
+		name = /Users/ssp/Developer/Symmetries/QuickLook/Info.plist;
+		rLen = 3;
+		rLoc = 0;
 	};
 	6CDC23E60E18DF3D00772100 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;

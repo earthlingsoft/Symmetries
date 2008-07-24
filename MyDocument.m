@@ -130,7 +130,7 @@
 	Allegedly this should be obvious from the Info.plist, but that didn't work…
 */
 + (NSArray*) writableTypes {
-	return [NSArray arrayWithObjects: FILETYPEUTI, kUTTypePDF, nil];
+	return [NSArray arrayWithObjects: ESSYM_SYMMETRY_UTI, kUTTypePDF, nil];
 }
 
 
@@ -165,7 +165,7 @@
 	// NSLog(@"[MyDocument writeToURL: ofType: %@...]", typeName);
 	BOOL writeOK = NO;
 
-	if ([typeName isEqualToString:FILETYPEUTI]) {
+	if ([typeName isEqualToString:ESSYM_SYMMETRY_UTI]) {
 		// our own file type
 		NSDictionary * dict = self.plistDictionary;
 		if (dict) {
@@ -199,7 +199,7 @@
 
 - (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation originalContentsURL:(NSURL *)absoluteOriginalContentsURL error:(NSError **)outError
 {
-	if ([typeName isEqualToString:FILETYPEUTI]) {
+	if ([typeName isEqualToString:ESSYM_SYMMETRY_UTI]) {
 		NSMutableDictionary *myDict= [NSMutableDictionary dictionaryWithDictionary: [super fileAttributesToWriteToURL:absoluteURL ofType:typeName forSaveOperation:saveOperation originalContentsURL:absoluteOriginalContentsURL error:outError]];
 									  
 		[myDict setObject:[NSNumber numberWithLong:'esRR'] forKey:NSFileHFSCreatorCode];

@@ -11,8 +11,8 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 6CE60D5B0E0D4E5900BFE3F3 /* Build configuration list for PBXAggregateTarget "Release" */;
 			buildPhases = (
-				6CE60D5A0E0D4E2700BFE3F3 /* ShellScript */,
 				6CE60D6A0E0D4F8200BFE3F3 /* ShellScript */,
+				6CE60D5A0E0D4E2700BFE3F3 /* ShellScript */,
 			);
 			dependencies = (
 				6CE60D580E0D4E1800BFE3F3 /* PBXTargetDependency */,
@@ -460,8 +460,10 @@
 			files = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/Symmetries.app",
 			);
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Symmetries.zip",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -478,7 +480,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# remove Sparkle header files\n#cd \"$BUILT_PRODUCTS_DIR\"\n#cd \"Symmetries.app/Contents/Frameworks/Sparkle.framework/\"\n#rm \"Headers\"\n#cd \"Versions/A\"\n#rm -r \"Headers\"\n#lipo -remove pp64 \n#lipo -remove x86_64";
+			shellScript = "# remove Sparkle header files\ncd \"$BUILT_PRODUCTS_DIR\"\npwd\ncd \"Symmetries.app/Contents/\"\nfind . | grep classes.nib | xargs rm \nfind . | grep info.nib | xargs rm \ncd \"Frameworks/SparkleGC.framework/\"\nls | grep Headers | xargs rm\ncd \"Versions/A\"\nls | grep Headers | xargs rm -r \ncd \"../../../SSCrypto.framework\"\nls | grep Headers | xargs rm\ncd \"Versions/A\"\nls | grep Headers | xargs rm -r \ncd \"../../../SSCrypto.framework\"\n#lipo -remove pp64 \n#lipo -remove x86_64";
 		};
 /* End PBXShellScriptBuildPhase section */
 

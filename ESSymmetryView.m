@@ -673,14 +673,15 @@
 		stringParagraphStyle, NSParagraphStyleAttributeName,
 									   nil];
 	NSAttributedString * aS = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"Please Register", @"Message superimposed on drag image during the drag operation in unregistered version") attributes: stringAttributes];
-	NSSize stringSize = aS.size;
+	NSSize stringSize = [aS boundingRectWithSize:image.size options:NSStringDrawingUsesLineFragmentOrigin].size; //aS.size;
 
 	NSImage * dragProxyImage = [[NSImage alloc] initWithSize: image.size];
 	[dragProxyImage lockFocus];
 	[image compositeToPoint:NSZeroPoint operation:NSCompositeCopy fraction: 0.5];
 	if (!self.theDocument.registeredMode) {
-		[aS drawInRect:NSMakeRect( 0, (image.size.height - stringSize.height) / 2. , 
-							  image.size.width, stringSize.height)];
+		[aS drawWithRect:NSMakeRect( 0, (image.size.height - stringSize.height) / 2. , 
+							  image.size.width, stringSize.height)
+			   options:NSStringDrawingUsesLineFragmentOrigin];
 	}
 	[dragProxyImage unlockFocus];
 	
