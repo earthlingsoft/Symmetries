@@ -8,31 +8,33 @@
 OSStatus DrawStuff(CFURLRef url, CGFloat size) {
 	NSDictionary * theDict = [NSDictionary dictionaryWithContentsOfURL: (NSURL *)url];
 	if (theDict) {
-		NSBezierPath * thePath = [NSBezierPath bezierPathWithDictionary:theDict size:size/2.71];	
-		NSAffineTransform * moveToMiddle = [NSAffineTransform transform];
-		[moveToMiddle translateXBy: size/2.0 yBy: size/2.0];
-		[thePath transformUsingAffineTransform:moveToMiddle]; 
+		NSBezierPath * thePath = [NSBezierPath bezierPathWithDictionary:theDict size:1.0];
+		NSRect pathBounds = thePath.bounds;		
+		CGFloat mainStrokeThickness = [[theDict objectForKey:@"strokeThickness"] floatValue] * size / 2. / 10.;
+		CGFloat haloStrokeThickness = mainStrokeThickness + 3. ;
+		CGFloat maxSize =  MAX(MAX(MAX(pathBounds.size.width, pathBounds.size.height), 2. * fabs(pathBounds.origin.x)), fabs(pathBounds.origin.y));
 
-		thePath.lineWidth = [[theDict objectForKey:@"strokeThickness"] floatValue] * size / 2.0 / 10.0 + 3. ;
-
-		// Create the shadow below and to the right of the shape.
-		NSShadow* theShadow = [[[NSShadow alloc] init] autorelease];
-		[theShadow setShadowOffset:NSMakeSize(0.0, 0.0)];
-		[theShadow setShadowBlurRadius:MAX(size/80.0, 5.0)];		
-		[theShadow setShadowColor:[[NSColor whiteColor] colorWithAlphaComponent:1.]]; 
-//		[theShadow set];		
+		NSAffineTransform * scaleToUnitSize = [NSAffineTransform transform];
+		[scaleToUnitSize scaleBy: size / maxSize - haloStrokeThickness - 10. ];
+		
+		NSAffineTransform * translate = [NSAffineTransform transform];
+		[translate translateXBy: .5 * size yBy: .5 * size];
+		
+		[scaleToUnitSize appendTransform:translate];
+		[thePath transformUsingAffineTransform:scaleToUnitSize];
+		
+		// draw halo
+		thePath.lineWidth = haloStrokeThickness;
 		[[NSColor colorWithCalibratedWhite:1.0 alpha:0.6] set];
 		[thePath stroke];
-//		theShadow.shadowColor = [NSColor colorWithCalibratedWhite:1.0 alpha:0.0];
-//		[theShadow set];
 		
-		// draw
+		// draw path
 		if ([[theDict objectForKey:@"twoLines"] boolValue]) {
 			[[NSColor lightGrayColor] set];
 			[thePath fill];
 		}
 		[[NSColor blackColor] set];
-		thePath.lineWidth = [[theDict objectForKey:@"strokeThickness"] floatValue] * size / 2.0 / 10.0;
+		thePath.lineWidth = mainStrokeThickness;
 		[thePath stroke];
 		
 		return noErr;
