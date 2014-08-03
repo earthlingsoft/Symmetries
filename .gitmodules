@@ -1,0 +1,6 @@
+[submodule "ESCursors"]
+	path = ESCursors
+	url = git@github.com:ssp/ESCursors.git
+[submodule "NSBezierPath+ESPoints"]
+	path = NSBezierPath+ESPoints
+	url = git@github.com:earthlingsoft/NSBezierPath-ESPoints.git
