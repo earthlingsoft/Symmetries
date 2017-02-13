@@ -25,8 +25,6 @@
 /* Begin PBXBuildFile section */
 		1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD582A0DA1D0D100B32029 /* MainMenu.xib */; };
 		6C129FE80E2A138C00C0FD35 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 6C129FE60E2A138C00C0FD35 /* Credits.html */; };
-		6C12A6140E2E913000C0FD35 /* ESLicense.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C12A6130E2E913000C0FD35 /* ESLicense.m */; };
-		6C1A36DF1649C3A7006199B1 /* ESLicense.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6CAA47791649B68600DE5AF8 /* ESLicense.strings */; };
 		6C3BE82B0DE8268D0064BCE7 /* NSBezierPath+ESPoints.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+ESPoints.m */; };
 		6C3FE2190DE9762100EAB959 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C3FE2180DE9762100EAB959 /* QuartzCore.framework */; };
 		6C4DC32E0E336CFC00CFE539 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58290DA1D0D100B32029 /* MyDocument.xib */; };
@@ -37,8 +35,6 @@
 		6C5A7ABD0E15419800A3D6E1 /* ESSymmetryView+Intro.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5A7ABC0E15419800A3D6E1 /* ESSymmetryView+Intro.m */; };
 		6C5A7AE60E1544DD00A3D6E1 /* AttributedStrings.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6C5A7AE40E1544DD00A3D6E1 /* AttributedStrings.rtf */; };
 		6C68A73B16594131000F0666 /* NoodleCustomImageRep.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C68A73A1659391D000F0666 /* NoodleCustomImageRep.m */; };
-		6C68A76516594663000F0666 /* SSCrypto.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C68A76416594663000F0666 /* SSCrypto.framework */; };
-		6C68A766165946EF000F0666 /* SSCrypto.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6C68A76416594663000F0666 /* SSCrypto.framework */; };
 		6C73CF3A0E0B079C00749440 /* NSBezierPath+ESSymmetry.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */; };
 		6C82F99D0DF7614F005CF008 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C82F99C0DF7614F005CF008 /* AppDelegate.m */; };
 		6C92E0BA0E1A283700BEE063 /* Primel.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6C92E0B90E1A283700BEE063 /* Primel.icns */; };
@@ -100,7 +96,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				6CE60E860E0D54D100BFE3F3 /* SparkleGC.framework in CopyFiles */,
-				6C68A766165946EF000F0666 /* SSCrypto.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,27 +111,25 @@
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		32DBCF750370BD2300C91783 /* Symmetries_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Symmetries_Prefix.pch; sourceTree = "<group>"; };
 		6C0012A70DE6244B0016ABB5 /* ESSymmetryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryView.h; sourceTree = "<group>"; };
-		6C12A6120E2E913000C0FD35 /* ESLicense.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESLicense.h; path = "../earthlingsoft Serials/ESLicense Class/ESLicense.h"; sourceTree = "<group>"; };
-		6C12A6130E2E913000C0FD35 /* ESLicense.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESLicense.m; path = "../earthlingsoft Serials/ESLicense Class/ESLicense.m"; sourceTree = "<group>"; };
 		6C18A1C90E29104000A25A56 /* ESCursors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESCursors.h; path = ESCursors/ESCursors.h; sourceTree = "<group>"; usesTabs = 0; };
 		6C18A1CA0E29104000A25A56 /* ESCursors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESCursors.m; path = ../ESCursors/ESCursors.m; sourceTree = "<group>"; };
 		6C3BE8290DE8268D0064BCE7 /* NSBezierPath+ESPoints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSBezierPath+ESPoints.h"; path = "NSBezierPath+ESPoints/NSBezierPath+ESPoints.h"; sourceTree = "<group>"; };
 		6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+ESPoints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSBezierPath+ESPoints.m"; path = "NSBezierPath+ESPoints/NSBezierPath+ESPoints.m"; sourceTree = "<group>"; };
 		6C3FE2180DE9762100EAB959 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		6C4DC4280E34EC7F00CFE539 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		6C4DC42A0E34EC7F00CFE539 /* de */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
-		6C4DC42B0E34EC7F00CFE539 /* de */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		6C4DC42A0E34EC7F00CFE539 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6C4DC42B0E34EC7F00CFE539 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6C4DC42C0E34EC7F00CFE539 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = de; path = de.lproj/Help.html; sourceTree = "<group>"; };
 		6C4DC42D0E34EC7F00CFE539 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = de; path = de.lproj/Credits.html; sourceTree = "<group>"; };
 		6C4DC42E0E34EC7F00CFE539 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = de; path = de.lproj/AttributedStrings.rtf; sourceTree = "<group>"; };
 		6C4DC43D0E34ECCC00CFE539 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		6C4DC43E0E34ECCC00CFE539 /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		6C4DC43F0E34ECCC00CFE539 /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		6C4DC43E0E34ECCC00CFE539 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6C4DC43F0E34ECCC00CFE539 /* en */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6C4DC4400E34ECCC00CFE539 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = en; path = en.lproj/Help.html; sourceTree = "<group>"; };
 		6C4DC4410E34ECCC00CFE539 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = en; path = en.lproj/Credits.html; sourceTree = "<group>"; };
 		6C4DC4420E34ECCC00CFE539 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/AttributedStrings.rtf; sourceTree = "<group>"; };
-		6C4DC4450E34ECE500CFE539 /* fr */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
-		6C4DC4460E34ECE500CFE539 /* fr */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		6C4DC4450E34ECE500CFE539 /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6C4DC4460E34ECE500CFE539 /* fr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6C4DC4470E34ECE500CFE539 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = fr; path = fr.lproj/Credits.html; sourceTree = "<group>"; };
 		6C4DC4480E34ECE500CFE539 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = fr; path = fr.lproj/Help.html; sourceTree = "<group>"; };
 		6C4DC4490E34ECE500CFE539 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = fr.lproj/AttributedStrings.rtf; sourceTree = "<group>"; };
@@ -151,13 +144,11 @@
 		6C5A7ABC0E15419800A3D6E1 /* ESSymmetryView+Intro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ESSymmetryView+Intro.m"; sourceTree = "<group>"; };
 		6C68A7391659391D000F0666 /* NoodleCustomImageRep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoodleCustomImageRep.h; path = "../-open-projects/NoodleKit/NoodleCustomImageRep.h"; sourceTree = "<group>"; };
 		6C68A73A1659391D000F0666 /* NoodleCustomImageRep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoodleCustomImageRep.m; path = "../-open-projects/NoodleKit/NoodleCustomImageRep.m"; sourceTree = "<group>"; };
-		6C68A76416594663000F0666 /* SSCrypto.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SSCrypto.framework; path = "../../Library/Developer/Xcode/DerivedData/SSCrypto-edvtwohzkpsavpcanwshrzkuyywa/Build/Products/Development/SSCrypto.framework"; sourceTree = "<group>"; };
 		6C73CF380E0B079C00749440 /* NSBezierPath+ESSymmetry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+ESSymmetry.h"; sourceTree = "<group>"; };
 		6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+ESSymmetry.m"; sourceTree = "<group>"; };
 		6C82F99B0DF7614F005CF008 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6C82F99C0DF7614F005CF008 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		6C92E0B90E1A283700BEE063 /* Primel.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Primel.icns; path = Icons/Primel.icns; sourceTree = "<group>"; };
-		6CAA477A1649B68600DE5AF8 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = "../earthlingsoft Serials/ESLicense Class/de.lproj/ESLicense.strings"; sourceTree = "<group>"; };
 		6CB3F7FD0E29878D00B005BF /* Primel-Document.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = "Primel-Document.icns"; path = "Icons/Primel-Document.icns"; sourceTree = "<group>"; };
 		6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryView.m; sourceTree = "<group>"; };
 		6CC7E0250E32177F00E3C849 /* TwoMidpointShape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TwoMidpointShape.png; path = Help/TwoMidpointShape.png; sourceTree = "<group>"; };
@@ -189,7 +180,6 @@
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
 				6C3FE2190DE9762100EAB959 /* QuartzCore.framework in Frameworks */,
 				6CE60E830E0D54C800BFE3F3 /* SparkleGC.framework in Frameworks */,
-				6C68A76516594663000F0666 /* SSCrypto.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,7 +189,6 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6C68A76416594663000F0666 /* SSCrypto.framework */,
 				6CE60E820E0D54C800BFE3F3 /* SparkleGC.framework */,
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
 			);
@@ -231,7 +220,6 @@
 				6CF369780E28E623003F1D67 /* net.earthlingsoft.symmetries.plist */,
 				6CE607150E0BA48300BFE3F3 /* Symmetries QuickLook.xcodeproj */,
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
-				6C4DC5D90E368CB800CFE539 /* ESLicense */,
 				2A37F4AFFDCFA73011CA2CEA /* Other Sources */,
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
@@ -315,16 +303,6 @@
 				1058C7A8FEA54F5311CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		6C4DC5D90E368CB800CFE539 /* ESLicense */ = {
-			isa = PBXGroup;
-			children = (
-				6C12A6130E2E913000C0FD35 /* ESLicense.m */,
-				6C12A6120E2E913000C0FD35 /* ESLicense.h */,
-				6CAA47791649B68600DE5AF8 /* ESLicense.strings */,
-			);
-			name = ESLicense;
 			sourceTree = "<group>";
 		};
 		6CE610B90E0DBC4700BFE3F3 /* Products */ = {
@@ -453,7 +431,6 @@
 				6CC7E0DD0E32506300E3C849 /* Primel-mini.png in Resources */,
 				6C4DC4300E34EC7F00CFE539 /* Localizable.strings in Resources */,
 				6C4DC5910E36857A00CFE539 /* Help.css in Resources */,
-				6C1A36DF1649C3A7006199B1 /* ESLicense.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -508,7 +485,6 @@
 				6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */,
 				6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */,
 				6CB3F8020E2987CC00B005BF /* ESCursors.m in Sources */,
-				6C12A6140E2E913000C0FD35 /* ESLicense.m in Sources */,
 				6CC7E1520E326A9100E3C849 /* MyDocumentController.m in Sources */,
 				6C68A73B16594131000F0666 /* NoodleCustomImageRep.m in Sources */,
 			);
@@ -574,15 +550,6 @@
 			);
 			name = AttributedStrings.rtf;
 			sourceTree = "<group>";
-		};
-		6CAA47791649B68600DE5AF8 /* ESLicense.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6CAA477A1649B68600DE5AF8 /* de */,
-			);
-			name = ESLicense.strings;
-			path = /Users/ssp/Developer/Symmetries;
-			sourceTree = "<absolute>";
 		};
 		6CC7E0220E32174F00E3C849 /* Help.html */ = {
 			isa = PBXVariantGroup;

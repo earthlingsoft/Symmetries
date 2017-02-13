@@ -11,10 +11,11 @@
 #import "MyDocument+Animation.h"
 #import "ESSymmetryView.h"
 #import "ESSymmetryView+Intro.h"
-#import "ESLicense.h"
 
+#define EARTHLINGSOFTWEBPAGE @"https://earthlingsoft.net/"
+#define SYMMETRIESWEBPAGE @"https://earthlingsoft.net/Symmetries/"
+#define GITHUBURL @"https://github.com/ssp/Symmetries"
 
-#define SYMMETRIESPUBLICKEY @"-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAw257efIv+R8VMH+lwtDA\nSwiGIDutsCWS0WzmaJmtb/Uy4LHAAqe8z8Do7A2QUf3cfyfkvI2Ci45dq+YHx6Vf\n2+78rAmKUxgcEAOa/ZHF5AgofV+rMQS5oOrWgWXVeru8seqMOyeic7y50prAf04m\nrRvBAnPqKLpXxaI+00NggpZcHcryvTFxefKo29atD420o36aYLmjuUqoq3kF4ok6\n9tC1ecTMWcxtqS2Qw9on1SnNs8Y6S6qdH0Mm1rx1TgBlI7X5zbUtuuieU0ftZidB\nsfS6MG+Z6Aav+EALrRcGtlUweF/BsAIn98163gPr0nRIL++5yUpVR7bazurNIUs1\nVQIDAQAB\n-----END PUBLIC KEY-----" 
 
 @implementation AppDelegate
 
@@ -172,19 +173,22 @@
 	const NSInteger tag = [sender tag];
 	switch (tag) {
 		case 1: // earthlingsoft
-			[WORKSPACE openURL:[NSURL URLWithString:@"http://earthlingsoft.net/"]];
+			[WORKSPACE openURL:[NSURL URLWithString:EARTHLINGSOFTWEBPAGE]];
 			break;
 		case 2: // Website
-			[WORKSPACE openURL:[NSURL URLWithString:@"http://earthlingsoft.net/Symmetries/"]];
+			[WORKSPACE openURL:[NSURL URLWithString:SYMMETRIESWEBPAGE]];
 			break;
 		case 3: // Send Mail
-			[WORKSPACE openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:earthlingsoft%%40earthlingsoft.net?subject=Symmetries%%20%@", [self myVersionString]]]];
+			[WORKSPACE openURL:[NSURL URLWithString:self.emailURL]];
 			break;
 		case 4: // Paypal
 			[WORKSPACE openURL: [NSURL URLWithString:self.payPalURL]];
 			break;
 		case 5: // Readme
 			[WORKSPACE openFile:[[NSBundle mainBundle] pathForResource:@"Help" ofType:@"html"]];
+			break;
+		case 6: // github
+			[WORKSPACE openURL:[NSURL URLWithString:GITHUBURL]];
 			break;
 	}
 }
@@ -201,22 +205,13 @@
 - (IBAction) orderFrontStandardAboutPanel:(id)sender {
 	NSString * HTMLPath = [[NSBundle mainBundle] pathForResource:@"Credits" ofType:@"html"];
 	NSString * HTML = [NSString stringWithContentsOfFile:HTMLPath encoding:NSUTF8StringEncoding error:nil];
-	NSString * registrationInfo = @"";
-	NSString * startComment = @"";
-	NSString * endComment = @"";
-	
-	if (self.isRegistered) {
-		NSString * registeredName = [[ESLicenser licenser] userName];
-		
-		registrationInfo = [NSString stringWithFormat:@"<h3>%@</h3>\n<p>%@<br></p>\n",
-							NSLocalizedString(@"Registered to", @"Heading for registration info in About box"),
-							registeredName];
-		startComment = @"<!-- ";	
-		endComment = @" -->";
-	}
 	
 	// adjust Credits text for current licensing status
-	HTML = [NSString stringWithFormat:HTML, startComment, endComment, registrationInfo, self.payPalURL];
+	HTML = [NSString stringWithFormat:HTML,
+			SYMMETRIESWEBPAGE,
+			self.emailURL,
+			GITHUBURL,
+			self.payPalURL];
 	
 	NSAttributedString * HTMLString = [[NSAttributedString alloc] initWithHTML:[HTML dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
 	
@@ -227,45 +222,11 @@
 
 
 - (NSString *) payPalURL {
-	return NSLocalizedString(@"PayPalURL", @"the URL to go to when selecting to register in the about box or help menu");	
+	return NSLocalizedString(@"PayPalURL", @"the URL to go to when selecting to donate in the about box or help menu");	
 }
 
-
-- (BOOL) isRegistered {
-	return [[ESLicenser licenser] isLicensed];
-}
-
-@end
-
-
-
-#pragma mark ESLICENSING PROTOCOLS
-
-
-@implementation AppDelegate (ESLicensingKeyProvider)
-
-- (NSString *) publicKey {
-	return SYMMETRIESPUBLICKEY;
+- (NSString *) emailURL {
+	return [NSString stringWithFormat:@"mailto:earthlingsoft%%40earthlingsoft.net?subject=Symmetries%%20%@", [self myVersionString]];
 }
 
 @end
-
-
-@implementation AppDelegate (ESLicensingErrorButtons)
-- (NSArray*) licenseFailureRecoveryButtons {
-	return [NSArray arrayWithObject:NSLocalizedString(@"E-Mail earthlingsoft", @"E-Mail earthlingsoft button when failing to open registration file.")];
-}
-@end
-
-
-@implementation AppDelegate (NSErrorRecoveryAttempting)
-/* we won't have errors in sheets, so this method is sufficient */
-- (BOOL) attemptRecoveryFromError:(NSError *)error optionIndex:(NSUInteger)recoveryOptionIndex {
-	if ([error.domain isEqualToString:ESLICENSE_ERRORDOMAIN]) {
-		NSString * subject = NSLocalizedString(@"Symmetries license problem", @"Subject of e-mail sent when there is a problem with the license");
-		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"mailto:earthlingsoft%%40earthlingsoft.net?subject=%@", [subject stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]];
-	}
-	return YES;
-}
-@end
-

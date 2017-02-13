@@ -44,12 +44,13 @@
 
 
 
-/* When a document is opened, first checker whether it is a registration file. Then check to see whether there is a document that is already open, and whether it is transient. If so, transfer the document's window controllers and close the transient document. 
+/*
+ Then check to see whether there is a document that is already open, and whether it is transient. If so, transfer the document's window controllers and close the transient document.
 */
 - (id)openDocumentWithContentsOfURL:(NSURL *)absoluteURL display:(BOOL)displayDocument error:(NSError **)outError {
 	
 	NSDocument *doc = nil;
-	NSString * documentType = [[NSDocumentController sharedDocumentController] typeForContentsOfURL:absoluteURL error:outError];
+	NSString *documentType = [[NSDocumentController sharedDocumentController] typeForContentsOfURL:absoluteURL error:outError];
 
 	if ([documentType isEqualToString: ESSYM_SYMMETRY_UTI]) {	
 		// we are dealing with a document here => special handling
@@ -65,7 +66,7 @@
 		}
 	}
 	else {
-		// not a document (in practice: license file) => standard handling
+		// not a document => standard handling
 		doc = [super openDocumentWithContentsOfURL:absoluteURL display:displayDocument error:outError];
 	}
 

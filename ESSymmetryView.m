@@ -622,35 +622,29 @@
 	
 	NSPasteboard * draggingPasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
 
-	// prepare dragging in different styles for registered and unregistered users
+	// prepare dragging
 	NSData * TIFFData = [NSBezierPath TIFFDataForDictionary:documentDict size:self.theDocument.bitmapSize];
 	NSData * PDFData = [NSBezierPath PDFDataForDictionary:documentDict];
 	
 
 	// declare Pboard types
-	NSArray * pboardTypes = [NSArray arrayWithObjects:NSTIFFPboardType, ESSYMMETRYPBOARDTYPE, NSFilesPromisePboardType, nil];
-	if (self.theDocument.registeredMode) {
-		pboardTypes = [pboardTypes arrayByAddingObject:NSPDFPboardType];
-	}
+	NSArray * pboardTypes = @[NSTIFFPboardType, ESSYMMETRYPBOARDTYPE, NSFilesPromisePboardType, NSPDFPboardType];
+
 	[draggingPasteboard declareTypes:pboardTypes owner:self];
 	
 	// add image data 	
 	[draggingPasteboard setData:TIFFData forType:NSTIFFPboardType];
-	if (self.theDocument.registeredMode) {
-		[draggingPasteboard setData:PDFData forType:NSPDFPboardType];
-	}
+	[draggingPasteboard setData:PDFData forType:NSPDFPboardType];
 	
 		
 	NSString * imageType = (NSString *) kUTTypeTIFF;
 	NSString * imageExtension = @"tiff";
-	if (self.theDocument.registeredMode) {
-		imageType = (NSString *) kUTTypePDF;
-		imageExtension = @"pdf";
-	}
+	imageType = (NSString *) kUTTypePDF;
+	imageExtension = @"pdf";
 
 	// File Promise in a format accepted by Preview
 	NSString * errorString;
-	NSData * fileTypesData = [NSPropertyListSerialization dataFromPropertyList:[NSArray arrayWithObject:imageExtension] format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorString];
+	NSData * fileTypesData = [NSPropertyListSerialization dataFromPropertyList:@[imageExtension] format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorString];
 	[draggingPasteboard setData:fileTypesData forType:NSFilesPromisePboardType];
 	
 	// File Promise in a format accepted by the Finder or GKON
@@ -668,21 +662,10 @@
 
 	NSMutableParagraphStyle * stringParagraphStyle = [[NSMutableParagraphStyle alloc] init];
 	stringParagraphStyle.alignment = NSCenterTextAlignment;
-	NSDictionary * stringAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
-		[NSFont fontWithName:@"Lucida Grande Bold" size:24.], NSFontAttributeName,
-		stringParagraphStyle, NSParagraphStyleAttributeName,
-									   nil];
-	NSAttributedString * aS = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"Please Register", @"Message superimposed on drag image during the drag operation in unregistered version") attributes: stringAttributes];
-	NSSize stringSize = [aS boundingRectWithSize:image.size options:NSStringDrawingUsesLineFragmentOrigin].size; //aS.size;
 
 	NSImage * dragProxyImage = [[NSImage alloc] initWithSize: image.size];
 	[dragProxyImage lockFocus];
     [image drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:0.5];
-	if (!self.theDocument.registeredMode) {
-		[aS drawWithRect:NSMakeRect( 0, (image.size.height - stringSize.height) / 2. , 
-							  image.size.width, stringSize.height)
-			   options:NSStringDrawingUsesLineFragmentOrigin];
-	}
 	[dragProxyImage unlockFocus];
 	
 	[self dragImage:dragProxyImage at:imagePosition offset:NSZeroSize event:event pasteboard:draggingPasteboard source:self slideBack:YES];	
@@ -694,19 +677,13 @@
 	if ([dropDestination isFileURL]) {
 		NSString * folderName = [dropDestination path];
 		NSString * fileName;
-		NSString * fileNameExtension;
+		NSString * fileNameExtension = @"pdf";
 		NSURL * documentURL = self.theDocument.fileURL;
 		if (documentURL && [documentURL isFileURL]) {
 			fileName = [[documentURL.path lastPathComponent] stringByDeletingPathExtension];
 		}
 		else {
 			fileName = @"Symmetry";
-		}
-		if (self.theDocument.registeredMode) {
-			fileNameExtension = @"pdf";
-		}
-		else {
-			fileNameExtension = @"tiff";
 		}
 		
 		NSString * fullName = [fileName stringByAppendingPathExtension:fileNameExtension];
@@ -722,12 +699,7 @@
 		NSURL * destinationURL = [NSURL fileURLWithPath:fullPath];
 		
 		NSError * myError = nil;
-		if (self.theDocument.registeredMode) {
-			[self.theDocument writeToURL:destinationURL ofType: (NSString *) kUTTypePDF error:&myError];
-		}
-		else {
-			[self.theDocument writeToURL:destinationURL ofType: (NSString *) kUTTypeTIFF error:&myError];
-		}
+		[self.theDocument writeToURL:destinationURL ofType:(NSString *)kUTTypePDF error:&myError];
 		
 		if (myError) {
 			NSBeep();

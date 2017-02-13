@@ -180,7 +180,6 @@
 		}
 	}
 	else if ([typeName isEqualToString:(NSString *) kUTTypeTIFF]) {
-		// export a TIFF file, large for registered users, small otherwise
 		NSData * TIFFData = [NSBezierPath TIFFDataForDictionary:self.dictionary size:self.bitmapSize];
 		if (TIFFData) {
 			writeOK = [TIFFData writeToURL:absoluteURL atomically:YES];
@@ -315,12 +314,6 @@
 
 #pragma mark ACCESSORS
 
-- (BOOL) registeredMode {
-	AppDelegate * aD = [NSApp delegate];
-	return aD.isRegistered || (self.cornerCount == SYMMETRIESUNREGISTEREDCORNERCOUNT);
-}
-
-
 - (BOOL) runningDemo {
 	return (((ESSymmetryView*)self.myView).currentDemoStep >= 0);
 }
@@ -332,12 +325,7 @@
 
 
 - (CGFloat) bitmapSize {
-	CGFloat bitmapSize = 384.; 
-	if (self.registeredMode) {
-		bitmapSize = 1024.;
-	}
-	
-	return bitmapSize;
+	return 1024.;
 }
 
 
@@ -502,17 +490,12 @@
 - (void) copy: (id) sender {
 	NSPasteboard * pB = [NSPasteboard generalPasteboard];
 
-	if (self.registeredMode) {
-		// PDF pasteboard for registered users
-		NSData * pdfData = [NSBezierPath PDFDataForDictionary:self.dictionary];
-		[pB declareTypes:[NSArray arrayWithObjects: NSPDFPboardType, NSTIFFPboardType, nil] owner:self];
-		[pB setData:pdfData forType:NSPDFPboardType];
-	}
-	else {
-		[pB declareTypes:[NSArray arrayWithObjects: NSTIFFPboardType, nil] owner:self];
-	}
+	// PDF
+	NSData * pdfData = [NSBezierPath PDFDataForDictionary:self.dictionary];
+	[pB declareTypes:@[NSPDFPboardType, NSTIFFPboardType] owner:self];
+	[pB setData:pdfData forType:NSPDFPboardType];
 
-	// bitmaps for everyone
+	// bitmaps
 	[pB setData:[NSBezierPath TIFFDataForDictionary:self.dictionary size:self.bitmapSize] forType:NSTIFFPboardType];
 }
 
@@ -523,12 +506,7 @@
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
 	if (menuItem.action == @selector(exportAsPDF:)) {
-		if (self.registeredMode) {
-			return YES;
-		}
-		else {
-			return NO;
-		}
+		return YES;
 	}
 	else if ([menuItem action] == @selector(setHandles:)) {
 		if (self.runningDemo) {

@@ -87,7 +87,6 @@
 
 @property (retain) ESSymmetryTotalAnimation * totalAnimation;
 
-@property (readonly) BOOL registeredMode;
 @property (readonly) BOOL runningDemo;
 @property (readonly) BOOL runningAnimation;
 @property (readonly) CGFloat bitmapSize;

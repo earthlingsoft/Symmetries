@@ -8,7 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-#define SYMMETRIESUNREGISTEREDCORNERCOUNT 4
 #define ESSYM_LAUNCHCOUNT_KEY @"number of launches"
 
 @interface AppDelegate : NSObject {
@@ -20,7 +19,6 @@
 @property (readonly) NSDocument * firstDocument;
 @property (readonly) BOOL demoIsRunning;
 @property (readwrite) BOOL useCoreAnimation;
-@property (readonly) BOOL isRegistered;
 @property (readonly) NSString * payPalURL;
 
 - (IBAction) demo:(id) sender;
