@@ -476,7 +476,7 @@
 
 	// NSLog (@"[ESSymmetryView updateCursor] for point %@", TAName);
 		
-	NSCursor * theCursor = [NSCursor arrowCursor];
+	NSCursor * theCursor;
 	CGFloat cursorSize = 16.0;
 	
 	if ([TAName isEqualToString:@"endPoint"]) {
@@ -677,7 +677,7 @@
 
 	NSImage * dragProxyImage = [[NSImage alloc] initWithSize: image.size];
 	[dragProxyImage lockFocus];
-	[image compositeToPoint:NSZeroPoint operation:NSCompositeCopy fraction: 0.5];
+    [image drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:0.5];
 	if (!self.theDocument.registeredMode) {
 		[aS drawWithRect:NSMakeRect( 0, (image.size.height - stringSize.height) / 2. , 
 							  image.size.width, stringSize.height)
@@ -811,7 +811,7 @@
 			
 			if ([self.clickedPointName isEqualToString:@"endPoint"] && self.theDocument.cornerCount > 4) {
 				// we are currently dragging -> give number of corners
-				NSString * numberString = [NSString stringWithFormat:@"%i", self.theDocument.cornerCount];
+				NSString * numberString = [NSString stringWithFormat:@"%li", self.theDocument.cornerCount];
 				NSRange wholeString = NSMakeRange(0, numberString.length);
 				NSMutableAttributedString * aString = [[NSMutableAttributedString alloc] initWithString:numberString];
 				CGFloat fontSize = 72.0;
@@ -1162,7 +1162,7 @@
 		CGImageRef imageRef = [image cgImage];
 		[CATransaction begin];
 		[CATransaction setValue:[NSNumber numberWithFloat:0.0f] forKey:kCATransactionAnimationDuration];
-		self.handleLayer.contents = (id) imageRef;
+		self.handleLayer.contents = (__bridge id) imageRef;
 		self.handleLayer.opacity = 1.0;
 		[CATransaction commit];
 		CGImageRelease(imageRef);	

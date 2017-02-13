@@ -187,7 +187,7 @@
 		}
 	}
 	
-	if (!writeOK) {
+	if (!writeOK && outError != NULL) {
 		// nicked from sample code, not even sure what it does
 		*outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:NULL];
 	}
@@ -219,7 +219,7 @@
 		NSDictionary * initialValues = [self initialValues];
 		NSObject * object;
 		for (NSString * key in initialValues) {
-			if (object = [dict objectForKey:key]) {
+			if ((object = [dict objectForKey:key])) {
 				if ([object isKindOfClass: [NSData class]]) { // unarchive NSColor objects
 					object = [NSUnarchiver unarchiveObjectWithData: (NSData*) object];
 				}				
@@ -231,7 +231,7 @@
 		}				
 	}
     
-    if ( !dict ) {
+    if (!dict && outError != NULL) {
 		*outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:NULL];
 	}
     return (dict != nil);
@@ -306,7 +306,7 @@
 			 self.previousStrokeThickness = [[change objectForKey:NSKeyValueChangeOldKey] floatValue];
 		 }
 		 else if ([keyPath isEqualToString:@"backgroundColor"]) {
-			 self.myView.layer.backgroundColor = (CGColorRef) self.backgroundColor;
+			 self.myView.layer.backgroundColor = (__bridge CGColorRef) self.backgroundColor;
 		 }
 	 }
  }
@@ -474,7 +474,7 @@
 	[pI setVerticalPagination:NSFitPagination];
 	
 	NSPrintOperation *op = [NSPrintOperation printOperationWithView:myView printInfo:[self printInfo]];
-	[op setShowPanels:uiFlag];
+	[op setShowsPrintPanel:uiFlag];
 	[op runOperationModalForWindow:[self windowForSheet] delegate:nil didRunSelector:NULL contextInfo:NULL];
 }
 
@@ -489,7 +489,7 @@
 }
 
 - (void)didEndPageLayout:(NSPageLayout *)pageLayout returnCode:(int)result contextInfo:(void *)contextInfo {
-	NSPrintInfo *tempPrintInfo = (NSPrintInfo *)contextInfo;
+	NSPrintInfo *tempPrintInfo = (__bridge NSPrintInfo *)contextInfo;
 	if (result == NSOKButton) [self setPrintInfo:tempPrintInfo];
 	[tempPrintInfo release];
 }
@@ -641,7 +641,7 @@
 	if ([sender isKindOfClass:[NSMenuItem class]]) {
 		NSSavePanel * savePanel = [NSSavePanel savePanel];
 		savePanel.prompt = NSLocalizedString(@"Export", @"Export as PDF");
-		savePanel.requiredFileType = @"pdf";
+        [savePanel setAllowedFileTypes:[NSArray arrayWithObject:@"pdf"]];
 		[savePanel beginSheetForDirectory:nil file:nil modalForWindow:self.windowForSheet modalDelegate:self didEndSelector:@selector(exportSavePanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
 	}		
 }
@@ -649,7 +649,7 @@
 
 /*
  return function for export sheet
- */
+*/
 - (void)exportSavePanelDidEnd:(NSSavePanel *)sheet returnCode:(int)returnCode  contextInfo:(void  *)contextInfo {
 	if (returnCode == NSOKButton) {
 		NSError * myError = nil;

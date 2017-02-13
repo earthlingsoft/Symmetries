@@ -7,7 +7,7 @@
 //
 
 #import "ESSymmetryTotalAnimation.h"
-
+#import "MyDocument+Animation.h"
 
 @implementation ESSymmetryTotalAnimation
 @synthesize properties;
@@ -44,7 +44,7 @@
 		
 		// recreate animation if it has expired
 		if (!endTimeDate || [endTimeDate timeIntervalSinceReferenceDate] < nowTI) {
-			NSDictionary * minMax = [self.valueObject valueRangeForKey: key currentValue:currentValue];
+			NSDictionary * minMax = [self.valueObject valueRangeForKey:key currentValue:currentValue];
 			CGFloat min, max;
 			NSNumber * value;
 			(value = [minMax objectForKey:@"minValue"]) ? (min = [value floatValue]) : (min = 0.0);
@@ -52,7 +52,7 @@
 			
 			CGFloat newTarget = [self randomFloatBetween:min and:max];
 			NSNumber * newTargetNumber = [NSNumber numberWithFloat: newTarget];
-			NSDate * newEndTime = [now addTimeInterval:[self randomFloatBetween: 3.0 and: 15.0]]; //[endTimeDate addTimeInterval:[self randomFloatBetween: 3.0 and: 15.0]];
+			NSDate * newEndTime = [now dateByAddingTimeInterval:[self randomFloatBetween: 3.0 and: 15.0]]; //[endTimeDate addTimeInterval:[self randomFloatBetween: 3.0 and: 15.0]];
 
 			[property setObject:now forKey:@"startTime"];
 			[property setObject:newEndTime forKey:@"endTime"];

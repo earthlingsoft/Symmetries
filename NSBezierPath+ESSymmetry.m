@@ -148,12 +148,12 @@
 	[bP transformUsingAffineTransform:aT];
 
 	NSMutableData * pdfData = [NSMutableData dataWithCapacity:10000];
-	CGDataConsumerRef consumer = CGDataConsumerCreateWithCFData((CFMutableDataRef)pdfData);
-	NSDictionary * PDFInfo = nil;
-
-	CGContextRef pdfContext = CGPDFContextCreate (consumer, &boundingRect, (CFDictionaryRef)PDFInfo);
+	CGDataConsumerRef consumer = CGDataConsumerCreateWithCFData((__bridge CFMutableDataRef)pdfData);
+    
+	CFDictionaryRef PDFInfo = nil;
+	CGContextRef pdfContext = CGPDFContextCreate(consumer, &boundingRect, PDFInfo);
    
-	CGContextBeginPage (pdfContext, &boundingRect); 
+	CGContextBeginPage(pdfContext, &boundingRect);
 
 	[NSGraphicsContext saveGraphicsState]; 
 	NSGraphicsContext * graphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:pdfContext flipped:NO];

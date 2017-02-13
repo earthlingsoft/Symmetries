@@ -31,7 +31,7 @@
 @class ESSymmetryView;
 @class ESSymmetryTotalAnimation;
 
-@interface MyDocument : NSDocument
+@interface MyDocument : NSDocument <NSMenuDelegate>
 {
  	CGFloat size;
 	NSUInteger cornerCount;

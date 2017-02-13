@@ -21,7 +21,7 @@ typedef struct {
 } ESPolarPoint;
 
 
-@interface ESSymmetryView : NSView {
+@interface ESSymmetryView : NSView <NSAnimationDelegate> {
 	IBOutlet MyDocument * theDocument;
 
 	NSBezierPath * path;	

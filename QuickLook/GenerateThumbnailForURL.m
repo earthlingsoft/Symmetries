@@ -6,7 +6,7 @@
 
 
 OSStatus DrawStuff(CFURLRef url, CGFloat size) {
-	NSDictionary * theDict = [NSDictionary dictionaryWithContentsOfURL: (NSURL *)url];
+	NSDictionary * theDict = [NSDictionary dictionaryWithContentsOfURL: (__bridge NSURL *)url];
 	if (theDict) {
 		NSBezierPath * thePath = [NSBezierPath bezierPathWithDictionary:theDict size:1.0];
 		NSRect pathBounds = thePath.bounds;		

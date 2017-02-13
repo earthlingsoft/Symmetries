@@ -24,7 +24,7 @@ CGImageRef CreateCGImageFromData(NSData* data)
     CGImageRef        imageRef = NULL;
     CGImageSourceRef  sourceRef;
 
-    sourceRef = CGImageSourceCreateWithData((CFDataRef)data, NULL);
+    sourceRef = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
     if(sourceRef) {
         imageRef = CGImageSourceCreateImageAtIndex(sourceRef, 0, NULL);
         CFRelease(sourceRef);

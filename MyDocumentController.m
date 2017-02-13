@@ -30,17 +30,12 @@
     NSEnumerator *controllerEnum = [controllersToTransfer objectEnumerator];
     NSWindowController *controller;
     
-    [controllersToTransfer makeObjectsPerformSelector:@selector(retain)];
-    
     while (controller = [controllerEnum nextObject]) {
 		[doc addWindowController:controller];
 		[transientDoc removeWindowController:controller];
     }
     [transientDoc close];
-    
-    [controllersToTransfer makeObjectsPerformSelector:@selector(release)];
-    [controllersToTransfer release];
-    
+
     if (displayDocument) {
 		[doc makeWindowControllers];
 		[doc showWindows];
