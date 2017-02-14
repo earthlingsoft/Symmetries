@@ -309,10 +309,10 @@
 			animation.valueObject = self.theDocument;
 			animation.animationBlockingMode = NSAnimationNonblocking;
 			animation.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithInt:self.theDocument.cornerCount], 
+									 [NSNumber numberWithUnsignedInteger:self.theDocument.cornerCount],
 									 @"cornerCount", nil];
 			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithInt: self.theDocument.cornerCount], 
+									  [NSNumber numberWithUnsignedInteger:self.theDocument.cornerCount],
 									  @"cornerCount",  nil];
 			
 			
@@ -320,7 +320,7 @@
 			animation2.valueObject = self.theDocument;
 			animation2.animationBlockingMode = NSAnimationNonblocking;
 			animation2.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithInt:self.theDocument.cornerCount], 
+									 [NSNumber numberWithUnsignedInteger:self.theDocument.cornerCount],
 									 @"cornerCount", nil];
 			animation2.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
 									  [NSNumber numberWithInt: 2], 

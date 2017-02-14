@@ -25,8 +25,6 @@
 - (id)init
 {
     return [self initWithDictionary: [self initialValues]];
-	unsigned int time = round((double)[NSDate timeIntervalSinceReferenceDate]);
-	srandom(time);
 }
 
 

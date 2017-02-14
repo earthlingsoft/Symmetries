@@ -13,12 +13,13 @@
 /* Mostly nicked from TextEdit and slightly adapted */
 
 @implementation MyDocumentController
+
 - (NSDocument *)transientDocumentToReplace {
-    NSArray *documents = [self documents];
-	int openDocuments = [documents count];
+    NSArray<NSDocument *> *documents = self.documents;
+	NSUInteger openDocuments = documents.count;
 	if(openDocuments == 1) {
-		NSDocument * theDoc = [documents objectAtIndex:0];
-		if (![theDoc isDocumentEdited]) {
+		NSDocument * theDoc = documents.firstObject;
+		if (!theDoc.isDocumentEdited) {
 			return theDoc;
 		}
 	}
