@@ -13,6 +13,7 @@
 #import "ESSymmetryAnimation.h"
 #import "ESSymmetryTotalAnimation.h"
 #import "ESCursors.h"
+#import "ESSymmetryViewPasteboardWriter.h"
 
 #define HANDLELINEWIDTH 1.5
 #define HANDLESIZE 4.0
@@ -267,7 +268,7 @@
 			self.theDocument.size = MIN(length, 1.0);
 			
 			CGFloat safeXValue = MAX(MIN(mouseLocation.x / self.shapeRadius , 1.0), -1.0);
-			self.theDocument.cornerCount = MIN(round( 2 * pi / acos(safeXValue)), ESSYM_CORNERCOUNT_MAX);
+			self.theDocument.cornerCount = MIN(round(2 * M_PI / acos(safeXValue)), ESSYM_CORNERCOUNT_MAX);
 	
 			if (self.theDocument.runningAnimation){
 				[self.theDocument.totalAnimation addProperty:@"cornerCount"];
@@ -282,19 +283,19 @@
 			}
 			self.theDocument.straightTangentLength = straightTangentLength;
 			
-			CGFloat straightTangentDirection = polar.phi - 2.0 * pi/theDocument.cornerCount+ pi / 2.0;
+			CGFloat straightTangentDirection = polar.phi - 2.0 * M_PI/theDocument.cornerCount + M_PI / 2.0;
 			if (stickyValues) {
 				if ( fabs(straightTangentDirection) < STICKYANGLE) {
 					straightTangentDirection = 0.0;
 				}
-				else if (fabs(straightTangentDirection + pi) < STICKYANGLE) {
-					straightTangentDirection = pi;
+				else if (fabs(straightTangentDirection + M_PI) < STICKYANGLE) {
+					straightTangentDirection = M_PI;
 				}
-				else if (fabs(straightTangentDirection + pi/2.0) < STICKYANGLE) {
-					straightTangentDirection = - pi/2.0;
+				else if (fabs(straightTangentDirection + M_PI/2.0) < STICKYANGLE) {
+					straightTangentDirection = - M_PI/2.0;
 				}
-				else if (fabs(straightTangentDirection - pi/2.0) < STICKYANGLE) {
-					straightTangentDirection = pi/2.0;
+				else if (fabs(straightTangentDirection - M_PI/2.0) < STICKYANGLE) {
+					straightTangentDirection = M_PI/2.0;
 				}
 			}
 			self.theDocument.straightTangentDirection = straightTangentDirection;
@@ -307,7 +308,7 @@
 		else if ([TAName isEqualToString:@"midPoint"]) {
 			NSPoint midTangent = NSMakePoint(self.endPoint.x - self.startPoint.x, self.endPoint.y - self.startPoint.y);
 			NSAffineTransform * rotator = [NSAffineTransform transform];
-			[rotator rotateByRadians: -pi/theDocument.cornerCount];
+			[rotator rotateByRadians: -M_PI/theDocument.cornerCount];
 			NSPoint rotatedMouse = [rotator transformPoint:mouseLocation];
 
 			self.theDocument.cornerFraction = MAX(MIN(rotatedMouse.x / self.shapeRadius / sqrt(2.0), 1.0), -1.0);
@@ -315,7 +316,7 @@
 			if (theDocument.twoMidPoints) {
 				CGFloat midPointsDistance =  MAX(MIN(rotatedMouse.y / LENGTH(midTangent), 1.0),-1.0);
 				if (stickyValues) {
-					if (abs(rotatedMouse.y) < STICKYLENGTH) {
+					if (fabs(rotatedMouse.y) < STICKYLENGTH) {
 						midPointsDistance = 0.0;
 					}
 				}
@@ -334,19 +335,19 @@
 			CGFloat startToEndDistance = LENGTH(startToEndVector);
 			self.theDocument.diagonalTangentLength = MAX(MIN(polar.r / startToEndDistance, 1.0), 0.0);
 			
-			CGFloat diagonalTangentDirection = polar.phi - pi / theDocument.cornerCount + pi * 0.5;
+			CGFloat diagonalTangentDirection = polar.phi - M_PI / theDocument.cornerCount + M_PI * 0.5;
 			if (stickyValues) {
 				if ( fabs(diagonalTangentDirection) < STICKYANGLE) {
 					diagonalTangentDirection = 0.0;
 				}
-				else if (fabs(diagonalTangentDirection + pi) < STICKYANGLE) {
-					diagonalTangentDirection = pi;
+				else if (fabs(diagonalTangentDirection + M_PI) < STICKYANGLE) {
+					diagonalTangentDirection = M_PI;
 				}
-				else if (fabs(diagonalTangentDirection + pi/2.0) < STICKYANGLE) {
-					diagonalTangentDirection = - pi/2.0;
+				else if (fabs(diagonalTangentDirection + M_PI/2.0) < STICKYANGLE) {
+					diagonalTangentDirection = - M_PI/2.0;
 				}
-				else if (fabs(diagonalTangentDirection - pi/2.0) < STICKYANGLE) {
-					diagonalTangentDirection = pi/2.0;
+				else if (fabs(diagonalTangentDirection - M_PI/2.0) < STICKYANGLE) {
+					diagonalTangentDirection = M_PI/2.0;
 				}
 			}
 			self.theDocument.diagonalTangentDirection = diagonalTangentDirection;
@@ -492,28 +493,28 @@
 		
 		if (self.theDocument.size == ESSYM_SIZE_MIN) {
 			// doesn't actually happen
-			theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:NO leftArrow:YES downArrow:YES forAngle: 2.0 * pi +  2.0 * pi / self.theDocument.cornerCount size:cursorSize underlay:redDot];
+			theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:NO leftArrow:YES downArrow:YES forAngle: 2.0 * M_PI +  2.0 * M_PI / self.theDocument.cornerCount size:cursorSize underlay:redDot];
 		}
 		else if (self.theDocument.size == ESSYM_SIZE_MAX) {
 			if (self.theDocument.cornerCount == ESSYM_CORNERCOUNT_MIN) {
-				theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:NO leftArrow:NO downArrow:YES forAngle:1.5 * pi +  2.0 * pi / self.theDocument.cornerCount size:cursorSize underlay:redDot];
+				theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:NO leftArrow:NO downArrow:YES forAngle:1.5 * M_PI +  2.0 * M_PI / self.theDocument.cornerCount size:cursorSize underlay:redDot];
 			}
 			else if (self.theDocument.cornerCount == ESSYM_CORNERCOUNT_MAX) {
-				theCursor = [ESCursors curvedCursorWithRightArrow:NO upArrow:NO leftArrow:YES downArrow:YES forAngle:1.5 * pi +  2.0 * pi / self.theDocument.cornerCount size:cursorSize underlay:redDot];
+				theCursor = [ESCursors curvedCursorWithRightArrow:NO upArrow:NO leftArrow:YES downArrow:YES forAngle:1.5 * M_PI +  2.0 * M_PI / self.theDocument.cornerCount size:cursorSize underlay:redDot];
 			}
 			else {
-				theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:NO leftArrow:YES downArrow:YES forAngle:1.5 * pi +  2.0 * pi / self.theDocument.cornerCount size:cursorSize underlay:redDot];
+				theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:NO leftArrow:YES downArrow:YES forAngle:1.5 * M_PI +  2.0 * M_PI / self.theDocument.cornerCount size:cursorSize underlay:redDot];
 			}
 		}
 		else {
 			if (self.theDocument.cornerCount == ESSYM_CORNERCOUNT_MIN) {
-				theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:YES leftArrow:NO downArrow:YES forAngle:1.5 * pi +  2.0 * pi / self.theDocument.cornerCount size:cursorSize underlay:redDot];
+				theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:YES leftArrow:NO downArrow:YES forAngle:1.5 * M_PI +  2.0 * M_PI / self.theDocument.cornerCount size:cursorSize underlay:redDot];
 			}
 			else if (self.theDocument.cornerCount == ESSYM_CORNERCOUNT_MAX) {
-				theCursor = [ESCursors curvedCursorWithRightArrow:NO upArrow:YES leftArrow:YES downArrow:YES forAngle:1.5 * pi +  2.0 * pi / self.theDocument.cornerCount size:cursorSize underlay:redDot];
+				theCursor = [ESCursors curvedCursorWithRightArrow:NO upArrow:YES leftArrow:YES downArrow:YES forAngle:1.5 * M_PI +  2.0 * M_PI / self.theDocument.cornerCount size:cursorSize underlay:redDot];
 			}
 			else {
-				theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:YES leftArrow:YES downArrow:YES forAngle:1.5 * pi +  2.0 * pi / self.theDocument.cornerCount size:cursorSize underlay:redDot];
+				theCursor = [ESCursors curvedCursorWithRightArrow:YES upArrow:YES leftArrow:YES downArrow:YES forAngle:1.5 * M_PI +  2.0 * M_PI / self.theDocument.cornerCount size:cursorSize underlay:redDot];
 			}
 		}
 	} 
@@ -522,50 +523,50 @@
 			// two midpoints => draw variations of cross cursor
 			if (self.theDocument.cornerFraction == ESSYM_CORNERFRACTION_MIN) {
 				if (self.theDocument.midPointsDistance == ESSYM_MIDPOINTSDISTANCE_MIN) {
-					theCursor = [ESCursors angleCursorForAngle: pi / self.theDocument.cornerCount withSize: cursorSize];					
+					theCursor = [ESCursors angleCursorForAngle: M_PI / self.theDocument.cornerCount withSize: cursorSize];
 				}
 				else if (self.theDocument.midPointsDistance == ESSYM_MIDPOINTSDISTANCE_MAX) {
-					theCursor = [ESCursors angleCursorForAngle: - pi / 2.0 + pi / self.theDocument.cornerCount withSize: cursorSize];					
+					theCursor = [ESCursors angleCursorForAngle: - M_PI / 2.0 + M_PI / self.theDocument.cornerCount withSize: cursorSize];
 				}
 				else {
-					theCursor = [ESCursors threeProngedCursorForAngle: pi + pi / 2.0 + pi / self.theDocument.cornerCount withSize: cursorSize];					
+					theCursor = [ESCursors threeProngedCursorForAngle: M_PI + M_PI / 2.0 + M_PI / self.theDocument.cornerCount withSize: cursorSize];
 				}
 			}
 			else if (self.theDocument.cornerFraction == ESSYM_CORNERFRACTION_MAX) {
 				if (self.theDocument.midPointsDistance == ESSYM_MIDPOINTSDISTANCE_MIN) {
-					theCursor = [ESCursors angleCursorForAngle: .5 * pi + pi / self.theDocument.cornerCount withSize: cursorSize];					
+					theCursor = [ESCursors angleCursorForAngle: .5 * M_PI + M_PI / self.theDocument.cornerCount withSize: cursorSize];
 				}
 				else if (self.theDocument.midPointsDistance == ESSYM_MIDPOINTSDISTANCE_MAX) {
-					theCursor = [ESCursors angleCursorForAngle: -.5 * pi - pi / 2.0 + pi / self.theDocument.cornerCount withSize: cursorSize];					
+					theCursor = [ESCursors angleCursorForAngle: -.5 * M_PI - M_PI / 2.0 + M_PI / self.theDocument.cornerCount withSize: cursorSize];
 				}
 				else {
-					theCursor = [ESCursors threeProngedCursorForAngle: pi / 2.0 + pi / self.theDocument.cornerCount withSize: cursorSize];					
+					theCursor = [ESCursors threeProngedCursorForAngle: M_PI / 2.0 + M_PI / self.theDocument.cornerCount withSize: cursorSize];
 				}
 			}
 			else {
 				if (self.theDocument.midPointsDistance == ESSYM_MIDPOINTSDISTANCE_MIN) {
-					theCursor = [ESCursors threeProngedCursorForAngle: -0.5 * pi + pi / 2.0 + pi / self.theDocument.cornerCount withSize: cursorSize];					
+					theCursor = [ESCursors threeProngedCursorForAngle: -0.5 * M_PI + M_PI / 2.0 + M_PI / self.theDocument.cornerCount withSize: cursorSize];
 					
 				}
 				else if (self.theDocument.midPointsDistance == ESSYM_MIDPOINTSDISTANCE_MAX) {
-					theCursor = [ESCursors threeProngedCursorForAngle: 0.5 * pi + pi / 2.0 + pi / self.theDocument.cornerCount withSize: cursorSize];					
+					theCursor = [ESCursors threeProngedCursorForAngle: 0.5 * M_PI + M_PI / 2.0 + M_PI / self.theDocument.cornerCount withSize: cursorSize];
 				}
 				else {
 					// standard cross cursor away from the borders
-					theCursor = [ESCursors crossCursorForAngle: pi / 2.0 + pi / self.theDocument.cornerCount withSize: cursorSize];					
+					theCursor = [ESCursors crossCursorForAngle: M_PI / 2.0 + M_PI / self.theDocument.cornerCount withSize: cursorSize];
 				}				
 			}
 		}
 		else {
 			// just a single midpoint => only draw cursor for cornerFraction direction
 			if (self.theDocument.cornerFraction == ESSYM_CORNERFRACTION_MIN) {
-				theCursor = [ESCursors halfStraightCursorForAngle: pi / self.theDocument.cornerCount  withSize:cursorSize];
+				theCursor = [ESCursors halfStraightCursorForAngle: M_PI / self.theDocument.cornerCount  withSize:cursorSize];
 			}
 			else if (self.theDocument.cornerFraction == ESSYM_CORNERFRACTION_MAX) {
-				theCursor = [ESCursors halfStraightCursorForAngle: pi + pi / self.theDocument.cornerCount  withSize:cursorSize];				
+				theCursor = [ESCursors halfStraightCursorForAngle: M_PI + M_PI / self.theDocument.cornerCount  withSize:cursorSize];
 			}
 			else {
-				theCursor = [ESCursors straightCursorForAngle: pi / self.theDocument.cornerCount withSize:cursorSize];
+				theCursor = [ESCursors straightCursorForAngle: M_PI / self.theDocument.cornerCount withSize:cursorSize];
 			}
 		}
 	}
@@ -574,24 +575,24 @@
 	}
 	else if ([TAName isEqualToString:@"widthHandle"]) {
 		if (self.theDocument.thickness == ESSYM_THICKNESS_MIN) {
-			theCursor = [ESCursors halfStraightCursorForAngle: pi + 2.0 * pi / self.theDocument.cornerCount  withSize:cursorSize];
+			theCursor = [ESCursors halfStraightCursorForAngle: M_PI + 2.0 * M_PI / self.theDocument.cornerCount  withSize:cursorSize];
 		}
 		else if (self.theDocument.thickness == ESSYM_THICKNESS_MAX) {
-			theCursor = [ESCursors halfStraightCursorForAngle: 2.0 * pi / self.theDocument.cornerCount  withSize:cursorSize];			
+			theCursor = [ESCursors halfStraightCursorForAngle: 2.0 * M_PI / self.theDocument.cornerCount  withSize:cursorSize];
 		}
 		else {
-			theCursor = [ESCursors straightCursorForAngle: 2.0 * pi / self.theDocument.cornerCount withSize:cursorSize];
+			theCursor = [ESCursors straightCursorForAngle: 2.0 * M_PI / self.theDocument.cornerCount withSize:cursorSize];
 		}
 	}
 	else if ([TAName isEqualToString:@"thickCornerHandle"]) {
 		if (self.theDocument.thickenedCorner == ESSYM_THICKENEDCORNER_MIN) {
-			theCursor = [ESCursors halfStraightCursorForAngle: pi + pi / self.theDocument.cornerCount withSize:cursorSize];
+			theCursor = [ESCursors halfStraightCursorForAngle: M_PI + M_PI / self.theDocument.cornerCount withSize:cursorSize];
 		}
 		else if (self.theDocument.thickenedCorner == ESSYM_THICKENEDCORNER_MAX) {
-			theCursor = [ESCursors halfStraightCursorForAngle: pi / self.theDocument.cornerCount withSize:cursorSize];			
+			theCursor = [ESCursors halfStraightCursorForAngle: M_PI / self.theDocument.cornerCount withSize:cursorSize];
 		}
 		else {
-			theCursor = [ESCursors straightCursorForAngle: pi / self.theDocument.cornerCount withSize:cursorSize];
+			theCursor = [ESCursors straightCursorForAngle: M_PI / self.theDocument.cornerCount withSize:cursorSize];
 		}
 	}
 	else {
@@ -609,67 +610,45 @@
 
 #pragma mark DRAG & DROP 
 
-/* We want to do drag and drop */
-- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal {
-	return NSDragOperationCopy;
+- (NSDragOperation)draggingSession:(NSDraggingSession *)session sourceOperationMaskForDraggingContext:(NSDraggingContext)context {
+	switch(context) {
+		case NSDraggingContextOutsideApplication:
+			return NSDragOperationCopy;
+			
+		case NSDraggingContextWithinApplication:
+			return NSDragOperationPrivate;
+	}
 }
 
 
 - (void) handleDragForEvent: (NSEvent*) event {
 	//NSLog(@"-handleDragForEvent:");
 	NSDictionary * documentDict = self.theDocument.dictionary;
-	NSImage * image = [[NSImage alloc] initWithData:[NSBezierPath PDFDataForDictionary: documentDict]];
+	NSImage * image = [[NSImage alloc] initWithData:[NSBezierPath PDFDataForDictionary:documentDict]];
 	
-	NSPasteboard * draggingPasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
-
-	// prepare dragging
-	NSData * TIFFData = [NSBezierPath TIFFDataForDictionary:documentDict size:self.theDocument.bitmapSize];
-	NSData * PDFData = [NSBezierPath PDFDataForDictionary:documentDict];
-	
-
-	// declare Pboard types
-	NSArray * pboardTypes = @[NSTIFFPboardType, ESSYMMETRYPBOARDTYPE, NSFilesPromisePboardType, NSPDFPboardType];
-
-	[draggingPasteboard declareTypes:pboardTypes owner:self];
-	
-	// add image data 	
-	[draggingPasteboard setData:TIFFData forType:NSTIFFPboardType];
-	[draggingPasteboard setData:PDFData forType:NSPDFPboardType];
-	
-		
-	NSString * imageType = (NSString *) kUTTypeTIFF;
-	NSString * imageExtension = @"tiff";
-	imageType = (NSString *) kUTTypePDF;
-	imageExtension = @"pdf";
-
-	// File Promise in a format accepted by Preview
-	NSString * errorString;
-	NSData * fileTypesData = [NSPropertyListSerialization dataFromPropertyList:@[imageExtension] format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorString];
-	[draggingPasteboard setData:fileTypesData forType:NSFilesPromisePboardType];
-	
-	// File Promise in a format accepted by the Finder or GKON
-	[draggingPasteboard setData:[imageType dataUsingEncoding:NSUTF8StringEncoding] forType:@"com.apple.pasteboard.promised-file-content-type"];
-	
-	
-	// internal data format
-	NSData * dictData = [NSArchiver archivedDataWithRootObject:documentDict];
-	[draggingPasteboard setData:dictData forType:ESSYMMETRYPBOARDTYPE];
-
-	
-	NSPoint eventMousePosition = event.locationInWindow;
-	NSPoint imagePosition = NSMakePoint(eventMousePosition.x - image.size.width /2.0,
-										eventMousePosition.y - image.size.height / 2.0);
-
-	NSMutableParagraphStyle * stringParagraphStyle = [[NSMutableParagraphStyle alloc] init];
-	stringParagraphStyle.alignment = NSCenterTextAlignment;
+	//NSPoint eventMousePosition = event.locationInWindow;
+	//NSPoint imagePosition = NSMakePoint(eventMousePosition.x - image.size.width /2.0,
+	//									eventMousePosition.y - image.size.height / 2.0);
 
 	NSImage * dragProxyImage = [[NSImage alloc] initWithSize: image.size];
 	[dragProxyImage lockFocus];
     [image drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:0.5];
 	[dragProxyImage unlockFocus];
 	
-	[self dragImage:dragProxyImage at:imagePosition offset:NSZeroSize event:event pasteboard:draggingPasteboard source:self slideBack:YES];	
+	ESSymmetryViewPasteboardWriter * pasteboardWriter = [[ESSymmetryViewPasteboardWriter alloc] init];
+	pasteboardWriter.documentDictionary = self.theDocument.dictionary;
+	pasteboardWriter.bitmapSize = self.theDocument.bitmapSize;
+	
+	NSDraggingItem * draggingItem = [[NSDraggingItem alloc] initWithPasteboardWriter:pasteboardWriter];
+	[draggingItem setDraggingFrame:self.frame
+						  contents:dragProxyImage];
+	
+	[self beginDraggingSessionWithItems:@[draggingItem]
+								  event:event
+								 source:self];
 }
+
+
 
 
 - (NSArray *)namesOfPromisedFilesDroppedAtDestination:(NSURL *)dropDestination {
@@ -766,14 +745,14 @@
 			[bP appendBezierPathWithArcWithCenter:origin radius:radius startAngle:360.0 / ESSYM_CORNERCOUNT_MAX endAngle:180.0];
 			// draw vertical line
 			[bP moveToPoint: origin];
-			[bP lineToPoint: NSMakePoint(self.canvasRadius * cos(2.0 * pi / theDocument.cornerCount) , self.canvasRadius * sin(2.0 * pi / theDocument.cornerCount))];
+			[bP lineToPoint: NSMakePoint(self.canvasRadius * cos(2.0 * M_PI / theDocument.cornerCount) , self.canvasRadius * sin(2.0 * M_PI / theDocument.cornerCount))];
 			[bP transformUsingAffineTransform: self.moveToMiddle];
 			[bP stroke];
 		
 			bP = [NSBezierPath bezierPath];
 			for (int i = 2; i <= ESSYM_CORNERCOUNT_MAX; i++) {
-				NSRect circleRect = NSMakeRect(radius * cos(2.0 * pi / i) - guideLineWidth, 
-											   radius * sin(2.0 * pi / i) - guideLineWidth, 
+				NSRect circleRect = NSMakeRect(radius * cos(2.0 * M_PI / i) - guideLineWidth,
+											   radius * sin(2.0 * M_PI / i) - guideLineWidth,
 											   2.0 * guideLineWidth, 
 											   2.0 * guideLineWidth);
 				[bP appendBezierPathWithOvalInRect:circleRect];
@@ -802,7 +781,7 @@
 				}				
 				numberDistance = MIN( numberDistance, 100.0);
 				
-				NSPoint basePoint = NSMakePoint((radius + numberDistance) * cos (2.0 * pi / self.theDocument.cornerCount), (radius +  numberDistance) * sin(2.0 * pi / self.theDocument.cornerCount));
+				NSPoint basePoint = NSMakePoint((radius + numberDistance) * cos(2.0 * M_PI / self.theDocument.cornerCount), (radius +  numberDistance) * sin(2.0 * M_PI / self.theDocument.cornerCount));
 				basePoint = [self.moveToMiddle transformPoint:basePoint];
 				NSRect stringRect = NSMakeRect(basePoint.x - 100.0, basePoint.y, 100.0, fontSize);
 				[aString drawInRect:stringRect];
@@ -824,7 +803,7 @@
 		else if ([thePointName isEqualToString:@"midPoint"]) {
 			// line through midPoint and midmidPoint
 			ESPolarPoint midmidMaximumPolar;
-			midmidMaximumPolar.phi =  pi / (theDocument.cornerCount);
+			midmidMaximumPolar.phi =  M_PI / (theDocument.cornerCount);
 			midmidMaximumPolar.r = self.shapeRadius * sqrt(2.0);
 			NSPoint midmidMaximumPoint = [self pointForPolarPoint:midmidMaximumPolar origin:self.middle];
 
@@ -876,7 +855,7 @@
 			polar.r = startToEndDistance;
 			polar.phi = polar.phi;
 			NSPoint lineStart = [self pointForPolarPoint:polar origin:self.midPoint];
-			polar.phi = pi + polar.phi;
+			polar.phi = M_PI + polar.phi;
 			NSPoint lineEnd = [self pointForPolarPoint:polar origin:self.midPoint];
 			
 			CGFloat distance = LENGTH(NSMakePoint(self.midPoint.x - self.midHandle.x, self.midPoint.y - self.midHandle.y));
@@ -1032,7 +1011,7 @@
 		bP = [NSBezierPath bezierPath];
 		bP.lineCapStyle = NSRoundLineCapStyle;
 		bP.lineWidth = lineHandleThickness;
-		CGFloat phi = 0.5 * pi  + 2.0 * pi / self.theDocument.cornerCount;
+		CGFloat phi = 0.5 * M_PI  + 2.0 * M_PI / self.theDocument.cornerCount;
 
 		// ... thickness handle
 		NSPoint lineStart = NSMakePoint(self.innerEndPoint.x - cos(phi) * lineHandleWidth,
@@ -1051,7 +1030,7 @@
 		[self addTrackingArea:self.widthHandleTA];
 		
 		// ... thickened corner handle
-		phi = 0.5 * pi + pi / self.theDocument.cornerCount;
+		phi = 0.5 * M_PI + M_PI / self.theDocument.cornerCount;
 		lineStart = NSMakePoint(self.middleMidmidPoint.x - cos(phi) * lineHandleWidth,
 								self.middleMidmidPoint.y - sin(phi) * lineHandleWidth);
 		lineEnd = NSMakePoint(self.middleMidmidPoint.x + cos(phi) * lineHandleWidth,
@@ -1137,7 +1116,7 @@
 		self.handleLayer.contents = (__bridge id) imageRef;
 		self.handleLayer.opacity = 1.0;
 		[CATransaction commit];
-		CGImageRelease(imageRef);	
+		// CGImageRelease(imageRef);
 	}	
 	else {
 		self.handleLayer.opacity = 0.0;
@@ -1181,8 +1160,8 @@
 	
 	// background
 	if (spaceOut) {
-		NSColor * startColor = [NSColor colorWithCalibratedHue:1.0 - [theDocument normalisePolarAngle: 1.0 * theDocument.straightTangentDirection + 1.0 * theDocument.diagonalTangentDirection] / (2.0 * pi)  saturation:0.8 - theDocument.size * 0.3  brightness:0.7 alpha:0.9];
-		NSColor * endColor = [NSColor colorWithCalibratedHue:1.0 - [theDocument normalisePolarAngle: 2.0 * theDocument.straightTangentDirection - theDocument.diagonalTangentDirection + 2.0 * pi] / (2.0 * pi)  saturation:1.0 - theDocument.size * 0.3  brightness:0.7 alpha:0.9];
+		NSColor * startColor = [NSColor colorWithCalibratedHue:1.0 - [theDocument normalisePolarAngle: 1.0 * theDocument.straightTangentDirection + 1.0 * theDocument.diagonalTangentDirection] / (2.0 * M_PI)  saturation:0.8 - theDocument.size * 0.3  brightness:0.7 alpha:0.9];
+		NSColor * endColor = [NSColor colorWithCalibratedHue:1.0 - [theDocument normalisePolarAngle: 2.0 * theDocument.straightTangentDirection - theDocument.diagonalTangentDirection + 2.0 * M_PI] / (2.0 * M_PI)  saturation:1.0 - theDocument.size * 0.3  brightness:0.7 alpha:0.9];
 		NSGradient * gradient = [[NSGradient alloc] initWithStartingColor:startColor endingColor:endColor];
 		[gradient drawInRect:self.bounds relativeCenterPosition:NSMakePoint(0.0, 0.0)];
 	}
@@ -1196,9 +1175,9 @@
 		}
 		else{
 			CGFloat saturation = 1.0 - theDocument.size * 0.2;
-			NSColor * startColor = [NSColor colorWithCalibratedHue: [theDocument normalisePolarAngle: 2.0 * theDocument.straightTangentDirection + theDocument.diagonalTangentDirection] / (2.0 * pi)  saturation:saturation brightness:0.9 alpha:1.0];
-			NSColor * midColor = [NSColor colorWithCalibratedHue: [theDocument normalisePolarAngle: theDocument.straightTangentDirection + theDocument.diagonalTangentDirection] / ( 2.0 * pi) saturation:saturation brightness:0.9 alpha:0.8];
-			NSColor * endColor = [NSColor colorWithCalibratedHue:[theDocument normalisePolarAngle: theDocument.straightTangentDirection -  theDocument.diagonalTangentDirection] / (2.0 * pi)  saturation:saturation brightness:0.9 alpha:1.0];
+			NSColor * startColor = [NSColor colorWithCalibratedHue: [theDocument normalisePolarAngle: 2.0 * theDocument.straightTangentDirection + theDocument.diagonalTangentDirection] / (2.0 * M_PI)  saturation:saturation brightness:0.9 alpha:1.0];
+			NSColor * midColor = [NSColor colorWithCalibratedHue: [theDocument normalisePolarAngle: theDocument.straightTangentDirection + theDocument.diagonalTangentDirection] / ( 2.0 * M_PI) saturation:saturation brightness:0.9 alpha:0.8];
+			NSColor * endColor = [NSColor colorWithCalibratedHue:[theDocument normalisePolarAngle: theDocument.straightTangentDirection -  theDocument.diagonalTangentDirection] / (2.0 * M_PI)  saturation:saturation brightness:0.9 alpha:1.0];
 			NSGradient * gradient = [[NSGradient alloc] initWithColorsAndLocations: startColor, 0.0, midColor, 0.5 * 0.2 * theDocument.cornerFraction, endColor, 1.0, nil];
 			[gradient drawInBezierPath:thePath relativeCenterPosition:NSMakePoint(0.0, 0.0)];
 		}
@@ -1303,7 +1282,7 @@
 - (NSPoint) midmidPoint {
 	if (theDocument.twoMidPoints) {
 		ESPolarPoint midmidPolar;
-		midmidPolar.phi = pi / (theDocument.cornerCount); 
+		midmidPolar.phi = M_PI / (theDocument.cornerCount);
 		midmidPolar.r = theDocument.cornerFraction * self.shapeRadius * sqrt(2.0);
 		NSPoint midmidPoint = [self pointForPolarPoint:midmidPolar origin:self.middle];
 		return midmidPoint;
@@ -1369,7 +1348,7 @@
 	
 - (NSPoint) innerMidmidPoint {
 	ESPolarPoint midmidPolar;
-	midmidPolar.phi = pi / (theDocument.cornerCount); 
+	midmidPolar.phi = M_PI / (theDocument.cornerCount);
 	midmidPolar.r = theDocument.cornerFraction * self.shapeRadius * sqrt(2.0) * (1-self.theDocument.thickness) * (1- self.theDocument.thickenedCorner);
 	NSPoint immp = [self pointForPolarPoint:midmidPolar origin:self.middle];
 	return immp;
@@ -1380,7 +1359,7 @@
 /* this one doesn't actually exist */
 - (NSPoint) innerUncorrectedMidmidPoint {
 	ESPolarPoint midmidPolar;
-	midmidPolar.phi = pi / (theDocument.cornerCount); 
+	midmidPolar.phi = M_PI / (theDocument.cornerCount);
 	midmidPolar.r = theDocument.cornerFraction * self.shapeRadius * sqrt(2.0) * (1-self.theDocument.thickness);
 	NSPoint midmidPoint = [self pointForPolarPoint:midmidPolar origin:self.middle];
 	return midmidPoint;	

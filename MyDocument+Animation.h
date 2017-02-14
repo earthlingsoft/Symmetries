@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "MyDocument.h"
 
-@interface MyDocument (Animation) 
+@interface MyDocument (Animation) <NSAnimationDelegate>
 
 @property (readonly) BOOL runningAnimation;
 

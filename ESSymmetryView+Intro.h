@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "ESSymmetryView.h"
 
-@interface ESSymmetryView (Intro)
+@interface ESSymmetryView (Intro) <CALayerDelegate, CAAnimationDelegate>
 
 @property (readonly) NSArray * stringsFromFile;
 @property (readonly) NSAttributedString * introString;

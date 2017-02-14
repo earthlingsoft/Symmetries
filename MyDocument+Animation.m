@@ -107,12 +107,12 @@
 	}
 	else if (	[key isEqualToString:@"straightTangentDirection"]
 			 || [key isEqualToString:@"diagonalTangentDirection"] ) {
-		min = currentValue - 3.0 * pi;
-		max = currentValue + 3.0 * pi;
+		min = currentValue - 3.0 * M_PI;
+		max = currentValue + 3.0 * M_PI;
 	}
 	else if ([key isEqualToString:@"rotation"]) {
-		min = currentValue - 1.5 * pi;
-		max = currentValue + 1.5 * pi;
+		min = currentValue - 1.5 * M_PI;
+		max = currentValue + 1.5 * M_PI;
 	}	
 	else if (	[key isEqualToString:@"midPointsDistance"]
 			 || [key isEqualToString:@"thickness"]

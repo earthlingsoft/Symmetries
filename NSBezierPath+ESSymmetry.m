@@ -40,7 +40,7 @@
 	CGFloat dTD = [[dict objectForKey:@"diagonalTangentDirection"] floatValue];
 	CGFloat midPointsDistance = [[dict valueForKey:@"midPointsDistance"] floatValue];
 	BOOL twoMidPoints = [[dict valueForKey:@"twoMidPoints"] boolValue];
-	CGFloat phi = 2.0 * pi / corners;
+	CGFloat phi = 2.0 * M_PI / corners;
 	
 	// anchor points
 	NSPoint startPoint = NSMakePoint(size, 0.0);

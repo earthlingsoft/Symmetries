@@ -11,8 +11,6 @@
 #import "MyDocument.h"
 #import "MyDocument+Animation.h"
 
-#define ESSYMMETRYPBOARDTYPE @"ESSSymmetryPboardType"
-
 @class MyDocument;
 
 typedef struct {
@@ -21,7 +19,7 @@ typedef struct {
 } ESPolarPoint;
 
 
-@interface ESSymmetryView : NSView <NSAnimationDelegate> {
+@interface ESSymmetryView : NSView <NSAnimationDelegate, NSDraggingSource, CALayerDelegate> {
 	IBOutlet MyDocument * theDocument;
 
 	NSBezierPath * path;	

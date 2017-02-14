@@ -25,6 +25,7 @@
 /* Begin PBXBuildFile section */
 		1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD582A0DA1D0D100B32029 /* MainMenu.xib */; };
 		6C129FE80E2A138C00C0FD35 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 6C129FE60E2A138C00C0FD35 /* Credits.html */; };
+		6C1FF2061E527DAF0023374A /* ESSymmetryViewPasteboardWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1FF2051E527DAF0023374A /* ESSymmetryViewPasteboardWriter.m */; };
 		6C3BE82B0DE8268D0064BCE7 /* NSBezierPath+ESPoints.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+ESPoints.m */; };
 		6C3FE2190DE9762100EAB959 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C3FE2180DE9762100EAB959 /* QuartzCore.framework */; };
 		6C4DC32E0E336CFC00CFE539 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58290DA1D0D100B32029 /* MyDocument.xib */; };
@@ -34,7 +35,6 @@
 		6C5A79BB0E11B5D200A3D6E1 /* ESSymmetryAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5A79BA0E11B5D200A3D6E1 /* ESSymmetryAnimation.m */; };
 		6C5A7ABD0E15419800A3D6E1 /* ESSymmetryView+Intro.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5A7ABC0E15419800A3D6E1 /* ESSymmetryView+Intro.m */; };
 		6C5A7AE60E1544DD00A3D6E1 /* AttributedStrings.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 6C5A7AE40E1544DD00A3D6E1 /* AttributedStrings.rtf */; };
-		6C68A73B16594131000F0666 /* NoodleCustomImageRep.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C68A73A1659391D000F0666 /* NoodleCustomImageRep.m */; };
 		6C73CF3A0E0B079C00749440 /* NSBezierPath+ESSymmetry.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */; };
 		6C82F99D0DF7614F005CF008 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C82F99C0DF7614F005CF008 /* AppDelegate.m */; };
 		6C92E0BA0E1A283700BEE063 /* Primel.icns in Resources */ = {isa = PBXBuildFile; fileRef = 6C92E0B90E1A283700BEE063 /* Primel.icns */; };
@@ -113,6 +113,8 @@
 		6C0012A70DE6244B0016ABB5 /* ESSymmetryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryView.h; sourceTree = "<group>"; };
 		6C18A1C90E29104000A25A56 /* ESCursors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESCursors.h; path = ESCursors/ESCursors.h; sourceTree = "<group>"; usesTabs = 0; };
 		6C18A1CA0E29104000A25A56 /* ESCursors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESCursors.m; path = ../ESCursors/ESCursors.m; sourceTree = "<group>"; };
+		6C1FF2041E527DAF0023374A /* ESSymmetryViewPasteboardWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryViewPasteboardWriter.h; sourceTree = "<group>"; };
+		6C1FF2051E527DAF0023374A /* ESSymmetryViewPasteboardWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryViewPasteboardWriter.m; sourceTree = "<group>"; };
 		6C3BE8290DE8268D0064BCE7 /* NSBezierPath+ESPoints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSBezierPath+ESPoints.h"; path = "NSBezierPath+ESPoints/NSBezierPath+ESPoints.h"; sourceTree = "<group>"; };
 		6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+ESPoints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSBezierPath+ESPoints.m"; path = "NSBezierPath+ESPoints/NSBezierPath+ESPoints.m"; sourceTree = "<group>"; };
 		6C3FE2180DE9762100EAB959 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
@@ -142,8 +144,6 @@
 		6C5A79BA0E11B5D200A3D6E1 /* ESSymmetryAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryAnimation.m; sourceTree = "<group>"; };
 		6C5A7ABB0E15419800A3D6E1 /* ESSymmetryView+Intro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ESSymmetryView+Intro.h"; sourceTree = "<group>"; };
 		6C5A7ABC0E15419800A3D6E1 /* ESSymmetryView+Intro.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ESSymmetryView+Intro.m"; sourceTree = "<group>"; };
-		6C68A7391659391D000F0666 /* NoodleCustomImageRep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NoodleCustomImageRep.h; path = "../-open-projects/NoodleKit/NoodleCustomImageRep.h"; sourceTree = "<group>"; };
-		6C68A73A1659391D000F0666 /* NoodleCustomImageRep.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NoodleCustomImageRep.m; path = "../-open-projects/NoodleKit/NoodleCustomImageRep.m"; sourceTree = "<group>"; };
 		6C73CF380E0B079C00749440 /* NSBezierPath+ESSymmetry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+ESSymmetry.h"; sourceTree = "<group>"; };
 		6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+ESSymmetry.m"; sourceTree = "<group>"; };
 		6C82F99B0DF7614F005CF008 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -241,14 +241,14 @@
 				6CDC20D00E17E4AC00772100 /* MyDocument+Animation.m */,
 				6C0012A70DE6244B0016ABB5 /* ESSymmetryView.h */,
 				6CBC479B0DEAE2610073B214 /* ESSymmetryView.m */,
+				6C1FF2041E527DAF0023374A /* ESSymmetryViewPasteboardWriter.h */,
+				6C1FF2051E527DAF0023374A /* ESSymmetryViewPasteboardWriter.m */,
 				6C5A7ABB0E15419800A3D6E1 /* ESSymmetryView+Intro.h */,
 				6C5A7ABC0E15419800A3D6E1 /* ESSymmetryView+Intro.m */,
 				6C73CF380E0B079C00749440 /* NSBezierPath+ESSymmetry.h */,
 				6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */,
 				6C18A1C90E29104000A25A56 /* ESCursors.h */,
 				6C18A1CA0E29104000A25A56 /* ESCursors.m */,
-				6C68A7391659391D000F0666 /* NoodleCustomImageRep.h */,
-				6C68A73A1659391D000F0666 /* NoodleCustomImageRep.m */,
 				6C3BE8290DE8268D0064BCE7 /* NSBezierPath+ESPoints.h */,
 				6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+ESPoints.m */,
 				6C5A79B90E11B5D200A3D6E1 /* ESSymmetryAnimation.h */,
@@ -482,11 +482,11 @@
 				6C73CF3A0E0B079C00749440 /* NSBezierPath+ESSymmetry.m in Sources */,
 				6C5A79BB0E11B5D200A3D6E1 /* ESSymmetryAnimation.m in Sources */,
 				6C5A7ABD0E15419800A3D6E1 /* ESSymmetryView+Intro.m in Sources */,
+				6C1FF2061E527DAF0023374A /* ESSymmetryViewPasteboardWriter.m in Sources */,
 				6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */,
 				6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */,
 				6CB3F8020E2987CC00B005BF /* ESCursors.m in Sources */,
 				6CC7E1520E326A9100E3C849 /* MyDocumentController.m in Sources */,
-				6C68A73B16594131000F0666 /* NoodleCustomImageRep.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -597,7 +597,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../builds/Release GC/\"",
-					"\"$(SRCROOT)/../../Library/Developer/Xcode/DerivedData/SSCrypto-edvtwohzkpsavpcanwshrzkuyywa/Build/Products/Development\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_GC = "no-required";
@@ -608,7 +607,7 @@
 				IBC_FLATTEN_NIBS = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = Symmetries;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
@@ -626,7 +625,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../builds/Release GC/\"",
-					"\"$(SRCROOT)/../../Library/Developer/Xcode/DerivedData/SSCrypto-edvtwohzkpsavpcanwshrzkuyywa/Build/Products/Development\"",
 				);
 				GCC_ENABLE_OBJC_GC = "no-required";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -634,7 +632,7 @@
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = Symmetries;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;

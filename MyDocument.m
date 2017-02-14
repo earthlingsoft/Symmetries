@@ -446,8 +446,8 @@
 */ 
 - (CGFloat) normalisePolarAngle: (CGFloat) phi {
 	CGFloat f = phi;
-	while (f < 0 ) { f = f + 2.0 * pi; }
-	while (f > 2.0 * pi ) { f = f - 2.0 * pi; }
+	while (f < 0 ) { f = f + 2.0 * M_PI; }
+	while (f > 2.0 * M_PI ) { f = f - 2.0 * M_PI; }
 	return f;
 }
 
@@ -473,13 +473,18 @@
 - (void)runPageLayout:(id)sender {
 	NSPrintInfo *tempPrintInfo = [[self printInfo] copy];
 	NSPageLayout *pageLayout = [NSPageLayout pageLayout];
-	[pageLayout beginSheetWithPrintInfo:tempPrintInfo modalForWindow:[self windowForSheet] delegate:self didEndSelector:@selector(didEndPageLayout:returnCode:contextInfo:) contextInfo:(void *)tempPrintInfo];
+	[pageLayout beginSheetWithPrintInfo:tempPrintInfo
+						 modalForWindow:[self windowForSheet]
+							   delegate:self
+						 didEndSelector:@selector(didEndPageLayout:returnCode:contextInfo:)
+							contextInfo:(void *)tempPrintInfo];
 }
 
 - (void)didEndPageLayout:(NSPageLayout *)pageLayout returnCode:(int)result contextInfo:(void *)contextInfo {
 	NSPrintInfo *tempPrintInfo = (__bridge NSPrintInfo *)contextInfo;
-	if (result == NSOKButton) [self setPrintInfo:tempPrintInfo];
-	[tempPrintInfo release];
+	if (result == NSModalResponseOK) {
+		[self setPrintInfo:tempPrintInfo];
+	}
 }
 
 
@@ -620,26 +625,18 @@
 		NSSavePanel * savePanel = [NSSavePanel savePanel];
 		savePanel.prompt = NSLocalizedString(@"Export", @"Export as PDF");
         [savePanel setAllowedFileTypes:[NSArray arrayWithObject:@"pdf"]];
-		[savePanel beginSheetForDirectory:nil file:nil modalForWindow:self.windowForSheet modalDelegate:self didEndSelector:@selector(exportSavePanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
-	}		
-}
-
-
-/*
- return function for export sheet
-*/
-- (void)exportSavePanelDidEnd:(NSSavePanel *)sheet returnCode:(int)returnCode  contextInfo:(void  *)contextInfo {
-	if (returnCode == NSOKButton) {
-		NSError * myError = nil;
-		[self writeToURL:sheet.URL ofType:(NSString*) kUTTypePDF error:&myError];
-		
-		if (myError) {
-			NSBeep();
-			NSLog(@"exportSavePanelDidEnd PDF writing failed (%@)", [myError description]);
-		}
+		[savePanel beginSheetModalForWindow:self.windowForSheet completionHandler:^(NSInteger returnCode) {
+			if (returnCode == NSModalResponseOK) {
+				NSError * myError = nil;
+				[self writeToURL:savePanel.URL ofType:(NSString *)kUTTypePDF error:&myError];
+				if (myError) {
+					NSBeep();
+					NSLog(@"exportSavePanelDidEnd PDF writing failed (%@)", [myError description]);
+				}
+			}
+		}];
 	}
 }
-
 
 
 - (IBAction) sliderMoved: (id) sender {

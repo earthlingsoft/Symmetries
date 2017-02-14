@@ -10,6 +10,11 @@
 #import "ESSymmetryAnimation.h"
 #import "AppDelegate.h"
 
+@interface NSView (AnimationDelegate)
+- (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx;
+@end
+
+
 @implementation ESSymmetryView (Intro)
 
 #pragma mark INTRO
@@ -62,7 +67,7 @@
 
 #pragma mark DRAWING
 
-- (void) drawLayerWithAttributedString: (NSAttributedString *) aS inContext:(CGContextRef)ctx {
+- (void) drawLayerWithAttributedString:(NSAttributedString *)aS inContext:(CGContextRef)ctx {
 	
 	NSSize windowMinSize = NSMakeSize(600.0, 581.0); // self.window.minSize;
 	NSSize windowSize = self.window.frame.size;
@@ -250,7 +255,7 @@
 			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
 									  [NSNumber numberWithFloat:0.6], 
 									  @"size",
-									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 2.7* pi], 
+									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 2.7*M_PI],
 									  @"straightTangentDirection",
 									  [NSNumber numberWithFloat: 0.5], 
 									  @"diagonalTangentLength",
@@ -281,7 +286,7 @@
 									  @"cornerCount",
 									  [NSNumber numberWithFloat: 0.3], 
 									  @"straightTangentLength",
-									  [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 2.5*pi], 
+									  [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 2.5*M_PI],
 									  @"diagonalTangentDirection",
 									  [NSNumber numberWithFloat:0.3],
 									  @"thickenedCorner",
@@ -544,7 +549,7 @@
 									  @"straightTangentLength",
 									  nil];
 			animation2.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: self.theDocument.straightTangentDirection + 2.5 * pi], 
+									  [NSNumber numberWithFloat: self.theDocument.straightTangentDirection + 2.5 * M_PI],
 									   @"straightTangentDirection",  
 									   [NSNumber numberWithFloat:0.85],
 									   @"straightTangentLength",
@@ -580,7 +585,7 @@
 			animation2.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
 									  [NSNumber numberWithFloat:self.theDocument.diagonalTangentLength], 
 									  @"diagonalTangentLength", 
-									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 2.5 * pi],
+									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 2.5 * M_PI],
 									  @"straightTangentDirection",
 									 [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection], 
 									 @"diagonalTangentDirection", 
@@ -590,7 +595,7 @@
 									   @"diagonalTangentLength",  
 									   [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 1.0],
 									   @"straightTangentDirection",
-									 [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - pi], 
+									 [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - M_PI],
 									 @"diagonalTangentDirection", 
 									   nil];
 			
@@ -604,7 +609,7 @@
 									  @"straightTangentLength", 
 									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 1.0],
 									   @"straightTangentDirection",
-									  [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - pi], 
+									  [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - M_PI],
 									  @"diagonalTangentDirection", 
 									  nil];
 			animation3.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -614,7 +619,7 @@
 									   @"straightTangentLength", 
 									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection],
 									   @"straightTangentDirection",
-									   [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 4.0 * pi], 
+									   [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 4.0 * M_PI],
 									   @"diagonalTangentDirection", 
 									   nil];
 			
@@ -626,7 +631,7 @@
 									  @"diagonalTangentLength", 
 									 [NSNumber numberWithFloat: 0.0], 
 									 @"straightTangentLength", 
-									  [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 4.0 * pi],
+									  [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 4.0 * M_PI],
 									  @"diagonalTangentDirection",								  
 									  nil];
 			animation4.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -634,7 +639,7 @@
 									   @"diagonalTangentLength", 
 									  [NSNumber numberWithFloat: 0.2], 
 									  @"straightTangentLength", 
-									   [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 3.0 * pi],
+									   [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 3.0 * M_PI],
 									   @"diagonalTangentDirection",								  
 									   nil];
 			
@@ -851,7 +856,7 @@
 									  @"diagonalTangentLength",
 									  nil];
 			animation4.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: self.theDocument.diagonalTangentDirection + 2.3 * pi], 
+									   [NSNumber numberWithFloat: self.theDocument.diagonalTangentDirection + 2.3 * M_PI],
 									   @"diagonalTangentDirection", 
 									   [NSNumber numberWithFloat: 0.25], 
 									   @"diagonalTangentLength",
@@ -891,7 +896,7 @@
 			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
 									  [NSNumber numberWithFloat:0.6], 
 									  @"size",
-									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection - 6* pi], 
+									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection - 6 * M_PI],
 									  @"straightTangentDirection",
 									  [NSNumber numberWithFloat: 0.2], 
 									  @"diagonalTangentLength",
@@ -922,7 +927,7 @@
 									   @"cornerCount",
 									   [NSNumber numberWithFloat: 0.3], 
 									   @"straightTangentLength",
-									   [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection + 3.5*pi], 
+									   [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection + 3.5 * M_PI],
 									   @"diagonalTangentDirection",
 									   [NSNumber numberWithFloat:0.3],
 									   @"thickenedCorner",
@@ -973,7 +978,7 @@
 
 - (void)drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx {
 	// NSLog(@"-drawLayer: %@", layer.name);
-	BOOL drew = NO;
+	BOOL hasDrawn = NO;
 	
 	[NSGraphicsContext saveGraphicsState];
 	NSGraphicsContext * graphicsContext = [NSGraphicsContext graphicsContextWithGraphicsPort:ctx flipped:NO];
@@ -981,25 +986,23 @@
 
 	if ([layer.name isEqualToString: @"introLayer"] ) {
 		[self drawLayerWithAttributedString:[self introString] inContext:ctx];
-		drew = YES;
+		hasDrawn = YES;
 	} 
 	else if ([layer.name hasPrefix:@"demo.page"]) {
 		// need to draw for demo
 		// NSLog(@"-drawLayer: %@ (%f, %f, %f, %f - %f, %f)", layer.name, layer.bounds.origin.x, layer.bounds.origin.y, layer.bounds.size.width, layer.bounds.size.height, layer.position.x, layer.position.y);
 		NSUInteger layerNumber = [[[layer.name componentsSeparatedByString:@"-"] lastObject] intValue];
 		[self drawLayerWithAttributedString:[self.stringsFromFile objectAtIndex:layerNumber + 2] inContext:ctx];
-		drew = YES;
+		hasDrawn = YES;
 	}
 
 	[NSGraphicsContext restoreGraphicsState];
 	
-	if(!drew) {
+	if(!hasDrawn) {
 		[super drawLayer:layer inContext:ctx];
-	}
-	
+	}	
 }
-		
-		
+
 
 #pragma ATTRIBUTED STRINGS
 
