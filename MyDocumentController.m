@@ -26,6 +26,7 @@
 	return nil;
 }
 
+
 - (void)replaceTransientDocument:(NSDocument *)transientDoc withDocument:(NSDocument *)doc display:(BOOL)displayDocument {
     NSArray *controllersToTransfer = [[transientDoc windowControllers] copy];
     NSEnumerator *controllerEnum = [controllersToTransfer objectEnumerator];
@@ -46,33 +47,91 @@
 
 
 /*
- Then check to see whether there is a document that is already open, and whether it is transient. If so, transfer the document's window controllers and close the transient document.
-*/
-- (id)openDocumentWithContentsOfURL:(NSURL *)absoluteURL display:(BOOL)displayDocument error:(NSError **)outError {
-	
-	NSDocument *doc = nil;
-	NSString *documentType = [[NSDocumentController sharedDocumentController] typeForContentsOfURL:absoluteURL error:outError];
+ * Then check to see whether there is a document that is already open,
+ * and whether it is transient. If so, transfer the document's window
+ * controllers and close the transient document.
+ */
+//- (__kindof NSDocument *)makeDocumentWithContentsOfURL:(NSURL *)url
+//												ofType:(NSString *)typeName
+//												 error:(NSError * _Nullable *)outError
+//{
+//	NSDocument * doc = nil;
+//
+//	if ([typeName isEqualToString: ESSYM_SYMMETRY_UTI]) {
+//		// we are dealing with a document here => special handling
+//		NSDocument * transientDoc = [self transientDocumentToReplace];
+//		// NSLog([absoluteURL description]);
+//		if (transientDoc) {
+//			[transientDoc readFromURL:url
+//							   ofType:[[NSDocumentController sharedDocumentController] typeForContentsOfURL:url error:outError]
+//								error:outError];
+//			doc = transientDoc;
+//			[doc setFileURL:url];
+//		}
+//	}
+//	
+//	return [super makeDocumentWithContentsOfURL:url ofType:typeName error:outError];
+//}
 
-	if ([documentType isEqualToString: ESSYM_SYMMETRY_UTI]) {	
-		// we are dealing with a document here => special handling
-		NSDocument *transientDoc = [self transientDocumentToReplace];
-		// NSLog([absoluteURL description]);
-		if (transientDoc) {
-			[transientDoc readFromURL:absoluteURL ofType:[[NSDocumentController sharedDocumentController] typeForContentsOfURL:absoluteURL error:outError] error:outError];
-			doc = transientDoc;
-			[doc setFileURL:absoluteURL];
-		}
-		if (!doc) { // do this if there is no document to replace OR if replacing failed
-			doc = [super openDocumentWithContentsOfURL:absoluteURL display:(displayDocument && !transientDoc) error:outError];
-		}
-	}
-	else {
-		// not a document => standard handling
-		doc = [super openDocumentWithContentsOfURL:absoluteURL display:displayDocument error:outError];
-	}
 
-    return doc;
-}
+//- (void)openDocumentWithContentsOfURL:(NSURL *)url
+//							  display:(BOOL)displayDocument
+//					completionHandler:(void (^)(NSDocument * __nullable document,
+//												BOOL documentWasAlreadyOpen,
+//												NSError * __nullable error))completionHandler  {
+//	
+//	NSError * error;
+//	NSString * documentType = [[NSDocumentController sharedDocumentController] typeForContentsOfURL:url error:&error];
+//
+//	if (documentType != nil) {
+//		if ([documentType isEqualToString: ESSYM_SYMMETRY_UTI]) {
+//			// we are dealing with a document here => special handling
+//			NSDocument * transientDoc = [self transientDocumentToReplace];
+//			// NSLog([absoluteURL description]);
+//			if (transientDoc != nil) {
+//				[transientDoc readFromURL:url ofType:[[NSDocumentController sharedDocumentController] typeForContentsOfURL:url error:&error] error:&error];
+//				[transientDoc setFileURL:url];
+//				completionHandler(transientDoc, NO, error);
+//			}
+//			else {
+//				// do this if there is no document to replace OR if replacing failed
+//				[super openDocumentWithContentsOfURL:url display:displayDocument completionHandler:completionHandler];
+//			}
+//		}
+//		else {
+//			// not a document => standard handling
+//			[super openDocumentWithContentsOfURL:url display:displayDocument completionHandler:completionHandler];
+//		}
+//	}
+//
+//	completionHandler(nil, YES, error);
+//}
 
+//- (id)openDocumentWithContentsOfURL:(NSURL *)absoluteURL display:(BOOL)displayDocument error:(NSError **)outError {
+//	
+//	NSDocument *doc = nil;
+//	NSString *documentType = [[NSDocumentController sharedDocumentController] typeForContentsOfURL:absoluteURL error:outError];
+//
+//	if ([documentType isEqualToString: ESSYM_SYMMETRY_UTI]) {	
+//		// we are dealing with a document here => special handling
+//		NSDocument *transientDoc = [self transientDocumentToReplace];
+//		// NSLog([absoluteURL description]);
+//		if (transientDoc) {
+//			[transientDoc readFromURL:absoluteURL ofType:[[NSDocumentController sharedDocumentController] typeForContentsOfURL:absoluteURL error:outError] error:outError];
+//			doc = transientDoc;
+//			[doc setFileURL:absoluteURL];
+//		}
+//		if (!doc) { // do this if there is no document to replace OR if replacing failed
+//			doc = [super openDocumentWithContentsOfURL:absoluteURL display:(displayDocument && !transientDoc) error:outError];
+//		}
+//	}
+//	else {
+//		// not a document => standard handling
+//		doc = [super openDocumentWithContentsOfURL:absoluteURL display:displayDocument error:outError];
+//	}
+//
+//    return doc;
+//}
+//
 
 @end
