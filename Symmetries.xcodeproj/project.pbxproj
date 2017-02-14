@@ -47,7 +47,6 @@
 		6CC7E0D10E32470300E3C849 /* Primel.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CC7E0D00E32470300E3C849 /* Primel.png */; };
 		6CC7E0DB0E324FBB00E3C849 /* Herzchen.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CC7E0DA0E324FBB00E3C849 /* Herzchen.png */; };
 		6CC7E0DD0E32506300E3C849 /* Primel-mini.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CC7E0DC0E32506300E3C849 /* Primel-mini.png */; };
-		6CC7E1520E326A9100E3C849 /* MyDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CC7E1510E326A9100E3C849 /* MyDocumentController.m */; };
 		6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */; };
 		6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC20D00E17E4AC00772100 /* MyDocument+Animation.m */; };
 		6CDC23980E185DAA00772100 /* Resize Widget.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CDC23970E185DAA00772100 /* Resize Widget.png */; };
@@ -156,8 +155,6 @@
 		6CC7E0D00E32470300E3C849 /* Primel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Primel.png; path = Icons/Primel.png; sourceTree = "<group>"; };
 		6CC7E0DA0E324FBB00E3C849 /* Herzchen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Herzchen.png; path = Help/Herzchen.png; sourceTree = "<group>"; };
 		6CC7E0DC0E32506300E3C849 /* Primel-mini.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Primel-mini.png"; path = "Help/Primel-mini.png"; sourceTree = "<group>"; };
-		6CC7E1500E326A9100E3C849 /* MyDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDocumentController.h; sourceTree = "<group>"; };
-		6CC7E1510E326A9100E3C849 /* MyDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDocumentController.m; sourceTree = "<group>"; };
 		6CDC1ED70E17935B00772100 /* ESSymmetryTotalAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryTotalAnimation.h; sourceTree = "<group>"; };
 		6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryTotalAnimation.m; sourceTree = "<group>"; };
 		6CDC209D0E17E2D400772100 /* PLANS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PLANS; sourceTree = "<group>"; };
@@ -233,8 +230,6 @@
 			children = (
 				6C82F99B0DF7614F005CF008 /* AppDelegate.h */,
 				6C82F99C0DF7614F005CF008 /* AppDelegate.m */,
-				6CC7E1500E326A9100E3C849 /* MyDocumentController.h */,
-				6CC7E1510E326A9100E3C849 /* MyDocumentController.m */,
 				2A37F4AEFDCFA73011CA2CEA /* MyDocument.h */,
 				2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */,
 				6CDC20CF0E17E4AC00772100 /* MyDocument+Animation.h */,
@@ -486,7 +481,6 @@
 				6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */,
 				6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */,
 				6CB3F8020E2987CC00B005BF /* ESCursors.m in Sources */,
-				6CC7E1520E326A9100E3C849 /* MyDocumentController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
