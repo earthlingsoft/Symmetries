@@ -24,15 +24,15 @@
 
 - (id)init
 {
-    return [self initWithDictionary: [self initialValues]];
+    return [self initWithDictionary:[self.class initialValues]];
 }
 
 
 
-- (id) initWithDictionary: (NSDictionary*) dict {
+- (id) initWithDictionary: (NSDictionary <NSString *, id> *) dict {
 	self = [super init];
 	if (self) {
-		NSDictionary * defaults = [self initialValues];
+		NSDictionary * defaults = [self.class initialValues];
 		// fill up with values from dictionary 
 		[self setValuesFromDictionary: defaults];
 		[self setValuesFromDictionary: dict];
@@ -47,7 +47,7 @@
 
 
 
-- (NSDictionary*) initialValues {
++ (NSDictionary <NSString *, id> *) initialValues {
 	return [NSDictionary dictionaryWithObjectsAndKeys: 
 			[NSNumber numberWithFloat: 0.6], @"size",
 			[NSNumber numberWithInt:4], @"cornerCount",
@@ -81,7 +81,7 @@
 
 
 - (NSDictionary*) dictionary {
-	NSDictionary * initialValues = [self initialValues];
+	NSDictionary * initialValues = [self.class initialValues];
 	NSMutableDictionary * valueDictionary = [NSMutableDictionary dictionaryWithCapacity:[initialValues count]];
 	for (NSString * key in initialValues) {
 		[valueDictionary setObject: [self valueForKey:key] forKey: key];
@@ -92,7 +92,7 @@
 
 
 - (NSDictionary*) plistDictionary {
-	NSDictionary * initialValues = [self initialValues];
+	NSDictionary * initialValues = [self.class initialValues];
 	NSMutableDictionary * valueDictionary = [NSMutableDictionary dictionaryWithCapacity:[initialValues count]];
 	for (NSString * key in initialValues) {
 		NSObject * object = [self valueForKey:key];
@@ -107,7 +107,7 @@
 
 
 - (void) setValuesFromDictionary: (NSDictionary*) dict {
-	NSDictionary * defaultValues = [self initialValues];
+	NSDictionary * defaultValues = [self.class initialValues];
 	for (NSString * key in dict) {
 		if ([defaultValues objectForKey:key]) {
 			[self setValue:[dict objectForKey:key] forKey:key];
@@ -159,7 +159,10 @@
 
 
 
-- (BOOL)writeToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
+- (BOOL) writeToURL:(NSURL *)absoluteURL
+			 ofType:(NSString *)typeName
+			  error:(NSError * _Nullable *)outError
+{
 	// NSLog(@"[MyDocument writeToURL: ofType: %@...]", typeName);
 	BOOL writeOK = NO;
 
@@ -194,7 +197,11 @@
 
 
 
-- (NSDictionary *)fileAttributesToWriteToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation originalContentsURL:(NSURL *)absoluteOriginalContentsURL error:(NSError **)outError
+- (NSDictionary<NSString *, id> *) fileAttributesToWriteToURL:(NSURL *)absoluteURL
+													   ofType:(NSString *)typeName
+											 forSaveOperation:(NSSaveOperationType)saveOperation
+										  originalContentsURL:(NSURL *)absoluteOriginalContentsURL
+														error:(NSError * _Nullable *)outError
 {
 	if ([typeName isEqualToString:ESSYM_SYMMETRY_UTI]) {
 		NSMutableDictionary *myDict= [NSMutableDictionary dictionaryWithDictionary: [super fileAttributesToWriteToURL:absoluteURL ofType:typeName forSaveOperation:saveOperation originalContentsURL:absoluteOriginalContentsURL error:outError]];
@@ -210,10 +217,13 @@
 
 
 
-- (BOOL)readFromURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError {
+- (BOOL) readFromURL:(NSURL *)absoluteURL
+			 ofType:(NSString *)typeName
+			  error:(NSError * _Nullable *)outError
+{
 	NSDictionary * dict = [NSDictionary dictionaryWithContentsOfURL:absoluteURL];
 	if (dict) {
-		NSDictionary * initialValues = [self initialValues];
+		NSDictionary * initialValues = [self.class initialValues];
 		NSObject * object;
 		for (NSString * key in initialValues) {
 			if ((object = [dict objectForKey:key])) {

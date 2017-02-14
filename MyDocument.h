@@ -94,7 +94,6 @@
 
 - (id) init;
 - (id) initWithDictionary: (NSDictionary*) dict;
-- (NSDictionary*) initialValues;
 - (NSDictionary*) dictionary;
 - (void) setValuesFromDictionary: (NSDictionary*) dict;
 
