@@ -650,7 +650,6 @@
 
 
 
-
 - (NSArray *)namesOfPromisedFilesDroppedAtDestination:(NSURL *)dropDestination {
 	//NSLog(@"namesOfPromisedFilesDroppedAtDestination");
 	if (dropDestination.fileURL) {
