@@ -60,7 +60,7 @@
 }
 
 
-- (void) frameChanged: (NSNotification*) notification {
+- (void) frameChanged: (NSNotification*) ignored {
 	//NSLog(@"framechange");
 	[CATransaction begin];
 	[CATransaction setValue:[NSNumber numberWithFloat:0.0] forKey:kCATransactionAnimationDuration];
@@ -82,7 +82,7 @@
 	}
 	
 	[CATransaction commit];
-	[self setNeedsDisplay:YES];
+	self.needsDisplay = YES;
 }
 
 
@@ -144,7 +144,7 @@
 /*
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if ([object isEqual:self.theDocument]) {
-		[self setNeedsDisplay:YES];
+		self.needsDisplay = YES;
 	}
 }
 */
@@ -164,10 +164,10 @@
 
 
 - (void) mouseEntered:(NSEvent*) event {
-	//NSString * pointName = [(NSDictionary*)[event userData] objectForKey: @"name"];
-	//NSLog([ @"mouseEntered - " stringByAppendingString:pointName]);
+	// NSString * pointName = [(NSDictionary*)[event userData] objectForKey: @"name"];
+	// NSLog([ @"mouseEntered - " stringByAppendingString:pointName]);
 	
-	[self setNeedsDisplay:YES];
+	self.needsDisplay = YES;
 }
 
 
@@ -180,7 +180,7 @@
 		self.guideLayer.opacity = 0.0;
 	}
 	else {
-		[self setNeedsDisplay:YES];
+		self.needsDisplay = YES;
 	}
 }
 
@@ -199,7 +199,7 @@
 	// NSLog(@"\tmouse Location: %f, %f", pt.x, pt.y );
 	// NSLog(@"\ttracking Rect : %f, %f, %f, %f", tr.origin.x, tr.origin.y, tr.size.width, tr.size.height);
 	
-	if (! self.clickedPointName) {
+	if (!self.clickedPointName) {
 		[self updateCursor];
 	}
 }
@@ -212,7 +212,7 @@
 		
 	if (TAName) {
 		self.clickedPointName = TAName;
-		[self setNeedsDisplay: YES];
+		self.needsDisplay = YES;
 		[self updateCursor];
 		
 		// store current values of the document before changes happen
@@ -241,7 +241,7 @@
 	
 	self.clickedPointName = nil;
 	[self updateCursor];
-	[self setNeedsDisplay:YES];	
+	self.needsDisplay = YES;
 	
 	if (self.oldDocumentValues && ![self.oldDocumentValues isEqualToDictionary: self.theDocument.dictionary]) {
 		// the document's values changed since the last mouse down => setup undo
