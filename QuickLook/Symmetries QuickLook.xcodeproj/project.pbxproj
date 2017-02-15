@@ -24,8 +24,8 @@
 		08FB77B6FE84183AC02AAC07 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		0AA1909FFE8422F4C02AAC07 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		61E3BCFA0870B4F2002186A0 /* GenerateThumbnailForURL.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = GenerateThumbnailForURL.m; sourceTree = "<group>"; };
-		6C73CFDC0E0B118C00749440 /* NSBezierPath+ESSymmetry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSBezierPath+ESSymmetry.h"; path = "../NSBezierPath+ESSymmetry.h"; sourceTree = SOURCE_ROOT; };
-		6C73CFDD0E0B118C00749440 /* NSBezierPath+ESSymmetry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSBezierPath+ESSymmetry.m"; path = "../NSBezierPath+ESSymmetry.m"; sourceTree = SOURCE_ROOT; };
+		6C73CFDC0E0B118C00749440 /* NSBezierPath+ESSymmetry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSBezierPath+ESSymmetry.h"; path = "../Code/NSBezierPath+ESSymmetry.h"; sourceTree = SOURCE_ROOT; };
+		6C73CFDD0E0B118C00749440 /* NSBezierPath+ESSymmetry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSBezierPath+ESSymmetry.m"; path = "../Code/NSBezierPath+ESSymmetry.m"; sourceTree = SOURCE_ROOT; };
 		6C73D0140E0B185C00749440 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		8D576316048677EA00EA77CD /* Symmetries.qlgenerator */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Symmetries.qlgenerator; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D576317048677EA00EA77CD /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -54,6 +54,7 @@
 			isa = PBXGroup;
 			children = (
 				08FB77AFFE84173DC02AAC07 /* Source */,
+				6CB3FBCD1E551B4C004ACF19 /* Other Sources */,
 				089C167CFE841241C02AAC07 /* Resources */,
 				089C1671FE841209C02AAC07 /* External Frameworks and Libraries */,
 				19C28FB6FE9D52B211CA2CBB /* Products */,
@@ -85,8 +86,6 @@
 		08FB77AFFE84173DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				6C73CFDC0E0B118C00749440 /* NSBezierPath+ESSymmetry.h */,
-				6C73CFDD0E0B118C00749440 /* NSBezierPath+ESSymmetry.m */,
 				61E3BCFA0870B4F2002186A0 /* GenerateThumbnailForURL.m */,
 				08FB77B6FE84183AC02AAC07 /* main.c */,
 			);
@@ -99,6 +98,15 @@
 				8D576316048677EA00EA77CD /* Symmetries.qlgenerator */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		6CB3FBCD1E551B4C004ACF19 /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				6C73CFDC0E0B118C00749440 /* NSBezierPath+ESSymmetry.h */,
+				6C73CFDD0E0B118C00749440 /* NSBezierPath+ESSymmetry.m */,
+			);
+			name = "Other Sources";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
