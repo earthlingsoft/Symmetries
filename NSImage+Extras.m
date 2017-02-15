@@ -11,7 +11,7 @@
 
 - (CGImageRef)cgImage
 {
-	NSData* data = [self TIFFRepresentation];
+	NSData* data = self.TIFFRepresentation;
 	return CreateCGImageFromData(data); 
 }
 

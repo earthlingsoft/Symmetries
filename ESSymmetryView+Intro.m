@@ -26,20 +26,10 @@
 	[self.introLayer setNeedsDisplay];
 	
 	CAKeyframeAnimation * myAnimation = [CAKeyframeAnimation animationWithKeyPath:@"opacity"];
-	myAnimation.keyTimes = [NSArray arrayWithObjects: 
-							[NSNumber numberWithFloat:0.0],
-							[NSNumber numberWithFloat:0.8],
-							[NSNumber numberWithFloat:1.0],
-							nil];
-	myAnimation.timingFunctions = [NSArray arrayWithObjects:
-								   [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear],
-								   [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut],
-								   nil];
-	myAnimation.values = [NSArray arrayWithObjects:
-						  [NSNumber numberWithFloat:1.0],
-						  [NSNumber numberWithFloat:1.0],
-						  [NSNumber numberWithFloat:0.0],
-						  nil];
+	myAnimation.keyTimes = @[@0.0f, @0.8f, @1.0f];
+	myAnimation.timingFunctions = @[[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear],
+								   [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut]];
+	myAnimation.values = @[@1.0f, @1.0f, @0.0f];
 	myAnimation.delegate = self;
 	myAnimation.duration = 4.0 + 6.0 / [[NSUserDefaults standardUserDefaults] floatForKey:ESSYM_LAUNCHCOUNT_KEY];
 	myAnimation.removedOnCompletion = NO;
@@ -53,10 +43,10 @@
 	NSAttributedString * aS;
 
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:ESSYM_LAUNCHCOUNT_KEY] > 8) {
-		aS = [self.stringsFromFile objectAtIndex:1];
+		aS = (self.stringsFromFile)[1];
 	}
 	else {
-		aS = [self.stringsFromFile objectAtIndex:0];
+		aS = (self.stringsFromFile)[0];
 	}
 	
 	return aS;
@@ -113,7 +103,7 @@
 	// make sure Welcome Layer is hidden
 	[self.introLayer removeAllAnimations];
 	[CATransaction begin];
-	[CATransaction setValue:[NSNumber numberWithFloat:0.1] forKey:kCATransactionAnimationDuration];
+	[CATransaction setValue:@0.1f forKey:kCATransactionAnimationDuration];
 	self.introLayer.opacity = 0.0;
 	[CATransaction commit];
 	
@@ -203,7 +193,7 @@
 		// go through all pages
 		if ( i > MIN(nr -1, self.currentDemoStep - 1) || i < MAX(nr + 1, self.currentDemoStep + 1) ) {
 			// page needs to be moved
-			CALayer * page = [sublayers objectAtIndex: i];
+			CALayer * page = sublayers[i];
 			if (i < nr) { // pages going to the left
 				page.position = CGPointMake(-self.layer.bounds.size.width, 0.0);
 			}
@@ -239,66 +229,46 @@
 			animation = [[ESSymmetryAnimation alloc] initWithDuration:5.0 animationCurve:NSAnimationEaseInOut];
 			animation.valueObject = self.theDocument;
 			animation.animationBlockingMode = NSAnimationNonblocking;
-			animation.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithFloat:self.theDocument.size], 
-									 @"size",
-									 [NSNumber numberWithFloat:self.theDocument.straightTangentDirection], 
-									 @"straightTangentDirection",
-									 [NSNumber numberWithFloat:self.theDocument.diagonalTangentLength], 
-									 @"diagonalTangentLength",
-									 [NSNumber numberWithFloat: self.theDocument.thickness],
-									 @"thickness",
-									 [NSNumber numberWithFloat: self.theDocument.midPointsDistance],
-									 @"midPointsDistance",
-									 nil];
+			animation.startValues = @{
+									  @"size": [NSNumber numberWithFloat:self.theDocument.size],
+									  @"straightTangentDirection": [NSNumber numberWithFloat:self.theDocument.straightTangentDirection],
+									  @"diagonalTangentLength": [NSNumber numberWithFloat:self.theDocument.diagonalTangentLength],
+									  @"thickness": [NSNumber numberWithFloat: self.theDocument.thickness],
+									  @"midPointsDistance": [NSNumber numberWithFloat: self.theDocument.midPointsDistance]
+									  };
 			
-			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat:0.6], 
-									  @"size",
-									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 2.7*M_PI],
-									  @"straightTangentDirection",
-									  [NSNumber numberWithFloat: 0.5], 
-									  @"diagonalTangentLength",
-									  [NSNumber numberWithFloat:0.2],
-									  @"thickness",
-									  [NSNumber numberWithFloat: 0.3],
-									  @"midPointsDistance",
-									  nil];
+			animation.targetValues = @{
+									   @"size": @0.6f,
+									   @"straightTangentDirection": [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 2.7*M_PI],
+									   @"diagonalTangentLength": @0.5f,
+									   @"thickness": @0.2f,
+									   @"midPointsDistance": @0.3f
+									   };
 
 			animation2 = [[ESSymmetryAnimation alloc] initWithDuration:3.5 animationCurve:NSAnimationEaseInOut];
 			animation2.valueObject = self.theDocument;
 			animation2.animationBlockingMode = NSAnimationNonblocking;
-			animation2.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithFloat:self.theDocument.cornerCount], 
-									 @"cornerCount",
-									 [NSNumber numberWithFloat:self.theDocument.straightTangentLength], 
-									 @"straightTangentLength",
-									 [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection], 
-									 @"diagonalTangentDirection",
-									 [NSNumber numberWithFloat: self.theDocument.thickenedCorner],
-									 @"thickenedCorner",
-									 [NSNumber numberWithFloat: self.theDocument.cornerFraction],
-									  @"cornerFraction",
-									 nil];
+			animation2.startValues = @{
+									   @"cornerCount": [NSNumber numberWithFloat:self.theDocument.cornerCount],
+									   @"straightTangentLength": [NSNumber numberWithFloat:self.theDocument.straightTangentLength],
+									   @"diagonalTangentDirection": [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection],
+									   @"thickenedCorner": [NSNumber numberWithFloat: self.theDocument.thickenedCorner],
+									   @"cornerFraction": [NSNumber numberWithFloat: self.theDocument.cornerFraction]
+									   };
 			
-			animation2.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithInt:5], 
-									  @"cornerCount",
-									  [NSNumber numberWithFloat: 0.3], 
-									  @"straightTangentLength",
-									  [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 2.5*M_PI],
-									  @"diagonalTangentDirection",
-									  [NSNumber numberWithFloat:0.3],
-									  @"thickenedCorner",
-									   [NSNumber numberWithFloat: 0.71],
-									   @"cornerFraction",
-									  nil];
+			animation2.targetValues = @{
+										@"cornerCount": @5,
+									    @"straightTangentLength": @0.3f,
+									    @"diagonalTangentDirection": [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 2.5*M_PI],
+									    @"thickenedCorner": @0.3f,
+									    @"cornerFraction": @0.71f
+										};
 			
 			[animation startAnimation];
 			[animation2 startWhenAnimation:animation reachesProgress:0.8];
 			animation2.delegate = self;
 			
-			self.lastAnimations = [NSArray arrayWithObjects:animation, animation2, nil];
+			self.lastAnimations = @[animation, animation2];
 			
 			break;
 		}
@@ -308,43 +278,27 @@
 			animation  = [[ESSymmetryAnimation alloc] initWithDuration:2.5 animationCurve:NSAnimationEaseInOut];
 			animation.valueObject = self.theDocument;
 			animation.animationBlockingMode = NSAnimationNonblocking;
-			animation.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithUnsignedInteger:self.theDocument.cornerCount],
-									 @"cornerCount", nil];
-			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithUnsignedInteger:self.theDocument.cornerCount],
-									  @"cornerCount",  nil];
+			animation.startValues = @{@"cornerCount": @(self.theDocument.cornerCount)};
+			animation.targetValues = @{@"cornerCount": @(self.theDocument.cornerCount)};
 			
 			
 			animation2 = [[ESSymmetryAnimation alloc] initWithDuration:2.0 animationCurve:NSAnimationEaseInOut];
 			animation2.valueObject = self.theDocument;
 			animation2.animationBlockingMode = NSAnimationNonblocking;
-			animation2.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithUnsignedInteger:self.theDocument.cornerCount],
-									 @"cornerCount", nil];
-			animation2.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithInt: 2], 
-									  @"cornerCount",  nil];
+			animation2.startValues = @{@"cornerCount": @(self.theDocument.cornerCount)};
+			animation2.targetValues = @{@"cornerCount": @2};
 			
 			animation3 = [[ESSymmetryAnimation alloc] initWithDuration:5.0 animationCurve:NSAnimationEaseInOut];
 			animation3.valueObject = self.theDocument;
 			animation3.animationBlockingMode = NSAnimationNonblocking;
-			animation3.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithInt:2], 
-									 @"cornerCount", nil];
-			animation3.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithInt: 37], 
-									  @"cornerCount",  nil];
+			animation3.startValues = @{@"cornerCount": @2};
+			animation3.targetValues = @{@"cornerCount": @37};
 			
 			animation4 = [[ESSymmetryAnimation alloc] initWithDuration:3.5 animationCurve:NSAnimationEaseInOut];
 			animation4.valueObject = self.theDocument;
 			animation4.animationBlockingMode = NSAnimationNonblocking;
-			animation4.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithInt:37], 
-									  @"cornerCount", nil];
-			animation4.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithInt: 5], 
-									   @"cornerCount", nil];
+			animation4.startValues = @{@"cornerCount": @37};
+			animation4.targetValues = @{@"cornerCount": @5};
 
 			
 			[animation startAnimation];
@@ -353,7 +307,7 @@
 			[animation4 startWhenAnimation:animation3 reachesProgress:1.0];
 			animation4.delegate = self;
 
-			self.lastAnimations = [NSArray arrayWithObjects:animation, animation2, animation3, animation4, nil];
+			self.lastAnimations = @[animation, animation2, animation3, animation4];
 			break;
 		}
 			
@@ -361,32 +315,20 @@
 			animation = [[ESSymmetryAnimation alloc] initWithDuration:2.0 animationCurve:NSAnimationEaseInOut];
 			animation.valueObject = self.theDocument;
 			animation.animationBlockingMode = NSAnimationNonblocking;
-			animation.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithFloat:self.theDocument.size], 
-									 @"size", nil];
-			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: 1.0], 
-									  @"size",  nil];
+			animation.startValues = @{@"size": [NSNumber numberWithFloat:self.theDocument.size]};
+			animation.targetValues = @{@"size": @1.0f};
 			
 			animation2 = [[ESSymmetryAnimation alloc] initWithDuration:5.0 animationCurve:NSAnimationEaseInOut];
 			animation2.valueObject = self.theDocument;
 			animation2.animationBlockingMode = NSAnimationNonblocking;
-			animation2.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat:1.0], 
-									  @"size", nil];
-			animation2.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: 0.01], 
-									   @"size",  nil];
+			animation2.startValues = @{@"size": @1.0f};
+			animation2.targetValues = @{@"size": @0.01f};
 			
 			animation3 = [[ESSymmetryAnimation alloc] initWithDuration:3.5 animationCurve:NSAnimationEaseInOut];
 			animation3.valueObject = self.theDocument;
 			animation3.animationBlockingMode = NSAnimationNonblocking;
-			animation3.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-										[NSNumber numberWithFloat:0.01], 
-									  @"size", nil]; 
-			animation3.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: 0.7], 
-									   @"size", nil];
+			animation3.startValues = @{@"size": @0.01f}; 
+			animation3.targetValues = @{@"size": @0.7f};
 			
 			
 			[animation startAnimation];
@@ -394,7 +336,7 @@
 			[animation3 startWhenAnimation:animation2 reachesProgress:1.0];
 			animation3.delegate = self;
 			
-			self.lastAnimations = [NSArray arrayWithObjects:animation, animation2, animation3, nil];
+			self.lastAnimations = @[animation, animation2, animation3];
 			break;		
 		}
 			
@@ -403,45 +345,27 @@
 			animation = [[ESSymmetryAnimation alloc] initWithDuration:1.5 animationCurve:NSAnimationEaseInOut];
 			animation.valueObject = self.theDocument;
 			animation.animationBlockingMode = NSAnimationNonblocking;
-			animation.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithFloat:self.theDocument.cornerFraction], 
-									 @"cornerFraction", nil];
-			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: self.theDocument.cornerFraction], 
-									  @"cornerFraction",  nil];
+			animation.startValues = @{@"cornerFraction": [NSNumber numberWithFloat:self.theDocument.cornerFraction]};
+			animation.targetValues = @{@"cornerFraction": [NSNumber numberWithFloat: self.theDocument.cornerFraction]};
 			
 			
 			animation2 = [[ESSymmetryAnimation alloc] initWithDuration:1.0 animationCurve:NSAnimationEaseInOut];
 			animation2.valueObject = self.theDocument;
 			animation2.animationBlockingMode = NSAnimationNonblocking;
-			animation2.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithFloat:self.theDocument.cornerFraction], 
-									 @"cornerFraction", nil];
-			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: 1.0], 
-									  @"cornerFraction",  nil];
+			animation2.startValues = @{@"cornerFraction": [NSNumber numberWithFloat:self.theDocument.cornerFraction]};
+			animation.targetValues = @{@"cornerFraction": @1.0f};
 			
 			animation3 = [[ESSymmetryAnimation alloc] initWithDuration:2.5 animationCurve:NSAnimationEaseInOut];
 			animation3.valueObject = self.theDocument;
 			animation3.animationBlockingMode = NSAnimationNonblocking;
-			animation3.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									[NSNumber numberWithFloat:1.0], 
-									  @"cornerFraction", nil];
-			animation3.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: -1.0], 
-									   @"cornerFraction",  nil];
+			animation3.startValues = @{@"cornerFraction": @1.0f};
+			animation3.targetValues = @{@"cornerFraction": @-1.0f};
 						
 			animation4 = [[ESSymmetryAnimation alloc] initWithDuration:2.5 animationCurve:NSAnimationEaseInOut];
 			animation4.valueObject = self.theDocument;
 			animation4.animationBlockingMode = NSAnimationNonblocking;
-			animation4.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: -1.0], 
-									  @"cornerFraction", 
-									  nil];
-			animation4.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: 0.71], 
-									   @"cornerFraction", 
-									   nil];
+			animation4.startValues = @{@"cornerFraction": @-1.0f};
+			animation4.targetValues = @{@"cornerFraction": @0.71f};
 			
 			
 			[animation startAnimation];
@@ -450,7 +374,7 @@
 			[animation4 startWhenAnimation:animation3 reachesProgress:1.0];
 			animation4.delegate = self;
 			
-			self.lastAnimations = [NSArray arrayWithObjects:animation, animation2, animation3, animation4, nil];
+			self.lastAnimations = @[animation, animation2, animation3, animation4];
 			
 			break;
 		}
@@ -460,58 +384,32 @@
 			animation = [[ESSymmetryAnimation alloc] initWithDuration:0.5 animationCurve:NSAnimationEaseInOut];
 			animation.valueObject = self.theDocument;
 			animation.animationBlockingMode = NSAnimationNonblocking;
-			animation.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithFloat:self.theDocument.midPointsDistance], 
-									 @"midPointsDistance", nil];
-			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: 1.0], 
-									  @"midPointsDistance",  nil];
+			animation.startValues = @{@"midPointsDistance": [NSNumber numberWithFloat:self.theDocument.midPointsDistance]};
+			animation.targetValues = @{@"midPointsDistance": @1.0f};
 			
 			animation2 = [[ESSymmetryAnimation alloc] initWithDuration:1.2 animationCurve:NSAnimationEaseInOut];
 			animation2.valueObject = self.theDocument;
 			animation2.animationBlockingMode = NSAnimationNonblocking;
-			animation2.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat:1.0], 
-									  @"midPointsDistance", nil];
-			animation2.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: 0.0], 
-									   @"midPointsDistance",  nil];
+			animation2.startValues = @{@"midPointsDistance": @1.0f};
+			animation2.targetValues = @{@"midPointsDistance": @0.0f};
 			
 			animation3 = [[ESSymmetryAnimation alloc] initWithDuration:0.5 animationCurve:NSAnimationEaseInOut];
 			animation3.valueObject = self.theDocument;
 			animation3.animationBlockingMode = NSAnimationNonblocking;
-			animation3.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: 0.0], 
-									  @"midPointsDistance", 
-									  nil];
-			animation3.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: 0.0], 
-									   @"midPointsDistance", 
-									   nil];
+			animation3.startValues = @{@"midPointsDistance": @0.0f};
+			animation3.targetValues = @{@"midPointsDistance": @0.0f};
 		
 			animation4 = [[ESSymmetryAnimation alloc] initWithDuration:1.2 animationCurve:NSAnimationEaseInOut];
 			animation4.valueObject = self.theDocument;
 			animation4.animationBlockingMode = NSAnimationNonblocking;
-			animation4.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: 0.0], 
-									  @"midPointsDistance", 
-									  nil];
-			animation4.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: -1.0], 
-									   @"midPointsDistance", 
-									   nil];
+			animation4.startValues = @{@"midPointsDistance": @0.0f};
+			animation4.targetValues = @{@"midPointsDistance": @-1.0f};
 			
 			animation5 = [[ESSymmetryAnimation alloc] initWithDuration:1.7 animationCurve:NSAnimationEaseInOut];
 			animation5.valueObject = self.theDocument;
 			animation5.animationBlockingMode = NSAnimationNonblocking;
-			animation5.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: -1.0], 
-									  @"midPointsDistance", 
-									  nil];
-			animation5.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: 0.3], 
-									   @"midPointsDistance", 
-									   nil];
+			animation5.startValues = @{@"midPointsDistance": @-1.0f};
+			animation5.targetValues = @{@"midPointsDistance": @0.3f};
 			
 			[animation startAnimation];
 			[animation2 startWhenAnimation:animation reachesProgress:1.0];
@@ -520,7 +418,7 @@
 			[animation5 startWhenAnimation:animation4 reachesProgress:1.0];
 			animation5.delegate = self;
 			
-			self.lastAnimations = [NSArray arrayWithObjects:animation, animation2, animation3, animation4, animation5, nil];
+			self.lastAnimations = @[animation, animation2, animation3, animation4, animation5];
 
 			break;
 		}			
@@ -530,49 +428,29 @@
 			animation = [[ESSymmetryAnimation alloc] initWithDuration:1.5 animationCurve:NSAnimationEaseInOut];
 			animation.valueObject = self.theDocument;
 			animation.animationBlockingMode = NSAnimationNonblocking;
-			animation.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithFloat:self.theDocument.straightTangentDirection], 
-									 @"straightTangentDirection", 
-									 nil];
-			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: self.theDocument.straightTangentDirection], 
-									  @"straightTangentDirection",  
-									  nil];
+			animation.startValues = @{@"straightTangentDirection": [NSNumber numberWithFloat:self.theDocument.straightTangentDirection]};
+			animation.targetValues = @{@"straightTangentDirection": [NSNumber numberWithFloat: self.theDocument.straightTangentDirection]};
 
 			animation2 = [[ESSymmetryAnimation alloc] initWithDuration:5.0 animationCurve:NSAnimationEaseInOut];
 			animation2.valueObject = self.theDocument;
 			animation2.animationBlockingMode = NSAnimationNonblocking;
-			animation2.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithFloat:self.theDocument.straightTangentDirection], 
-									  @"straightTangentDirection", 
-									  [NSNumber numberWithFloat:self.theDocument.straightTangentLength], 
-									  @"straightTangentLength",
-									  nil];
-			animation2.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: self.theDocument.straightTangentDirection + 2.5 * M_PI],
-									   @"straightTangentDirection",  
-									   [NSNumber numberWithFloat:0.85],
-									   @"straightTangentLength",
-									   nil];
+			animation2.startValues = @{@"straightTangentDirection": [NSNumber numberWithFloat:self.theDocument.straightTangentDirection], 
+									  @"straightTangentLength": [NSNumber numberWithFloat:self.theDocument.straightTangentLength]};
+			animation2.targetValues = @{@"straightTangentDirection": [NSNumber numberWithFloat: self.theDocument.straightTangentDirection + 2.5 * M_PI],  
+									   @"straightTangentLength": @0.85f};
 			
 			animation3 = [[ESSymmetryAnimation alloc] initWithDuration:1.2 animationCurve:NSAnimationEaseInOut];
 			animation3.valueObject = self.theDocument;
 			animation3.animationBlockingMode = NSAnimationNonblocking;
-			animation3.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat:0.85], 
-									  @"straightTangentLength", 
-									  nil];
-			animation3.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: 1.0], 
-									   @"straightTangentLength",  
-									   nil];
+			animation3.startValues = @{@"straightTangentLength": @0.85f};
+			animation3.targetValues = @{@"straightTangentLength": @1.0f};
 			
 			[animation startAnimation];
 			[animation2 startWhenAnimation:animation reachesProgress:1.0];
 			[animation3 startWhenAnimation:animation2 reachesProgress:1.0];
 			animation3.delegate = self;
 
-			self.lastAnimations = [NSArray arrayWithObjects:animation, animation2, animation3,  nil];
+			self.lastAnimations = @[animation, animation2, animation3];
 
 			break;
 		}
@@ -582,66 +460,34 @@
 			animation2 = [[ESSymmetryAnimation alloc] initWithDuration:1.5 animationCurve:NSAnimationEaseInOut];
 			animation2.valueObject = self.theDocument;
 			animation2.animationBlockingMode = NSAnimationNonblocking;
-			animation2.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat:self.theDocument.diagonalTangentLength], 
-									  @"diagonalTangentLength", 
-									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 2.5 * M_PI],
-									  @"straightTangentDirection",
-									 [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection], 
-									 @"diagonalTangentDirection", 
-									  nil];
-			animation2.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: 0.0], 
-									   @"diagonalTangentLength",  
-									   [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 1.0],
-									   @"straightTangentDirection",
-									 [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - M_PI],
-									 @"diagonalTangentDirection", 
-									   nil];
+			animation2.startValues = @{@"diagonalTangentLength": [NSNumber numberWithFloat:self.theDocument.diagonalTangentLength], 
+									  @"straightTangentDirection": [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 2.5 * M_PI],
+									 @"diagonalTangentDirection": [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection]};
+			animation2.targetValues = @{@"diagonalTangentLength": @0.0f,  
+									   @"straightTangentDirection": [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 1.0],
+									 @"diagonalTangentDirection": [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - M_PI]};
 			
 			animation3 = [[ESSymmetryAnimation alloc] initWithDuration:3.5 animationCurve:NSAnimationEaseInOut];
 			animation3.valueObject = self.theDocument;
 			animation3.animationBlockingMode = NSAnimationNonblocking;
-			animation3.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: 0.0], 
-									  @"diagonalTangentLength", 
-									  [NSNumber numberWithFloat: 1.0], 
-									  @"straightTangentLength", 
-									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 1.0],
-									   @"straightTangentDirection",
-									  [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - M_PI],
-									  @"diagonalTangentDirection", 
-									  nil];
-			animation3.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: 1.0], 
-									   @"diagonalTangentLength", 
-									   [NSNumber numberWithFloat: 0.0], 
-									   @"straightTangentLength", 
-									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection],
-									   @"straightTangentDirection",
-									   [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 4.0 * M_PI],
-									   @"diagonalTangentDirection", 
-									   nil];
+			animation3.startValues = @{@"diagonalTangentLength": @0.0f, 
+									  @"straightTangentLength": @1.0f, 
+									  @"straightTangentDirection": [NSNumber numberWithFloat:self.theDocument.straightTangentDirection + 1.0],
+									  @"diagonalTangentDirection": [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - M_PI]};
+			animation3.targetValues = @{@"diagonalTangentLength": @1.0f, 
+									   @"straightTangentLength": @0.0f, 
+									  @"straightTangentDirection": [NSNumber numberWithFloat:self.theDocument.straightTangentDirection],
+									   @"diagonalTangentDirection": [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 4.0 * M_PI]};
 			
 			animation4 = [[ESSymmetryAnimation alloc] initWithDuration:3.8 animationCurve:NSAnimationEaseInOut];
 			animation4.valueObject = self.theDocument;
 			animation4.animationBlockingMode = NSAnimationNonblocking;
-			animation4.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: 1.0], 
-									  @"diagonalTangentLength", 
-									 [NSNumber numberWithFloat: 0.0], 
-									 @"straightTangentLength", 
-									  [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 4.0 * M_PI],
-									  @"diagonalTangentDirection",								  
-									  nil];
-			animation4.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: 0.3], 
-									   @"diagonalTangentLength", 
-									  [NSNumber numberWithFloat: 0.2], 
-									  @"straightTangentLength", 
-									   [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 3.0 * M_PI],
-									   @"diagonalTangentDirection",								  
-									   nil];
+			animation4.startValues = @{@"diagonalTangentLength": @1.0f, 
+									 @"straightTangentLength": @0.0f, 
+									  @"diagonalTangentDirection": [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 4.0 * M_PI]};
+			animation4.targetValues = @{@"diagonalTangentLength": @0.3f, 
+									  @"straightTangentLength": @0.2f, 
+									   @"diagonalTangentDirection": [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection - 3.0 * M_PI]};
 			
 			
 			[animation2 startAnimation];
@@ -649,7 +495,7 @@
 			[animation4 startWhenAnimation:animation3 reachesProgress:1.0];
 			animation4.delegate = self;
 			
-			self.lastAnimations = [NSArray arrayWithObjects: animation2, animation3, animation4, nil];
+			self.lastAnimations = @[animation2, animation3, animation4];
 
 			break;
 		}
@@ -659,46 +505,26 @@
 			animation = [[ESSymmetryAnimation alloc] initWithDuration:1.5 animationCurve:NSAnimationEaseInOut];
 			animation.valueObject = self.theDocument;
 			animation.animationBlockingMode = NSAnimationNonblocking;
-			animation.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithFloat:self.theDocument.thickness], 
-									 @"thickness", nil];
-			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: 0.0], 
-									  @"thickness",  nil];
+			animation.startValues = @{@"thickness": [NSNumber numberWithFloat:self.theDocument.thickness]};
+			animation.targetValues = @{@"thickness": @0.0f};
 			
 			animation2 = [[ESSymmetryAnimation alloc] initWithDuration:1.0 animationCurve:NSAnimationEaseInOut];
 			animation2.valueObject = self.theDocument;
 			animation2.animationBlockingMode = NSAnimationNonblocking;
-			animation2.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat:0.0], 
-									  @"thickness", nil];
-			animation2.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: 1.0], 
-									   @"thickness",  nil];
+			animation2.startValues = @{@"thickness": @0.0f};
+			animation2.targetValues = @{@"thickness": @1.0f};
 			
 			animation3 = [[ESSymmetryAnimation alloc] initWithDuration:2.0 animationCurve:NSAnimationEaseInOut];
 			animation3.valueObject = self.theDocument;
 			animation3.animationBlockingMode = NSAnimationNonblocking;
-			animation3.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: 1.0], 
-									  @"thickness", 
-									  nil];
-			animation3.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: -1.0], 
-									   @"thickness", 
-									   nil];
+			animation3.startValues = @{@"thickness": @1.0f};
+			animation3.targetValues = @{@"thickness": @-1.0f};
 			
 			animation4 = [[ESSymmetryAnimation alloc] initWithDuration:1.2 animationCurve:NSAnimationEaseInOut];
 			animation4.valueObject = self.theDocument;
 			animation4.animationBlockingMode = NSAnimationNonblocking;
-			animation4.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: -1.0], 
-									  @"thickness", 
-									  nil];
-			animation4.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: 0.25], 
-									   @"thickness", 
-									   nil];
+			animation4.startValues = @{@"thickness": @-1.0f};
+			animation4.targetValues = @{@"thickness": @0.25f};
 			
 			[animation startAnimation];
 			[animation2 startWhenAnimation:animation reachesProgress:1.0];
@@ -706,7 +532,7 @@
 			[animation4 startWhenAnimation:animation3 reachesProgress:1.0];
 			animation4.delegate = self;
 
-			self.lastAnimations = [NSArray arrayWithObjects:animation, animation2, animation3, animation4, nil];
+			self.lastAnimations = @[animation, animation2, animation3, animation4];
 
 			break;
 		}			
@@ -716,46 +542,26 @@
 			animation = [[ESSymmetryAnimation alloc] initWithDuration:1.5 animationCurve:NSAnimationEaseInOut];
 			animation.valueObject = self.theDocument;
 			animation.animationBlockingMode = NSAnimationNonblocking;
-			animation.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithFloat:self.theDocument.thickenedCorner], 
-									 @"thickenedCorner", nil];
-			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: 0.0], 
-									  @"thickenedCorner",  nil];
+			animation.startValues = @{@"thickenedCorner": [NSNumber numberWithFloat:self.theDocument.thickenedCorner]};
+			animation.targetValues = @{@"thickenedCorner": @0.0f};
 			
 			animation2 = [[ESSymmetryAnimation alloc] initWithDuration:1.0 animationCurve:NSAnimationEaseInOut];
 			animation2.valueObject = self.theDocument;
 			animation2.animationBlockingMode = NSAnimationNonblocking;
-			animation2.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat:0.0], 
-									  @"thickenedCorner", nil];
-			animation2.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: 1.0], 
-									   @"thickenedCorner",  nil];
+			animation2.startValues = @{@"thickenedCorner": @0.0f};
+			animation2.targetValues = @{@"thickenedCorner": @1.0f};
 			
 			animation3 = [[ESSymmetryAnimation alloc] initWithDuration:2.0 animationCurve:NSAnimationEaseInOut];
 			animation3.valueObject = self.theDocument;
 			animation3.animationBlockingMode = NSAnimationNonblocking;
-			animation3.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: 1.0], 
-									  @"thickenedCorner", 
-									  nil];
-			animation3.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: -1.0], 
-									   @"thickenedCorner", 
-									   nil];
+			animation3.startValues = @{@"thickenedCorner": @1.0f};
+			animation3.targetValues = @{@"thickenedCorner": @-1.0f};
 			
 			animation4 = [[ESSymmetryAnimation alloc] initWithDuration:1.2 animationCurve:NSAnimationEaseInOut];
 			animation4.valueObject = self.theDocument;
 			animation4.animationBlockingMode = NSAnimationNonblocking;
-			animation4.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: -1.0], 
-									  @"thickenedCorner", 
-									  nil];
-			animation4.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: 0.2], 
-									   @"thickenedCorner", 
-									   nil];
+			animation4.startValues = @{@"thickenedCorner": @-1.0f};
+			animation4.targetValues = @{@"thickenedCorner": @0.2f};
 			
 			[animation startAnimation];
 			[animation2 startWhenAnimation:animation reachesProgress:1.0];
@@ -763,7 +569,7 @@
 			[animation4 startWhenAnimation:animation3 reachesProgress:1.0];
 			animation4.delegate = self;
 
-			self.lastAnimations = [NSArray arrayWithObjects:animation, animation2, animation3, animation4,  nil];
+			self.lastAnimations = @[animation, animation2, animation3, animation4];
 			
 			break;
 		}			
@@ -773,41 +579,27 @@
 			animation = [[ESSymmetryAnimation alloc] initWithDuration:1.2 animationCurve:NSAnimationEaseInOut];
 			animation.valueObject = self.theDocument;
 			animation.animationBlockingMode = NSAnimationNonblocking;
-			animation.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithBool:self.theDocument.twoLines], 
-									 @"twoLines", nil];
-			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithBool: YES], 
-									  @"twoLines",  nil];
+			animation.startValues = @{@"twoLines": @(self.theDocument.twoLines)};
+			animation.targetValues = @{@"twoLines": @YES};
 			
 			animation2 = [[ESSymmetryAnimation alloc] initWithDuration:1.5 animationCurve:NSAnimationEaseInOut];
 			animation2.valueObject = self.theDocument;
 			animation2.animationBlockingMode = NSAnimationNonblocking;
-			animation2.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithBool:YES], 
-									  @"twoLines", nil];
-			animation2.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithBool: NO], 
-									   @"twoLines",  nil];
+			animation2.startValues = @{@"twoLines": @YES};
+			animation2.targetValues = @{@"twoLines": @NO};
 			
 			animation3 = [[ESSymmetryAnimation alloc] initWithDuration:1.5 animationCurve:NSAnimationEaseInOut];
 			animation3.valueObject = self.theDocument;
 			animation3.animationBlockingMode = NSAnimationNonblocking;
-			animation3.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithBool: NO], 
-									  @"twoLines", 
-									  nil];
-			animation3.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithBool: YES], 
-									   @"twoLines", 
-									   nil];
+			animation3.startValues = @{@"twoLines": @NO};
+			animation3.targetValues = @{@"twoLines": @YES};
 			
 			[animation startAnimation];
 			[animation2 startWhenAnimation:animation reachesProgress:1.0];
 			[animation3 startWhenAnimation:animation2 reachesProgress:1.0];
 			animation3.delegate = self;
 
-			self.lastAnimations = [NSArray arrayWithObjects:animation, animation2, animation3, nil];
+			self.lastAnimations = @[animation, animation2, animation3];
 
 			break;
 		}			
@@ -817,50 +609,28 @@
 			animation = [[ESSymmetryAnimation alloc] initWithDuration:4.5 animationCurve:NSAnimationEaseInOut];
 			animation.valueObject = self.theDocument;
 			animation.animationBlockingMode = NSAnimationNonblocking;
-			animation.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithBool:YES], 
-									 @"twoMidPoints", nil];
-			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithBool: YES], 
-									  @"twoMidPoints",  nil];
+			animation.startValues = @{@"twoMidPoints": @YES};
+			animation.targetValues = @{@"twoMidPoints": @YES};
 			
 			animation2 = [[ESSymmetryAnimation alloc] initWithDuration:2.0 animationCurve:NSAnimationEaseInOut];
 			animation2.valueObject = self.theDocument;
 			animation2.animationBlockingMode = NSAnimationNonblocking;
-			animation2.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithBool: YES], 
-									  @"twoMidPoints", nil];
-			animation2.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithBool: NO], 
-									   @"twoMidPoints",  nil];
+			animation2.startValues = @{@"twoMidPoints": @YES};
+			animation2.targetValues = @{@"twoMidPoints": @NO};
 			
 			animation3 = [[ESSymmetryAnimation alloc] initWithDuration:2.5 animationCurve:NSAnimationEaseInOut];
 			animation3.valueObject = self.theDocument;
 			animation3.animationBlockingMode = NSAnimationNonblocking;
-			animation3.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithBool: NO], 
-									  @"twoMidPoints", 
-									  nil];
-			animation3.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithBool: YES], 
-									   @"twoMidPoints", 
-									   nil];
+			animation3.startValues = @{@"twoMidPoints": @NO};
+			animation3.targetValues = @{@"twoMidPoints": @YES};
 			
 			animation4 = [[ESSymmetryAnimation alloc] initWithDuration:9.0 animationCurve:NSAnimationEaseInOut];
 			animation4.valueObject = self.theDocument;
 			animation4.animationBlockingMode = NSAnimationNonblocking;
-			animation4.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat: self.theDocument.diagonalTangentDirection], 
-									  @"diagonalTangentDirection", 
-									  [NSNumber numberWithFloat: self.theDocument.diagonalTangentLength], 
-									  @"diagonalTangentLength",
-									  nil];
-			animation4.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [NSNumber numberWithFloat: self.theDocument.diagonalTangentDirection + 2.3 * M_PI],
-									   @"diagonalTangentDirection", 
-									   [NSNumber numberWithFloat: 0.25], 
-									   @"diagonalTangentLength",
-									   nil];
+			animation4.startValues = @{@"diagonalTangentDirection": [NSNumber numberWithFloat: self.theDocument.diagonalTangentDirection], 
+									  @"diagonalTangentLength": [NSNumber numberWithFloat: self.theDocument.diagonalTangentLength]};
+			animation4.targetValues = @{@"diagonalTangentDirection": [NSNumber numberWithFloat: self.theDocument.diagonalTangentDirection + 2.3 * M_PI], 
+									   @"diagonalTangentLength": @0.25f};
 			
 			
 			[animation startAnimation];
@@ -870,7 +640,7 @@
 			[animation4 startAnimation];
 			animation4.delegate = self; // triggers page 12 !
 			
-			self.lastAnimations = [NSArray arrayWithObjects:animation, animation2, animation3, animation4, nil];
+			self.lastAnimations = @[animation, animation2, animation3, animation4];
 
 			break;
 		}			
@@ -880,60 +650,40 @@
 			animation = [[ESSymmetryAnimation alloc] initWithDuration:4.0 animationCurve:NSAnimationEaseInOut];
 			animation.valueObject = self.theDocument;
 			animation.animationBlockingMode = NSAnimationNonblocking;
-			animation.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									 [NSNumber numberWithFloat:self.theDocument.size], 
-									 @"size",
-									 [NSNumber numberWithFloat:self.theDocument.straightTangentDirection], 
-									 @"straightTangentDirection",
-									 [NSNumber numberWithFloat:self.theDocument.diagonalTangentLength], 
-									 @"diagonalTangentLength",
-									 [NSNumber numberWithFloat: self.theDocument.thickness],
-									 @"thickness",
-									 [NSNumber numberWithFloat: self.theDocument.midPointsDistance],
-									 @"midPointsDistance",
-									 nil];
+			animation.startValues = @{
+									  @"size": [NSNumber numberWithFloat:self.theDocument.size],
+									  @"straightTangentDirection": [NSNumber numberWithFloat:self.theDocument.straightTangentDirection],
+									  @"diagonalTangentLength": [NSNumber numberWithFloat:self.theDocument.diagonalTangentLength],
+									  @"thickness": [NSNumber numberWithFloat: self.theDocument.thickness],
+									  @"midPointsDistance": [NSNumber numberWithFloat: self.theDocument.midPointsDistance]
+									  };
 			
-			animation.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat:0.6], 
-									  @"size",
-									  [NSNumber numberWithFloat:self.theDocument.straightTangentDirection - 6 * M_PI],
-									  @"straightTangentDirection",
-									  [NSNumber numberWithFloat: 0.2], 
-									  @"diagonalTangentLength",
-									  [NSNumber numberWithFloat:0.2],
-									  @"thickness",
-									  [NSNumber numberWithFloat: 0.3],
-									  @"midPointsDistance",
-									  nil];
+			animation.targetValues = @{
+									   @"size": @0.6f,
+									   @"straightTangentDirection": [NSNumber numberWithFloat:self.theDocument.straightTangentDirection - 6 * M_PI],
+									   @"diagonalTangentLength": @0.2f,
+									   @"thickness": @0.2f,
+									   @"midPointsDistance": @0.3f
+									   };
 			
 			animation2 = [[ESSymmetryAnimation alloc] initWithDuration:3.5 animationCurve:NSAnimationEaseInOut];
 			animation2.valueObject = self.theDocument;
 			animation2.animationBlockingMode = NSAnimationNonblocking;
-			animation2.startValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									  [NSNumber numberWithFloat:self.theDocument.cornerCount], 
-									  @"cornerCount",
-									  [NSNumber numberWithFloat:self.theDocument.straightTangentLength], 
-									  @"straightTangentLength",
-									  [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection], 
-									  @"diagonalTangentDirection",
-									  [NSNumber numberWithFloat: self.theDocument.thickenedCorner],
-									  @"thickenedCorner",
-									  [NSNumber numberWithFloat: self.theDocument.cornerFraction],
-									  @"cornerFraction",
-									  nil];
+			animation2.startValues = @{
+									   @"cornerCount": [NSNumber numberWithFloat:self.theDocument.cornerCount],
+									   @"straightTangentLength": [NSNumber numberWithFloat:self.theDocument.straightTangentLength],
+									   @"diagonalTangentDirection": [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection],
+									   @"thickenedCorner": [NSNumber numberWithFloat: self.theDocument.thickenedCorner],
+									   @"cornerFraction": [NSNumber numberWithFloat: self.theDocument.cornerFraction]
+									   };
 			
-			animation2.targetValues = [NSDictionary dictionaryWithObjectsAndKeys:
-									   [self.preAnimationDocumentValues valueForKey:@"cornerCount"], 
-									   @"cornerCount",
-									   [NSNumber numberWithFloat: 0.3], 
-									   @"straightTangentLength",
-									   [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection + 3.5 * M_PI],
-									   @"diagonalTangentDirection",
-									   [NSNumber numberWithFloat:0.3],
-									   @"thickenedCorner",
-									   [NSNumber numberWithFloat: 0.71],
-									   @"cornerFraction",
-									   nil];
+			animation2.targetValues = @{
+										@"cornerCount": [self.preAnimationDocumentValues valueForKey:@"cornerCount"],
+									    @"straightTangentLength": @0.3f,
+									    @"diagonalTangentDirection": [NSNumber numberWithFloat:self.theDocument.diagonalTangentDirection + 3.5 * M_PI],
+									    @"thickenedCorner": @0.3f,
+									    @"cornerFraction": @0.71f
+										};
 			
 
 			animation3 = [[ESSymmetryAnimation alloc] initWithDuration:3.5 animationCurve:NSAnimationEaseInOut];
@@ -950,7 +700,7 @@
 			[animation3 startWhenAnimation:animation2 reachesProgress:1.0];
 			animation3.delegate = self;
 
-			self.lastAnimations = [NSArray arrayWithObjects:animation, animation2, animation3, nil];
+			self.lastAnimations = @[animation, animation2, animation3];
 			
 			break;
 		}			
@@ -985,14 +735,14 @@
 	[NSGraphicsContext setCurrentContext:graphicsContext];
 
 	if ([layer.name isEqualToString: @"introLayer"] ) {
-		[self drawLayerWithAttributedString:[self introString] inContext:ctx];
+		[self drawLayerWithAttributedString:self.introString inContext:ctx];
 		hasDrawn = YES;
 	} 
 	else if ([layer.name hasPrefix:@"demo.page"]) {
 		// need to draw for demo
 		// NSLog(@"-drawLayer: %@ (%f, %f, %f, %f - %f, %f)", layer.name, layer.bounds.origin.x, layer.bounds.origin.y, layer.bounds.size.width, layer.bounds.size.height, layer.position.x, layer.position.y);
-		NSUInteger layerNumber = [[[layer.name componentsSeparatedByString:@"-"] lastObject] intValue];
-		[self drawLayerWithAttributedString:[self.stringsFromFile objectAtIndex:layerNumber + 2] inContext:ctx];
+		NSUInteger layerNumber = [layer.name componentsSeparatedByString:@"-"].lastObject.intValue;
+		[self drawLayerWithAttributedString:(self.stringsFromFile)[layerNumber + 2] inContext:ctx];
 		hasDrawn = YES;
 	}
 
@@ -1013,14 +763,14 @@
 		NSString * stringFilePath = [[NSBundle mainBundle] pathForResource:@"AttributedStrings" ofType:@"rtf"];
 		NSAttributedString * aS = [[NSAttributedString alloc] initWithPath:stringFilePath documentAttributes:NULL];
 		NSString * text = aS.string;
-		NSString * separator = [NSString stringWithUTF8String:"\012\342\231\253\012\000"];
+		NSString * separator = @"\012\342\231\253\012\000";
 		NSArray * strings = [text componentsSeparatedByString:separator];
 		
-		NSMutableArray * attributedStrings = [NSMutableArray arrayWithCapacity:[strings count]];
+		NSMutableArray * attributedStrings = [NSMutableArray arrayWithCapacity:strings.count];
 		NSInteger firstIndex = 0;
 		for (NSString * s in strings) {
-			NSRange range = NSMakeRange(firstIndex, [s length]);
-			firstIndex = firstIndex + [s length] + 3;
+			NSRange range = NSMakeRange(firstIndex, s.length);
+			firstIndex = firstIndex + s.length + 3;
 			[attributedStrings addObject:[aS attributedSubstringFromRange:range]];
 		}
 		stringsFromFile = attributedStrings;

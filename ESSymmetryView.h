@@ -95,7 +95,7 @@ typedef struct {
 @property (readonly) NSColor * guideColor;
 
 
-- (NSString*) trackingAreaNameForMouseLocation;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString *trackingAreaNameForMouseLocation;
 - (void) drawHandlesForFundamentalPath;
 - (void) drawGuidesForPoint:(NSString *) pointName;
 

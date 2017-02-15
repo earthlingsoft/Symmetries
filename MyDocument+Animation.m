@@ -58,9 +58,7 @@
 
 
 - (NSDictionary*) fullScreenModeDictionary {
-	return [NSDictionary dictionaryWithObjectsAndKeys:
-			[NSNumber numberWithBool:NO], NSFullScreenModeAllScreens,
-			nil];		
+	return @{NSFullScreenModeAllScreens: @NO};		
 }
 
 
@@ -76,7 +74,7 @@
 
 
 - (NSArray*) animationKeys {
-	return [NSArray arrayWithObjects: @"size", @"cornerCount", @"cornerFraction", @"straightTangentLength", @"straightTangentDirection", @"diagonalTangentLength", @"diagonalTangentDirection", @"midPointsDistance", @"thickness", @"thickenedCorner", @"rotation", nil];
+	return @[@"size", @"cornerCount", @"cornerFraction", @"straightTangentLength", @"straightTangentDirection", @"diagonalTangentLength", @"diagonalTangentDirection", @"midPointsDistance", @"thickness", @"thickenedCorner", @"rotation"];
 	// twoLines, strokeThickness left out
 }
 
@@ -124,8 +122,8 @@
 		return nil;
 	}
 	
-	return [NSDictionary dictionaryWithObjectsAndKeys:	[NSNumber numberWithFloat: min], @"minValue",
-			[NSNumber numberWithFloat: max], @"maxValue", nil];
+	return @{@"minValue": [NSNumber numberWithFloat: min],
+			@"maxValue": [NSNumber numberWithFloat: max]};
 }
 
 

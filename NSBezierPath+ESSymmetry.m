@@ -16,13 +16,13 @@
 	// outer and inner path
 	NSBezierPath * path = [NSBezierPath bezierPathWithDictionary:dict size:s cornerDelta: 0.0];	
 
-	if ([[dict objectForKey:@"twoLines"] boolValue]) {
-		CGFloat thickness = [[dict objectForKey:@"thickness"] floatValue];
-		CGFloat cornerDelta = [[dict objectForKey:@"thickenedCorner"] floatValue];
+	if ([dict[@"twoLines"] boolValue]) {
+		CGFloat thickness = [dict[@"thickness"] floatValue];
+		CGFloat cornerDelta = [dict[@"thickenedCorner"] floatValue];
 		NSBezierPath * path2 = [NSBezierPath bezierPathWithDictionary:dict size:s * (1-thickness) 
 														  cornerDelta:cornerDelta ];
 		// compound path
-		[path appendBezierPath:[path2 bezierPathByReversingPath]];
+		[path appendBezierPath:path2.bezierPathByReversingPath];
 	}
 	
 	return path;
@@ -32,12 +32,12 @@
 
 + (NSBezierPath*) bezierPathWithDictionary: (NSDictionary*) dict size: (CGFloat) size cornerDelta: (CGFloat) cornerDelta{
 	// gather the values we need
-	NSUInteger corners = [[dict objectForKey:@"cornerCount"] unsignedIntValue];
-	CGFloat cF =  ([[dict objectForKey:@"cornerFraction"] floatValue] - cornerDelta) * sqrt(2.0);
-	CGFloat sTL = [[dict objectForKey:@"straightTangentLength"] floatValue];
-	CGFloat sTD = [[dict objectForKey:@"straightTangentDirection"] floatValue];
-	CGFloat dTL = [[dict objectForKey:@"diagonalTangentLength"] floatValue];
-	CGFloat dTD = [[dict objectForKey:@"diagonalTangentDirection"] floatValue];
+	NSUInteger corners = [dict[@"cornerCount"] unsignedIntValue];
+	CGFloat cF =  ([dict[@"cornerFraction"] floatValue] - cornerDelta) * sqrt(2.0);
+	CGFloat sTL = [dict[@"straightTangentLength"] floatValue];
+	CGFloat sTD = [dict[@"straightTangentDirection"] floatValue];
+	CGFloat dTL = [dict[@"diagonalTangentLength"] floatValue];
+	CGFloat dTD = [dict[@"diagonalTangentDirection"] floatValue];
 	CGFloat midPointsDistance = [[dict valueForKey:@"midPointsDistance"] floatValue];
 	BOOL twoMidPoints = [[dict valueForKey:@"twoMidPoints"] boolValue];
 	CGFloat phi = 2.0 * M_PI / corners;
@@ -135,10 +135,10 @@
 
 + (NSData*) PDFDataForDictionary: (NSDictionary *) dict {
 	CGFloat radius = 100.0;
-	CGFloat shapeSize = [[dict objectForKey:@"size"] floatValue];
-	CGFloat strokeThickness = [[dict objectForKey:@"strokeThickness"] floatValue] * radius / shapeSize / 10.0;
+	CGFloat shapeSize = [dict[@"size"] floatValue];
+	CGFloat strokeThickness = [dict[@"strokeThickness"] floatValue] * radius / shapeSize / 10.0;
 	NSBezierPath * bP = [NSBezierPath bezierPathWithDictionary:dict size:radius] ;
-	NSRect pathBounds = [bP bounds];
+	NSRect pathBounds = bP.bounds;
 	CGFloat pdfSizeX = pathBounds.size.width + strokeThickness * 2.0 * 4.0;
 	CGFloat pdfSizeY = pathBounds.size.height + strokeThickness * 2.0 * 4.0;
 	CGRect boundingRect = CGRectMake(0.0, 0.0, pdfSizeX, pdfSizeY);
@@ -160,12 +160,12 @@
 	[NSGraphicsContext setCurrentContext:graphicsContext];
 	
 	// draw
-	if ([[dict objectForKey:@"twoLines"] boolValue]) {
-		[(NSColor*) [dict objectForKey:@"fillColor"] set];
+	if ([dict[@"twoLines"] boolValue]) {
+		[(NSColor*) dict[@"fillColor"] set];
 		[bP fill];
 	}
-	[(NSColor*) [dict objectForKey:@"strokeColor"] set];
-	[bP setLineWidth: strokeThickness];
+	[(NSColor*) dict[@"strokeColor"] set];
+	bP.lineWidth = strokeThickness;
 	[bP stroke];
 	
 	[NSGraphicsContext restoreGraphicsState];

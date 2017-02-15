@@ -28,18 +28,18 @@
 - (IBAction) bogusAction: (id) sender;
 
 - (void) readme:(id) sender;
-- (NSString *) myVersionString;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString *myVersionString;
 
 - (IBAction) orderFrontStandardAboutPanel:(id)sender;
 @end
 
 
 @interface AppDelegate (ESLicensingKeyProvider)
-- (NSString *) publicKey;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString *publicKey;
 @end
 
 @interface AppDelegate (ESLicensingErrorButtons)
-- (NSArray*) licenseFailureRecoveryButtons;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSArray *licenseFailureRecoveryButtons;
 @end
 
 

@@ -21,7 +21,7 @@
 
 #pragma mark DELEGATE METHODS
 - (void)applicationWillFinishLaunching:(NSNotification *)aNotification {
-	[[NSDocumentController sharedDocumentController] setAutosavingDelay:10.0];
+	[NSDocumentController sharedDocumentController].autosavingDelay = 10.0;
 	srandomdev();
 }
 
@@ -32,7 +32,7 @@
 
 	if (launchCount < 10) {
 		// not a long time user
-		MyDocument * doc = [[NSDocumentController sharedDocumentController] currentDocument];
+		MyDocument * doc = [NSDocumentController sharedDocumentController].currentDocument;
 		if (! doc.fileURL) {
 			// the document is an untitled one (we didn't launch by opening an existing file)
 			[doc intro];
@@ -49,7 +49,7 @@
 - (BOOL) useCoreAnimation {
 	NSNumber * n = [[NSUserDefaults standardUserDefaults] valueForKey:@"useCoreAnimation"];
 	if (n) {
-		return [n boolValue];
+		return n.boolValue;
 	} 
 	else {
 		return YES;
@@ -57,13 +57,13 @@
 }
 
 - (void) setUseCoreAnimation: (BOOL) newValue {
-	[[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:newValue] forKey:@"useCoreAnimation"];
+	[[NSUserDefaults standardUserDefaults] setValue:@(newValue) forKey:@"useCoreAnimation"];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 
 - (NSDocument*) firstDocument {
-	return (NSDocument*) [[NSDocumentController sharedDocumentController] currentDocument];
+	return (NSDocument*) [NSDocumentController sharedDocumentController].currentDocument;
 }
 
 
@@ -74,17 +74,17 @@
 
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
-	if ([menuItem tag] == 100) {
+	if (menuItem.tag == 100) {
 		// NSLog(@"AppDelegate -validateMenuItem: slider");
 		// menu item with slider
-		const NSSlider * slider = [menuItem.view.subviews objectAtIndex:0];
+		const NSSlider * slider = (menuItem.view.subviews)[0];
 		[slider setEnabled:NO];
-		[slider setFloatValue:0.0];
+		slider.floatValue = 0.0;
 		return NO;
 	}	
-	else if ([menuItem action] == @selector(demo:)) {
+	else if (menuItem.action == @selector(demo:)) {
 		// demo menu item, change text to reflect current state
-		if (![self demoIsRunning]) {
+		if (!self.demoIsRunning) {
 			menuItem.title = NSLocalizedString(@"Start Demo", @"Show Demo");
 			// NSLog(@"[AppDelegate validateMenuItem:] new name is %@",  NSLocalizedString(@"Start Demo", @"Show Demo"));
 		}
@@ -101,7 +101,7 @@
 - (BOOL) demoIsRunning {
 	BOOL isRunning = NO;
 
-	for (MyDocument * doc in [[NSDocumentController sharedDocumentController] documents]) {
+	for (MyDocument * doc in [NSDocumentController sharedDocumentController].documents) {
 		isRunning = isRunning || doc.runningDemo;
 	}
 	// NSLog(@"[AppDelegate demoIsRunning] -> %i", isRunning);
@@ -117,7 +117,7 @@
 		// stop demo
 		
 		MyDocument * doc;
-		for (doc in [[NSDocumentController sharedDocumentController] documents]) {
+		for (doc in [NSDocumentController sharedDocumentController].documents) {
 			if (doc.runningDemo) {
 				[doc.myView endDemo:sender];
 				break;
@@ -215,7 +215,7 @@
 	
 	NSAttributedString * HTMLString = [[NSAttributedString alloc] initWithHTML:[HTML dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:nil];
 	
-	NSDictionary * options = [NSDictionary dictionaryWithObjectsAndKeys:HTMLString, @"Credits", nil];
+	NSDictionary * options = @{@"Credits": HTMLString};
 	[NSApp orderFrontStandardAboutPanelWithOptions:options];
 }
 

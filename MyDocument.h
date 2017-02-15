@@ -92,8 +92,8 @@
 @property (readonly) CGFloat bitmapSize;
 
 
-- (id) init;
-- (id) initWithDictionary: (NSDictionary*) dict;
+- (instancetype) init;
+- (instancetype) initWithDictionary: (NSDictionary*) dict NS_DESIGNATED_INITIALIZER;
 - (NSDictionary*) dictionary;
 - (void) setValuesFromDictionary: (NSDictionary*) dict;
 

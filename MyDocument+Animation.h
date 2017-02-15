@@ -19,7 +19,7 @@
 - (IBAction) animateFullScreen:(id) sender;
 - (IBAction) stopAnimation:(id) sender;
 
-- (NSArray*) animationKeys;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSArray *animationKeys;
 - (NSDictionary *) valueRangeForKey: (NSString *) key currentValue: (CGFloat) currentValue;
 
 

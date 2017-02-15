@@ -22,14 +22,14 @@
 
 # pragma mark HOUSEKEEPING
 
-- (id)init
+- (instancetype)init
 {
     return [self initWithDictionary:[self.class initialValues]];
 }
 
 
 
-- (id) initWithDictionary: (NSDictionary <NSString *, id> *) dict {
+- (instancetype) initWithDictionary: (NSDictionary <NSString *, id> *) dict {
 	self = [super init];
 	if (self) {
 		NSDictionary * defaults = [self.class initialValues];
@@ -48,25 +48,25 @@
 
 
 + (NSDictionary <NSString *, id> *) initialValues {
-	return [NSDictionary dictionaryWithObjectsAndKeys: 
-			[NSNumber numberWithFloat: 0.6], @"size",
-			[NSNumber numberWithInt:4], @"cornerCount",
-			[NSNumber numberWithFloat: 0.71], @"cornerFraction",
-			[NSNumber numberWithFloat: 0.5], @"midPointsDistance",
-			[NSNumber numberWithFloat: 0.8], @"straightTangentLength",
-			[NSNumber numberWithFloat: 0.0], @"straightTangentDirection",
-			[NSNumber numberWithFloat: 0.07], @"diagonalTangentLength",
-			[NSNumber numberWithFloat: 1.0], @"diagonalTangentDirection",
-			[NSNumber numberWithFloat: 0.2], @"thickness",
-			[NSNumber numberWithFloat: 0.01], @"thickenedCorner",
-			[NSNumber numberWithBool:YES ], @"twoMidPoints",
-			[NSNumber numberWithBool:YES ], @"twoLines",
-			[NSNumber numberWithFloat: 0.141], @"strokeThickness",
-			[NSColor whiteColor], @"backgroundColor",
-			[NSColor blackColor], @"strokeColor",
-			[NSColor lightGrayColor], @"fillColor",
-			[NSNumber numberWithUnsignedInt: 1 ], @"showHandles",
-			nil];
+	return @{
+			 @"size": @0.6f,
+			 @"cornerCount": @4,
+			 @"cornerFraction": @0.71f,
+			 @"midPointsDistance": @0.5f,
+			 @"straightTangentLength": @0.8f,
+			 @"straightTangentDirection": @0.0f,
+			 @"diagonalTangentLength": @0.07f,
+			 @"diagonalTangentDirection": @1.0f,
+			 @"thickness": @0.2f,
+			 @"thickenedCorner": @0.01f,
+			 @"twoMidPoints": @YES,
+			 @"twoLines": @YES,
+			 @"strokeThickness": @0.141f,
+			 @"backgroundColor": [NSColor whiteColor],
+			 @"strokeColor": [NSColor blackColor],
+			 @"fillColor": [NSColor lightGrayColor],
+			 @"showHandles": @1U
+			 };
 }
 
 
@@ -82,9 +82,9 @@
 
 - (NSDictionary*) dictionary {
 	NSDictionary * initialValues = [self.class initialValues];
-	NSMutableDictionary * valueDictionary = [NSMutableDictionary dictionaryWithCapacity:[initialValues count]];
+	NSMutableDictionary * valueDictionary = [NSMutableDictionary dictionaryWithCapacity:initialValues.count];
 	for (NSString * key in initialValues) {
-		[valueDictionary setObject: [self valueForKey:key] forKey: key];
+		valueDictionary[key] = [self valueForKey:key];
 	}		
 	return valueDictionary;
 }
@@ -93,13 +93,13 @@
 
 - (NSDictionary*) plistDictionary {
 	NSDictionary * initialValues = [self.class initialValues];
-	NSMutableDictionary * valueDictionary = [NSMutableDictionary dictionaryWithCapacity:[initialValues count]];
+	NSMutableDictionary * valueDictionary = [NSMutableDictionary dictionaryWithCapacity:initialValues.count];
 	for (NSString * key in initialValues) {
 		NSObject * object = [self valueForKey:key];
 		if ([object isKindOfClass:[NSColor class]]) {
 			object = [NSArchiver archivedDataWithRootObject:object];
 		}
-		[valueDictionary setObject:object  forKey: key];
+		valueDictionary[key] = object;
 	}		
 	return valueDictionary;
 }
@@ -109,8 +109,8 @@
 - (void) setValuesFromDictionary: (NSDictionary*) dict {
 	NSDictionary * defaultValues = [self.class initialValues];
 	for (NSString * key in dict) {
-		if ([defaultValues objectForKey:key]) {
-			[self setValue:[dict objectForKey:key] forKey:key];
+		if (defaultValues[key]) {
+			[self setValue:dict[key] forKey:key];
 		}
 	}
 }
@@ -128,7 +128,7 @@
 	Allegedly this should be obvious from the Info.plist, but that didn't work…
 */
 + (NSArray*) writableTypes {
-	return [NSArray arrayWithObjects: ESSYM_SYMMETRY_UTI, kUTTypePDF, nil];
+	return @[ESSYM_SYMMETRY_UTI, (id)kUTTypePDF];
 }
 
 
@@ -206,8 +206,8 @@
 	if ([typeName isEqualToString:ESSYM_SYMMETRY_UTI]) {
 		NSMutableDictionary *myDict= [NSMutableDictionary dictionaryWithDictionary: [super fileAttributesToWriteToURL:absoluteURL ofType:typeName forSaveOperation:saveOperation originalContentsURL:absoluteOriginalContentsURL error:outError]];
 									  
-		[myDict setObject:[NSNumber numberWithLong:'esRR'] forKey:NSFileHFSCreatorCode];
-		[myDict setObject:[NSNumber numberWithLong:'esRR'] forKey:NSFileHFSTypeCode];
+		myDict[NSFileHFSCreatorCode] = [NSNumber numberWithLong:'esRR'];
+		myDict[NSFileHFSTypeCode] = [NSNumber numberWithLong:'esRR'];
 	
 	return myDict;
 	}
@@ -226,14 +226,14 @@
 		NSDictionary * initialValues = [self.class initialValues];
 		NSObject * object;
 		for (NSString * key in initialValues) {
-			if ((object = [dict objectForKey:key])) {
+			if ((object = dict[key])) {
 				if ([object isKindOfClass: [NSData class]]) { // unarchive NSColor objects
 					object = [NSUnarchiver unarchiveObjectWithData: (NSData*) object];
 				}				
 				[self setValue: object forKey: key];
 			}
 			else {
-				[self setValue: [initialValues objectForKey:key] forKey:key];
+				[self setValue: initialValues[key] forKey:key];
 			}
 		}				
 	}
@@ -266,8 +266,8 @@
 	// NSLog(@"[MyDocument observeValueForKeyPath: %@ ...]", keyPath);
 	 if ([object isEqual:self]) {
 		 [self.myView setNeedsDisplay:YES];
-		 NSNumber * oldNumber = [change objectForKey:NSKeyValueChangeOldKey];
-		 NSNumber * newNumber = [change objectForKey:NSKeyValueChangeNewKey];
+		 NSNumber * oldNumber = change[NSKeyValueChangeOldKey];
+		 NSNumber * newNumber = change[NSKeyValueChangeNewKey];
 		 if ([keyPath isEqualToString:@"cornerCount"]) {
 			 if (![newNumber isEqualToNumber:oldNumber]) {
 				 [self.myView updateCursor];
@@ -275,14 +275,14 @@
 		 }
 		 else if ([keyPath isEqualToString:@"size"]) {
 			 if (![newNumber isEqualToNumber:oldNumber]) {
-				 if ([newNumber floatValue] == ESSYM_SIZE_MIN || [newNumber floatValue] == ESSYM_SIZE_MAX || [oldNumber floatValue] == ESSYM_SIZE_MIN || [oldNumber floatValue] == ESSYM_SIZE_MAX ) {
+				 if (newNumber.floatValue == ESSYM_SIZE_MIN || newNumber.floatValue == ESSYM_SIZE_MAX || oldNumber.floatValue == ESSYM_SIZE_MIN || oldNumber.floatValue == ESSYM_SIZE_MAX ) {
 					 [self.myView updateCursor];
 				 }
 			 }
 		 }
 		 else if ([keyPath isEqualToString:@"cornerFraction"]) {
 			 if (![newNumber isEqualToNumber:oldNumber]) {
-				 if ([newNumber floatValue] == ESSYM_CORNERFRACTION_MIN || [newNumber floatValue] == ESSYM_CORNERFRACTION_MAX || [oldNumber floatValue] == ESSYM_CORNERFRACTION_MIN || [oldNumber floatValue] == ESSYM_CORNERFRACTION_MAX ) {
+				 if (newNumber.floatValue == ESSYM_CORNERFRACTION_MIN || newNumber.floatValue == ESSYM_CORNERFRACTION_MAX || oldNumber.floatValue == ESSYM_CORNERFRACTION_MIN || oldNumber.floatValue == ESSYM_CORNERFRACTION_MAX ) {
 					 [self.myView updateCursor];
 				 }
 			 }
@@ -290,27 +290,27 @@
 		 else if ([keyPath isEqualToString:@"midPointsDistance"]) {
 			 if (![newNumber isEqualToNumber:oldNumber]) {
 				 // NSLog(@"%@", newNumber);
-				 if ([newNumber floatValue] == ESSYM_MIDPOINTSDISTANCE_MIN || [newNumber floatValue] == ESSYM_MIDPOINTSDISTANCE_MAX || [oldNumber floatValue] == ESSYM_MIDPOINTSDISTANCE_MIN || [oldNumber floatValue] == ESSYM_MIDPOINTSDISTANCE_MAX ) {
+				 if (newNumber.floatValue == ESSYM_MIDPOINTSDISTANCE_MIN || newNumber.floatValue == ESSYM_MIDPOINTSDISTANCE_MAX || oldNumber.floatValue == ESSYM_MIDPOINTSDISTANCE_MIN || oldNumber.floatValue == ESSYM_MIDPOINTSDISTANCE_MAX ) {
 					 [self.myView updateCursor];
 				 }
 			 }
 		 }
 		 else if ([keyPath isEqualToString:@"thickness"]) {
 			 if (![newNumber isEqualToNumber:oldNumber]) {
-				 if ([newNumber floatValue] == ESSYM_THICKNESS_MIN || [newNumber floatValue] == ESSYM_THICKNESS_MAX || [oldNumber floatValue] == ESSYM_THICKNESS_MIN || [oldNumber floatValue] == ESSYM_THICKNESS_MAX ) {
+				 if (newNumber.floatValue == ESSYM_THICKNESS_MIN || newNumber.floatValue == ESSYM_THICKNESS_MAX || oldNumber.floatValue == ESSYM_THICKNESS_MIN || oldNumber.floatValue == ESSYM_THICKNESS_MAX ) {
 					 [self.myView updateCursor];
 				 }
 			 }
 		 }
 		 else if ([keyPath isEqualToString:@"thickenedCorner"]) {
 			 if (![newNumber isEqualToNumber:oldNumber]) {
-				 if ([newNumber floatValue] == ESSYM_THICKENEDCORNER_MIN || [newNumber floatValue] == ESSYM_THICKENEDCORNER_MAX || [oldNumber floatValue] == ESSYM_THICKENEDCORNER_MIN || [oldNumber floatValue] == ESSYM_THICKENEDCORNER_MAX ) {
+				 if (newNumber.floatValue == ESSYM_THICKENEDCORNER_MIN || newNumber.floatValue == ESSYM_THICKENEDCORNER_MAX || oldNumber.floatValue == ESSYM_THICKENEDCORNER_MIN || oldNumber.floatValue == ESSYM_THICKENEDCORNER_MAX ) {
 					 [self.myView updateCursor];
 				 }
 			 }
 		 }
 		 else if ([keyPath isEqualToString:@"strokeThickness"]) {
-			 self.previousStrokeThickness = [[change objectForKey:NSKeyValueChangeOldKey] floatValue];
+			 self.previousStrokeThickness = [change[NSKeyValueChangeOldKey] floatValue];
 		 }
 		 else if ([keyPath isEqualToString:@"backgroundColor"]) {
 			 self.myView.layer.backgroundColor = (__bridge CGColorRef) self.backgroundColor;
@@ -328,7 +328,7 @@
 
 
 - (BOOL) runningAnimation {
-	return [self.totalAnimation isAnimating];
+	return self.totalAnimation.animating;
 }
 
 
@@ -463,15 +463,15 @@
 #pragma mark PRINTING
 
 - (void)printDocumentUsingPrintPanel:(BOOL)uiFlag {
-	NSPrintInfo * pI = [self printInfo];
+	NSPrintInfo * pI = self.printInfo;
 	[pI setHorizontallyCentered:YES];
 	[pI setVerticallyCentered:YES];
-	[pI setHorizontalPagination:NSFitPagination];
-	[pI setVerticalPagination:NSFitPagination];
+	pI.horizontalPagination = NSFitPagination;
+	pI.verticalPagination = NSFitPagination;
 	
-	NSPrintOperation *op = [NSPrintOperation printOperationWithView:myView printInfo:[self printInfo]];
-	[op setShowsPrintPanel:uiFlag];
-	[op runOperationModalForWindow:[self windowForSheet] delegate:nil didRunSelector:NULL contextInfo:NULL];
+	NSPrintOperation *op = [NSPrintOperation printOperationWithView:myView printInfo:self.printInfo];
+	op.showsPrintPanel = uiFlag;
+	[op runOperationModalForWindow:self.windowForSheet delegate:nil didRunSelector:NULL contextInfo:NULL];
 }
 
 - (void)printDocument:(id)sender {
@@ -479,10 +479,10 @@
 }
 
 - (void)runPageLayout:(id)sender {
-	NSPrintInfo *tempPrintInfo = [[self printInfo] copy];
+	NSPrintInfo *tempPrintInfo = [self.printInfo copy];
 	NSPageLayout *pageLayout = [NSPageLayout pageLayout];
 	[pageLayout beginSheetWithPrintInfo:tempPrintInfo
-						 modalForWindow:[self windowForSheet]
+						 modalForWindow:self.windowForSheet
 							   delegate:self
 						 didEndSelector:@selector(didEndPageLayout:returnCode:contextInfo:)
 							contextInfo:(void *)tempPrintInfo];
@@ -491,7 +491,7 @@
 - (void)didEndPageLayout:(NSPageLayout *)pageLayout returnCode:(int)result contextInfo:(void *)contextInfo {
 	NSPrintInfo *tempPrintInfo = (__bridge NSPrintInfo *)contextInfo;
 	if (result == NSModalResponseOK) {
-		[self setPrintInfo:tempPrintInfo];
+		self.printInfo = tempPrintInfo;
 	}
 }
 
@@ -521,7 +521,7 @@
 	if (menuItem.action == @selector(exportAsPDF:)) {
 		return YES;
 	}
-	else if ([menuItem action] == @selector(setHandles:)) {
+	else if (menuItem.action == @selector(setHandles:)) {
 		if (self.runningDemo) {
 			// cannot change handle setting while demo is running
 			menuItem.toolTip = NSLocalizedString(@"This setting cannot be changed while the Demo is running.", @"This setting cannot be changed while the Demo is running");
@@ -529,25 +529,25 @@
 		}
 		else {
 			menuItem.toolTip = @"";
-			if ([menuItem tag] == self.showHandles) {
-				[menuItem setState:NSOnState];
+			if (menuItem.tag == self.showHandles) {
+				menuItem.state = NSOnState;
 			}
 			else {
-				[menuItem setState:NSOffState];
+				menuItem.state = NSOffState;
 			}
 			return YES; // menu item is always active
 		}
 	}
-	else if ([menuItem action] == @selector(twoMiddlePoints:)) {
-		[menuItem setState:self.twoMidPoints];
+	else if (menuItem.action == @selector(twoMiddlePoints:)) {
+		menuItem.state = self.twoMidPoints;
 		if (self.runningDemo) {
 			menuItem.toolTip = NSLocalizedString(@"This setting cannot be changed while the Demo is running.", @"This setting cannot be changed while the Demo is running");
 			return NO;
 		}
 		menuItem.toolTip = @"";
 	}
-	else if ([menuItem action] == @selector(twoLines:)) {
-		[menuItem setState:self.twoLines];
+	else if (menuItem.action == @selector(twoLines:)) {
+		menuItem.state = self.twoLines;
 		if (self.runningDemo) {
 			menuItem.toolTip = NSLocalizedString(@"This setting cannot be changed while the Demo is running.", @"This setting cannot be changed while the Demo is running");
 			return NO;
@@ -557,7 +557,7 @@
 	else if (menuItem.tag == 100) {
 		// menu item with slider
 		// NSLog(@"MyDocument -validateMenuItem: slider");
-		NSSlider * slider = [menuItem.view.subviews objectAtIndex:0];
+		NSSlider * slider = (menuItem.view.subviews)[0];
 		if (self.runningDemo) {
 			[slider setEnabled:NO];
 			menuItem.toolTip = NSLocalizedString(@"This setting cannot be changed while the Demo is running.", @"This setting cannot be changed while the Demo is running");
@@ -566,7 +566,7 @@
 			[slider setEnabled:YES];
 			menuItem.toolTip = @"";
 		}
-		[slider setFloatValue:self.strokeThickness]; // binding this is more complicated than code
+		slider.floatValue = self.strokeThickness; // binding this is more complicated than code
 		menuItem.menu.delegate = self; // need this to know when the menu has closed
 	}
 	else if (menuItem.action == @selector(animate:) || menuItem.action == @selector(spaceOut:) ) {
@@ -614,7 +614,7 @@
 
 - (IBAction) twoMiddlePoints: (id) sender {
 	if ([sender isKindOfClass:[NSMenuItem class]]) {
-		[self.undoManager registerUndoWithTarget:self selector:@selector(setValuesForUndoFromDictionary:) object:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:self.twoMidPoints] forKey:@"twoMidPoints"]];
+		[self.undoManager registerUndoWithTarget:self selector:@selector(setValuesForUndoFromDictionary:) object:@{@"twoMidPoints": @(self.twoMidPoints)}];
 		self.twoMidPoints = !self.twoMidPoints;
 	}		
 }
@@ -622,7 +622,7 @@
 
 - (IBAction) twoLines: (id) sender {
 	if ([sender isKindOfClass:[NSMenuItem class]]) {
-		[self.undoManager registerUndoWithTarget:self selector:@selector(setValuesForUndoFromDictionary:) object:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:self.twoLines] forKey:@"twoLines"]];
+		[self.undoManager registerUndoWithTarget:self selector:@selector(setValuesForUndoFromDictionary:) object:@{@"twoLines": @(self.twoLines)}];
 		self.twoLines = !self.twoLines;
 	}		
 }
@@ -632,14 +632,14 @@
 	if ([sender isKindOfClass:[NSMenuItem class]]) {
 		NSSavePanel * savePanel = [NSSavePanel savePanel];
 		savePanel.prompt = NSLocalizedString(@"Export", @"Export as PDF");
-        [savePanel setAllowedFileTypes:[NSArray arrayWithObject:@"pdf"]];
+        savePanel.allowedFileTypes = @[@"pdf"];
 		[savePanel beginSheetModalForWindow:self.windowForSheet completionHandler:^(NSInteger returnCode) {
 			if (returnCode == NSModalResponseOK) {
 				NSError * myError = nil;
 				[self writeToURL:savePanel.URL ofType:(NSString *)kUTTypePDF error:&myError];
 				if (myError) {
 					NSBeep();
-					NSLog(@"exportSavePanelDidEnd PDF writing failed (%@)", [myError description]);
+					NSLog(@"exportSavePanelDidEnd PDF writing failed (%@)", myError.description);
 				}
 			}
 		}];
@@ -648,7 +648,7 @@
 
 
 - (IBAction) sliderMoved: (id) sender {
-	NSDictionary * strokeThicknessDict = [NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:self.previousStrokeThickness]	forKey:@"strokeThickness"];
+	NSDictionary * strokeThicknessDict = @{@"strokeThickness": [NSNumber numberWithFloat:self.previousStrokeThickness]};
 	if (!self.strokeThicknessRecentChange) {
 		// start new undo group if haven't got one already
 		[self.undoManager beginUndoGrouping];

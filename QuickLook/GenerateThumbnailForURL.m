@@ -10,7 +10,7 @@ OSStatus DrawStuff(CFURLRef url, CGFloat size) {
 	if (theDict) {
 		NSBezierPath * thePath = [NSBezierPath bezierPathWithDictionary:theDict size:1.0];
 		NSRect pathBounds = thePath.bounds;		
-		CGFloat mainStrokeThickness = [[theDict objectForKey:@"strokeThickness"] floatValue] * size / 2. / 10.;
+		CGFloat mainStrokeThickness = [theDict[@"strokeThickness"] floatValue] * size / 2. / 10.;
 		CGFloat haloStrokeThickness = mainStrokeThickness + 3. ;
 		CGFloat maxSize =  MAX(MAX(MAX(pathBounds.size.width, pathBounds.size.height), 2. * fabs(pathBounds.origin.x)), fabs(pathBounds.origin.y));
 
@@ -29,7 +29,7 @@ OSStatus DrawStuff(CFURLRef url, CGFloat size) {
 		[thePath stroke];
 		
 		// draw path
-		if ([[theDict objectForKey:@"twoLines"] boolValue]) {
+		if ([theDict[@"twoLines"] boolValue]) {
 			[[NSColor lightGrayColor] set];
 			[thePath fill];
 		}

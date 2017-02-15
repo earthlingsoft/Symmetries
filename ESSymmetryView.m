@@ -51,7 +51,7 @@
 @synthesize spaceOut;
 
 
-- (id)initWithFrame:(NSRect)frame {
+- (instancetype)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code here.
@@ -63,7 +63,7 @@
 - (void) frameChanged: (NSNotification*) ignored {
 	//NSLog(@"framechange");
 	[CATransaction begin];
-	[CATransaction setValue:[NSNumber numberWithFloat:0.0] forKey:kCATransactionAnimationDuration];
+	[CATransaction setValue:@0.0f forKey:kCATransactionAnimationDuration];
 	
 	CGRect newBounds = NSRectToCGRect(self.bounds);
 	
@@ -75,7 +75,7 @@
 
 		for (CALayer * layer in self.demoLayer.sublayers) {
 			layer.bounds = newBounds;
-			NSInteger nr = [[[layer.name componentsSeparatedByString:@"-"] objectAtIndex:1] intValue];
+			NSInteger nr = [layer.name componentsSeparatedByString:@"-"][1].intValue;
 			if (nr < self.currentDemoStep) { layer.position = CGPointMake( -newBounds.size.width , 0.0); }
 			else if (nr > self.currentDemoStep) {layer.position = CGPointMake(newBounds.size.width, 0.0);}
 		}
@@ -230,7 +230,7 @@
 	//NSLog(@"mouseUp");
 
 	// handle double (multiple) clicks
-	if ([event clickCount] > 1) {
+	if (event.clickCount > 1) {
 		// a multi-click
 		if ([TAName isEqualToString:@"midPoint"]) {
 			theDocument.twoMidPoints = !theDocument.twoMidPoints;
@@ -253,7 +253,7 @@
 
 
 - (void) mouseDragged: (NSEvent*) event {
-	NSPoint realMouseLocation = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
+	NSPoint realMouseLocation = [self convertPoint:(self.window).mouseLocationOutsideOfEventStream fromView:nil];
 
 	if (self.clickedPointName != nil) {
 		// we want to follow this click
@@ -261,7 +261,7 @@
 		//NSLog(@"-mouseDragged after click on %@", TAName);
 		
 		NSPoint mouseLocation = [self.moveFromMiddle transformPoint:realMouseLocation];
-		BOOL stickyValues = !([[NSApp currentEvent] modifierFlags] & NSCommandKeyMask);
+		BOOL stickyValues = !(NSApp.currentEvent.modifierFlags & NSCommandKeyMask);
 		
 		if ([TAName isEqualToString:@"endPoint"]) {
 			CGFloat length = LENGTH(mouseLocation) / self.canvasRadius;
@@ -421,25 +421,25 @@
 #pragma mark MOUSE TRACKING
 
 - (NSString*) trackingAreaNameForMouseLocation {
-	NSPoint mouseLocation = [self convertPoint:[self.window mouseLocationOutsideOfEventStream] fromView:nil];
+	NSPoint mouseLocation = [self convertPoint:(self.window).mouseLocationOutsideOfEventStream fromView:nil];
 	//	NSLog (@"mouse: %f, %f", mouseLocation.x, mouseLocation.y);
 	
-	if ([self point:mouseLocation inRect:[self.endHandleTA rect]]) {
+	if ([self point:mouseLocation inRect:(self.endHandleTA).rect]) {
 		return @"endHandle";
 	}
-	else if ([self point:mouseLocation inRect:[self.midHandleTA rect]]) {
+	else if ([self point:mouseLocation inRect:(self.midHandleTA).rect]) {
 		return @"midHandle";											
 	}
-	else if ([self point:mouseLocation inRect:[self.endPointTA rect]]) {
+	else if ([self point:mouseLocation inRect:(self.endPointTA).rect]) {
 		return @"endPoint";
 	}
-	else if ([self point:mouseLocation inRect:[self.midPointTA rect]]) {
+	else if ([self point:mouseLocation inRect:(self.midPointTA).rect]) {
 		return @"midPoint";
 	}
-	else if ([self point:mouseLocation inRect:[self.widthHandleTA rect]]) {
+	else if ([self point:mouseLocation inRect:(self.widthHandleTA).rect]) {
 		return @"widthHandle";											
 	}
-	else if ([self point:mouseLocation inRect:[self.thickCornerHandleTA rect]]) {
+	else if ([self point:mouseLocation inRect:(self.thickCornerHandleTA).rect]) {
 		return @"thickCornerHandle";											
 	}
 	return nil;
@@ -653,13 +653,13 @@
 
 - (NSArray *)namesOfPromisedFilesDroppedAtDestination:(NSURL *)dropDestination {
 	//NSLog(@"namesOfPromisedFilesDroppedAtDestination");
-	if ([dropDestination isFileURL]) {
-		NSString * folderName = [dropDestination path];
+	if (dropDestination.fileURL) {
+		NSString * folderName = dropDestination.path;
 		NSString * fileName;
 		NSString * fileNameExtension = @"pdf";
 		NSURL * documentURL = self.theDocument.fileURL;
-		if (documentURL && [documentURL isFileURL]) {
-			fileName = [[documentURL.path lastPathComponent] stringByDeletingPathExtension];
+		if (documentURL && documentURL.fileURL) {
+			fileName = documentURL.path.lastPathComponent.stringByDeletingPathExtension;
 		}
 		else {
 			fileName = @"Symmetry";
@@ -686,7 +686,7 @@
 			return nil;
 		}
 		else {
-			return [NSArray arrayWithObject:fullName];
+			return @[fullName];
 		}
 	}
 	else {
@@ -770,7 +770,7 @@
 				[aString addAttribute:NSFontAttributeName value:lucidaGrande range:wholeString];
 				[aString addAttribute:NSForegroundColorAttributeName value:self.guideColor range:wholeString];
 				NSMutableParagraphStyle * myParagraphStyle = [[NSMutableParagraphStyle alloc] init];
-				[myParagraphStyle setAlignment: NSRightTextAlignment];
+				myParagraphStyle.alignment = NSRightTextAlignment;
 				[aString addAttribute:NSParagraphStyleAttributeName value:myParagraphStyle range:wholeString];
 				CGFloat numberDistance;
 				if (self.theDocument.cornerCount < 14) {
@@ -921,7 +921,7 @@
 		//	[image unlockFocus];
 		//	CGImageRef imageRef = [image cgImage];
 			[CATransaction begin];
-			[CATransaction setValue:[NSNumber numberWithFloat:0.0f] forKey:kCATransactionAnimationDuration];
+			[CATransaction setValue:@0.0f forKey:kCATransactionAnimationDuration];
 		//	self.guideLayer.contents = (id) imageRef;
 			self.guideLayer.opacity = 1.0;
 			[CATransaction commit];
@@ -988,7 +988,7 @@
 	rect.origin.y = round(rect.origin.y - 1.0);
 	rect.size.width = HANDLESIZE + HANDLEEXTRATRACKINGSIZE;
 	rect.size.height = HANDLESIZE + HANDLEEXTRATRACKINGSIZE;
-	self.endHandleTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"endHandle" forKey:@"name"]];
+	self.endHandleTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:@{@"name": @"endHandle"}];
 	[self addTrackingArea:self.endHandleTA];
 	
 	rect = NSMakeRect(round(self.midHandle.x - HANDLESIZE * 0.5), 
@@ -1000,7 +1000,7 @@
 	rect.origin.y = round(rect.origin.y - HANDLEEXTRATRACKINGSIZE / 2.0);
 	rect.size.width = HANDLESIZE + HANDLEEXTRATRACKINGSIZE;
 	rect.size.height = HANDLESIZE + HANDLEEXTRATRACKINGSIZE;	
-	self.midHandleTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"midHandle" forKey:@"name"]];	
+	self.midHandleTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:@{@"name": @"midHandle"}];	
 	[self addTrackingArea:self.midHandleTA];
 	[bP fill];
 	
@@ -1021,12 +1021,12 @@
 		
 		[bP moveToPoint:lineStart];
 		[bP lineToPoint:lineEnd];
-		rect = [bP bounds];
+		rect = bP.bounds;
 		rect.origin.x = round(rect.origin.x - lineHandleThickness * 0.5);
 		rect.origin.y = round(rect.origin.y - lineHandleThickness * 0.5);
 		rect.size.width = round(rect.size.width + lineHandleThickness);
 		rect.size.height = round(rect.size.height + lineHandleThickness);
-		self.widthHandleTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"widthHandle" forKey:@"name"]];
+		self.widthHandleTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:@{@"name": @"widthHandle"}];
 		[self addTrackingArea:self.widthHandleTA];
 		
 		// ... thickened corner handle
@@ -1039,12 +1039,12 @@
 		NSBezierPath * bP2 = [NSBezierPath bezierPath];
 		[bP2 moveToPoint:lineStart];
 		[bP2 lineToPoint:lineEnd];
-		rect = [bP2 bounds];
+		rect = bP2.bounds;
 		rect.origin.x = round(rect.origin.x - lineHandleThickness * 0.5);
 		rect.origin.y = round(rect.origin.y - lineHandleThickness * 0.5);
 		rect.size.width = round(rect.size.width + lineHandleThickness);
 		rect.size.height = round(rect.size.height + lineHandleThickness);
-		self.thickCornerHandleTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"thickCornerHandle" forKey:@"name"]];
+		self.thickCornerHandleTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:@{@"name": @"thickCornerHandle"}];
 		[self addTrackingArea:self.thickCornerHandleTA];
 			
 		[bP appendBezierPath:bP2];
@@ -1073,12 +1073,12 @@
 	[bP lineToPoint:NSMakePoint(self.midPoint.x - 0.5 * pSize, self.midPoint.y)];
 	[bP lineToPoint:NSMakePoint(self.midPoint.x, self.midPoint.y - 0.5 * pSize)];
 	[bP closePath];
-	rect = [bP bounds];
+	rect = bP.bounds;
 	rect.origin.x = round(rect.origin.x - HANDLEEXTRATRACKINGSIZE / 2.0);
 	rect.origin.y = round(rect.origin.y - HANDLEEXTRATRACKINGSIZE / 2.0);
 	rect.size.width = round(rect.size.width + HANDLEEXTRATRACKINGSIZE);
 	rect.size.height = round(rect.size.height + HANDLEEXTRATRACKINGSIZE);
-	self.midPointTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"midPoint" forKey:@"name"]];
+	self.midPointTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:@{@"name": @"midPoint"}];
 	[self addTrackingArea:self.midPointTA];
 	
 	if (( [self.clickedPointName isEqualTo:@"midPoint"] && self.theDocument.twoMidPoints)
@@ -1102,7 +1102,7 @@
 	rect.origin.y = round(rect.origin.y - HANDLEEXTRATRACKINGSIZE / 2.0);
 	rect.size.width = round(rect.size.width + HANDLEEXTRATRACKINGSIZE);
 	rect.size.height = round(rect.size.height + HANDLEEXTRATRACKINGSIZE);
-	self.endPointTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:[NSDictionary dictionaryWithObject:@"endPoint" forKey:@"name"]];
+	self.endPointTA = [[NSTrackingArea alloc] initWithRect:rect options:TAoptions owner:self userInfo:@{@"name": @"endPoint"}];
 	[self addTrackingArea:self.endPointTA];
 	[bP fill];
 
@@ -1112,7 +1112,7 @@
 		// put into layer	
 		CGImageRef imageRef = [image cgImage];
 		[CATransaction begin];
-		[CATransaction setValue:[NSNumber numberWithFloat:0.0f] forKey:kCATransactionAnimationDuration];
+		[CATransaction setValue:@0.0f forKey:kCATransactionAnimationDuration];
 		self.handleLayer.contents = (__bridge id) imageRef;
 		self.handleLayer.opacity = 1.0;
 		[CATransaction commit];
@@ -1185,7 +1185,7 @@
 
 	if (theDocument.strokeThickness != 0.0) {
 		[theDocument.strokeColor set];
-		[thePath setLineWidth: theDocument.strokeThickness * self.canvasRadius / 10.0];
+		thePath.lineWidth = theDocument.strokeThickness * self.canvasRadius / 10.0;
 		[thePath stroke];
 	}
 	
@@ -1208,7 +1208,7 @@
 	}
 	
 	// make sure the screen doesn't dim while we are in the foreground or the demo is running, may keep the screen from sleeping while running AppleScript	
-	if ( [NSApp isActive] || self.theDocument.runningDemo) {
+	if ( NSApp.active || self.theDocument.runningDemo) {
 		UpdateSystemActivity(UsrActivity);
 	}
 }
@@ -1337,7 +1337,7 @@
 - (NSPoint) innerEndPoint {
 	NSPoint points[3];
 	NSInteger offset = (theDocument.twoMidPoints) ? (6) : (5);
-	[self.path  elementAtIndex:([self.path elementCount] - offset) associatedPoints:points];
+	[self.path  elementAtIndex:(self.path.elementCount - offset) associatedPoints:points];
 	return points[2];
 }
 

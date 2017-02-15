@@ -34,44 +34,44 @@
 - (void) updateProperties {
 	// NSLog(@"[ESSymmetryTotalAnimation updateProperties]");
 	NSDate * now = [NSDate date];
-	NSTimeInterval nowTI = [now timeIntervalSinceReferenceDate];
+	NSTimeInterval nowTI = now.timeIntervalSinceReferenceDate;
 	
 	for (NSString * key in self.properties.allKeys) {
-		NSMutableDictionary * property = [self.properties objectForKey:key];
+		NSMutableDictionary * property = (self.properties)[key];
 		NSNumber * currentValueNumber = [self.valueObject valueForKey:key];
-		CGFloat currentValue = [currentValueNumber floatValue];
-		NSDate * endTimeDate = [property objectForKey:@"endTime"];
+		CGFloat currentValue = currentValueNumber.floatValue;
+		NSDate * endTimeDate = property[@"endTime"];
 		
 		// recreate animation if it has expired
-		if (!endTimeDate || [endTimeDate timeIntervalSinceReferenceDate] < nowTI) {
+		if (!endTimeDate || endTimeDate.timeIntervalSinceReferenceDate < nowTI) {
 			NSDictionary * minMax = [self.valueObject valueRangeForKey:key currentValue:currentValue];
 			CGFloat min, max;
 			NSNumber * value;
-			(value = [minMax objectForKey:@"minValue"]) ? (min = [value floatValue]) : (min = 0.0);
-			(value = [minMax objectForKey:@"maxValue"]) ? (max = [value floatValue]) : (max = 1.0);
+			(value = minMax[@"minValue"]) ? (min = value.floatValue) : (min = 0.0);
+			(value = minMax[@"maxValue"]) ? (max = value.floatValue) : (max = 1.0);
 			
 			CGFloat newTarget = [self randomFloatBetween:min and:max];
-			NSNumber * newTargetNumber = [NSNumber numberWithFloat: newTarget];
+			NSNumber * newTargetNumber = @(newTarget);
 			NSDate * newEndTime = [now dateByAddingTimeInterval:[self randomFloatBetween: 3.0 and: 15.0]]; //[endTimeDate addTimeInterval:[self randomFloatBetween: 3.0 and: 15.0]];
 
-			[property setObject:now forKey:@"startTime"];
-			[property setObject:newEndTime forKey:@"endTime"];
-			[property setObject:currentValueNumber forKey:@"startValue"];
-			[property setObject:newTargetNumber forKey:@"endValue"];
+			property[@"startTime"] = now;
+			property[@"endTime"] = newEndTime;
+			property[@"startValue"] = currentValueNumber;
+			property[@"endValue"] = newTargetNumber;
 			// NSLog(@" new target in %f\" for %@: %@", [newEndTime timeIntervalSinceReferenceDate] - nowTI, key, newTargetNumber);
 		}
 		
-		NSTimeInterval startTime = [(NSDate*)[property objectForKey:@"startTime"] timeIntervalSinceReferenceDate];
-		NSTimeInterval endTime = [(NSDate*)[property objectForKey:@"endTime"] timeIntervalSinceReferenceDate];		
-		CGFloat startValue = [(NSNumber*)[property objectForKey:@"startValue"] floatValue];
-		CGFloat endValue = [(NSNumber*)[property objectForKey:@"endValue"] floatValue];		
+		NSTimeInterval startTime = ((NSDate*)property[@"startTime"]).timeIntervalSinceReferenceDate;
+		NSTimeInterval endTime = ((NSDate*)property[@"endTime"]).timeIntervalSinceReferenceDate;		
+		CGFloat startValue = ((NSNumber*)property[@"startValue"]).floatValue;
+		CGFloat endValue = ((NSNumber*)property[@"endValue"]).floatValue;		
 		
 		// linear interpoloation
 		CGFloat duration = endTime - startTime;
 		CGFloat currentDelta = nowTI - startTime;
 		CGFloat t =  currentDelta / duration;
 		CGFloat newValue = (t* endValue + (1 - t) * startValue);
-		NSNumber * newValueNumber = [NSNumber numberWithFloat: newValue];
+		NSNumber * newValueNumber = @(newValue);
 		
 		[self.valueObject setValue:newValueNumber forKey:key];
 		// NSLog(@"%@ = %@", key, newValueNumber);
@@ -88,12 +88,12 @@
 */
 - (void) addProperty: (NSString*) key {
 	NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithCapacity:4];
-	[dict setObject:[NSDate distantPast] forKey:@"startTime"];
-	[dict setObject:[NSDate distantPast] forKey:@"endTime"];
-	[dict setObject:[NSNumber numberWithFloat: 0.0] forKey:@"startValue"];
-	[dict setObject:[NSNumber numberWithFloat: 1.0] forKey:@"endValue"];
+	dict[@"startTime"] = [NSDate distantPast];
+	dict[@"endTime"] = [NSDate distantPast];
+	dict[@"startValue"] = @0.0f;
+	dict[@"endValue"] = @1.0f;
 
-	[self.properties setObject:dict forKey:key];
+	(self.properties)[key] = dict;
 }
 
 
@@ -110,7 +110,7 @@
 
 #pragma mark HOUSEKEEPING
 
-- (id)initWithDuration:(NSTimeInterval)duration animationCurve:(NSAnimationCurve)animationCurve {
+- (instancetype)initWithDuration:(NSTimeInterval)duration animationCurve:(NSAnimationCurve)animationCurve {
 	self = [super initWithDuration:duration animationCurve:animationCurve];
 	if (self) {
 		self.properties = [NSMutableDictionary dictionaryWithCapacity:10];
