@@ -72,7 +72,7 @@
 	<key>OSAScriptingDefinition</key>
 	<string>Symmetries.sdef</string>
 	<key>SUFeedURL</key>
-	<string>http://earthlingsoft.net/Symmetries/appcast.xml</string>
+	<string>https://earthlingsoft.net/Symmetries/appcast.xml</string>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
