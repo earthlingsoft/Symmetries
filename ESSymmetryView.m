@@ -626,28 +626,33 @@
 	NSDictionary * documentDict = self.theDocument.dictionary;
 	NSImage * image = [[NSImage alloc] initWithData:[NSBezierPath PDFDataForDictionary:documentDict]];
 	
-	//NSPoint eventMousePosition = event.locationInWindow;
-	//NSPoint imagePosition = NSMakePoint(eventMousePosition.x - image.size.width /2.0,
-	//									eventMousePosition.y - image.size.height / 2.0);
-
-	NSImage * dragProxyImage = [[NSImage alloc] initWithSize: image.size];
-	[dragProxyImage lockFocus];
-    [image drawAtPoint:NSZeroPoint fromRect:NSZeroRect operation:NSCompositeCopy fraction:0.5];
-	[dragProxyImage unlockFocus];
+	// Create proxy image for dragging.
+	CGFloat size = 300;
+	CGFloat width = size;
+	CGFloat height = size * image.size.height / image.size.width;
+	CGFloat x = (self.frame.size.width - width) / 2;
+	CGFloat y = (self.frame.size.height - height) / 2;
 	
+	NSImage * proxyImage = [[NSImage alloc] initWithSize:NSMakeSize(width, height)];
+	
+	[proxyImage lockFocus];
+	[image drawInRect:NSMakeRect(0, 0, width, height) fromRect:NSZeroRect operation:NSCompositeCopy fraction:0.5];
+	[proxyImage unlockFocus];
+	
+	// Provide data for dragging pasteboard.
 	ESSymmetryViewPasteboardWriter * pasteboardWriter = [[ESSymmetryViewPasteboardWriter alloc] init];
 	pasteboardWriter.documentDictionary = self.theDocument.dictionary;
 	pasteboardWriter.bitmapSize = self.theDocument.bitmapSize;
 	
 	NSDraggingItem * draggingItem = [[NSDraggingItem alloc] initWithPasteboardWriter:pasteboardWriter];
-	[draggingItem setDraggingFrame:self.frame
-						  contents:dragProxyImage];
+	[draggingItem setDraggingFrame:NSMakeRect(x, y, width, height)
+						  contents:proxyImage];
 	
+	// Drag.
 	[self beginDraggingSessionWithItems:@[draggingItem]
 								  event:event
 								 source:self];
 }
-
 
 
 - (NSArray *)namesOfPromisedFilesDroppedAtDestination:(NSURL *)dropDestination {
