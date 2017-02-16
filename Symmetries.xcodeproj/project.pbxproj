@@ -614,7 +614,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"$BUILT_PRODUCTS_DIR\"\ncd \"Symmetries.app/Contents/\"\n\n# remove superfluous nib contents\nfind . | grep classes.nib | xargs rm \nfind . | grep info.nib | xargs rm \n\n# Sparkle cleanup\n# kill headers\ncd \"Frameworks/Sparkle.framework/\"\nls | grep Headers | xargs rm\ncd \"Versions/A\"\nls | grep Headers | xargs rm -r \n# kill unused localisations\ncd \"Resources\"\nls | grep lproj | grep -v -E '(de|en|fr).lproj' | xargs rm -r\n\ncd ../..";
+			shellScript = "cd \"$BUILT_PRODUCTS_DIR\"\ncd \"Symmetries.app/Contents/\"\n\n# remove superfluous nib contents\nfind . | grep classes.nib | xargs rm \nfind . | grep info.nib | xargs rm \n\n# Sparkle cleanup\n# kill headers\ncd \"Frameworks/Sparkle.framework/\"\nls | grep Headers | xargs rm\ncd \"Versions/A\"\nls | grep Headers | xargs rm -r \n# kill unused localisations\ncd \"Resources\"\nls | grep lproj | grep -v -E '(de|en|fr).lproj' | xargs rm -r\ncd \"Autoupdate.app/Contents/Resources\"\nls | grep lproj | grep -v -E '(de|en|fr).lproj' | xargs rm -r\n\ncd ../../../../..";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -807,6 +807,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -839,6 +840,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
