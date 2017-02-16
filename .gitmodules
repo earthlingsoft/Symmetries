@@ -4,3 +4,6 @@
 [submodule "submodules/NSBezierPath+ESPoints"]
 	path = submodules/NSBezierPath+ESPoints
 	url = git@github.com:earthlingsoft/NSBezierPath-ESPoints.git
+[submodule "submodules/Sparkle"]
+	path = submodules/Sparkle
+	url = git@github.com:sparkle-project/Sparkle.git
