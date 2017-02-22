@@ -96,6 +96,7 @@
 - (instancetype) initWithDictionary: (NSDictionary*) dict NS_DESIGNATED_INITIALIZER;
 - (NSDictionary*) dictionary;
 - (void) setValuesFromDictionary: (NSDictionary*) dict;
+- (void) setValuesForUndoFromDictionary: (NSDictionary *) dict;
 
 - (void) intro;
 
