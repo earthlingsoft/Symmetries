@@ -102,6 +102,8 @@ blNGyGodFKgnf3RflRl2F7Qvm8GjgM2rBmKoh1GaddwR9Iq1GbvC05qNrSFGK/db
 				<string>com.apple.property-list</string>
 				<string>net.earthlingsoft.license</string>
 			</array>
+			<key>UTTypeIconFile</key>
+			<string>Primel-Document</string>
 			<key>UTTypeIdentifier</key>
 			<string>net.earthlingsoft.symmetries.license</string>
 			<key>UTTypeTagSpecification</key>
