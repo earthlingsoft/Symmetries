@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 47;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -28,7 +28,6 @@
 		6C1FF2061E527DAF0023374A /* ESSymmetryViewPasteboardWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1FF2051E527DAF0023374A /* ESSymmetryViewPasteboardWriter.m */; };
 		6C1FF21C1E5508800023374A /* ESCursors.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1FF2171E5508800023374A /* ESCursors.m */; };
 		6C1FF2271E5508A80023374A /* NSBezierPath+ESPoints.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C1FF2231E5508A80023374A /* NSBezierPath+ESPoints.m */; };
-		6C3FE2190DE9762100EAB959 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C3FE2180DE9762100EAB959 /* QuartzCore.framework */; };
 		6C4DC32E0E336CFC00CFE539 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58290DA1D0D100B32029 /* MyDocument.xib */; };
 		6C4DC4300E34EC7F00CFE539 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6C4DC4290E34EC7F00CFE539 /* Localizable.strings */; };
 		6C4DC5910E36857A00CFE539 /* Help.css in Resources */ = {isa = PBXBuildFile; fileRef = 6C4DC5900E36857A00CFE539 /* Help.css */; };
@@ -50,6 +49,9 @@
 		6CC7E0D10E32470300E3C849 /* Primel.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CC7E0D00E32470300E3C849 /* Primel.png */; };
 		6CC7E0DB0E324FBB00E3C849 /* Herzchen.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CC7E0DA0E324FBB00E3C849 /* Herzchen.png */; };
 		6CC7E0DD0E32506300E3C849 /* Primel-mini.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CC7E0DC0E32506300E3C849 /* Primel-mini.png */; };
+		6CDBC9381E5E450B00983CD9 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CDBC9371E5E450B00983CD9 /* IOKit.framework */; };
+		6CDBC93A1E5E456F00983CD9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CDBC9391E5E456F00983CD9 /* QuartzCore.framework */; };
+		6CDBC93C1E5E46AF00983CD9 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CDBC93B1E5E46AF00983CD9 /* AppKit.framework */; };
 		6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */; };
 		6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC20D00E17E4AC00772100 /* MyDocument+Animation.m */; };
 		6CDC23980E185DAA00772100 /* Resize Widget.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CDC23970E185DAA00772100 /* Resize Widget.png */; };
@@ -57,7 +59,6 @@
 		6CE610BE0E0DBC5B00BFE3F3 /* Symmetries.qlgenerator in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CE610BD0E0DBC4700BFE3F3 /* Symmetries.qlgenerator */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8D15AC310486D014006FF6A4 /* MyDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */; settings = {ATTRIBUTES = (); }; };
-		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -157,12 +158,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		1DDD58290DA1D0D100B32029 /* MyDocument.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MyDocument.xib; path = Resources/MyDocument.xib; sourceTree = "<group>"; };
 		2A37F4ACFDCFA73011CA2CEA /* MyDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDocument.m; sourceTree = "<group>"; };
 		2A37F4AEFDCFA73011CA2CEA /* MyDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDocument.h; sourceTree = "<group>"; };
-		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
-		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		6C0012A70DE6244B0016ABB5 /* ESSymmetryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryView.h; sourceTree = "<group>"; };
 		6C1FF2041E527DAF0023374A /* ESSymmetryViewPasteboardWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryViewPasteboardWriter.h; sourceTree = "<group>"; };
 		6C1FF2051E527DAF0023374A /* ESSymmetryViewPasteboardWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryViewPasteboardWriter.m; sourceTree = "<group>"; };
@@ -170,7 +168,6 @@
 		6C1FF2171E5508800023374A /* ESCursors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESCursors.m; sourceTree = "<group>"; };
 		6C1FF2221E5508A80023374A /* NSBezierPath+ESPoints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+ESPoints.h"; sourceTree = "<group>"; };
 		6C1FF2231E5508A80023374A /* NSBezierPath+ESPoints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+ESPoints.m"; sourceTree = "<group>"; };
-		6C3FE2180DE9762100EAB959 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		6C4DC4280E34EC7F00CFE539 /* de */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = de; path = de.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		6C4DC42A0E34EC7F00CFE539 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6C4DC42B0E34EC7F00CFE539 /* de */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -210,6 +207,9 @@
 		6CC7E0D00E32470300E3C849 /* Primel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Primel.png; path = Icons/Primel.png; sourceTree = "<group>"; };
 		6CC7E0DA0E324FBB00E3C849 /* Herzchen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Herzchen.png; path = Help/Herzchen.png; sourceTree = "<group>"; };
 		6CC7E0DC0E32506300E3C849 /* Primel-mini.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Primel-mini.png"; path = "Help/Primel-mini.png"; sourceTree = "<group>"; };
+		6CDBC9371E5E450B00983CD9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		6CDBC9391E5E456F00983CD9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		6CDBC93B1E5E46AF00983CD9 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		6CDC1ED70E17935B00772100 /* ESSymmetryTotalAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryTotalAnimation.h; sourceTree = "<group>"; };
 		6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryTotalAnimation.m; sourceTree = "<group>"; };
 		6CDC209D0E17E2D400772100 /* PLANS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PLANS; sourceTree = "<group>"; };
@@ -228,8 +228,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
-				6C3FE2190DE9762100EAB959 /* QuartzCore.framework in Frameworks */,
+				6CDBC93C1E5E46AF00983CD9 /* AppKit.framework in Frameworks */,
+				6CDBC9381E5E450B00983CD9 /* IOKit.framework in Frameworks */,
+				6CDBC93A1E5E456F00983CD9 /* QuartzCore.framework in Frameworks */,
 				6CB3FBCC1E55195B004ACF19 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -237,24 +238,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
-			);
-			name = "Linked Frameworks";
-			sourceTree = "<group>";
-		};
-		1058C7A8FEA54F5311CA2CBB /* Other Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				6C3FE2180DE9762100EAB959 /* QuartzCore.framework */,
-				2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */,
-				2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */,
-			);
-			name = "Other Frameworks";
-			sourceTree = "<group>";
-		};
 		19C28FB0FE9D524F11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -339,8 +322,9 @@
 		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */,
-				1058C7A8FEA54F5311CA2CBB /* Other Frameworks */,
+				6CDBC93B1E5E46AF00983CD9 /* AppKit.framework */,
+				6CDBC9371E5E450B00983CD9 /* IOKit.framework */,
+				6CDBC9391E5E456F00983CD9 /* QuartzCore.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -435,7 +419,7 @@
 				LastUpgradeCheck = 0820;
 			};
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "Symmetries" */;
-			compatibilityVersion = "Xcode 6.3";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
