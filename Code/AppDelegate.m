@@ -11,15 +11,24 @@
 #import "MyDocument+Animation.h"
 #import "ESSymmetryView.h"
 #import "ESSymmetryView+Intro.h"
+#import <IOKit/pwr_mgt/IOPMLib.h>
 
 #define EARTHLINGSOFTWEBPAGE @"https://earthlingsoft.net/"
 #define SYMMETRIESWEBPAGE @"https://earthlingsoft.net/Symmetries/"
 #define GITHUBURL @"https://github.com/ssp/Symmetries"
 
 
+@interface AppDelegate () {
+    NSNumber * _demoPowerAssertionID; // contains a IOPMAssertionID
+}
+@end
+
+
 @implementation AppDelegate
 
+
 #pragma mark DELEGATE METHODS
+
 - (void)applicationWillFinishLaunching:(NSNotification *)aNotification {
 	[NSDocumentController sharedDocumentController].autosavingDelay = 10.0;
 	srandomdev();
@@ -127,7 +136,7 @@
 	else {
 		// NSLog(@"[AppDelegate demo:] starting Demo");
 		// start demo
-				
+
 		NSDocumentController * dC = [NSDocumentController sharedDocumentController];
 		if (dC.documents.count == 0 ) {
 			// create a document if there is none
@@ -148,6 +157,7 @@
 
 
 - (void) demoStarted {
+    [self preventDisplaySleepForReason:@"Running the Symmetries Demo"];
 	demoMenuItem.keyEquivalent = @".";
 	demoMenuItem.keyEquivalentModifierMask = NSCommandKeyMask;
 }
@@ -155,9 +165,44 @@
 
 
 - (void) demoStopped {
+    [self removePowerAssertion:_demoPowerAssertionID];
+
 	if (!self.demoIsRunning) {
 		demoMenuItem.keyEquivalent = @"";
 	}
+}
+
+
+
+- (void) preventDisplaySleepForReason:(NSString * _Nonnull)reason {
+    if (_demoPowerAssertionID != nil) {
+        [self removePowerAssertion:_demoPowerAssertionID];
+    }
+
+    IOPMAssertionID assertionID;
+    IOReturn success = IOPMAssertionCreateWithName(
+                                                   kIOPMAssertionTypeNoDisplaySleep, // AssertionType
+                                                   kIOPMAssertionLevelOn, // AssertionLevel
+                                                   (__bridge CFStringRef)(reason),
+                                                   &assertionID);
+
+    if (success == kIOReturnSuccess) {
+        _demoPowerAssertionID = @(assertionID);
+    }
+}
+
+
+
+- (void) removePowerAssertion:(NSNumber * _Nullable)assertionIDContainer {
+    if (assertionIDContainer != nil) {
+        IOPMAssertionID assertionID = assertionIDContainer.intValue;
+        IOReturn success = IOPMAssertionRelease(assertionID);
+        if (success == kIOReturnSuccess) {
+            _demoPowerAssertionID = nil;
+        } else {
+            NSLog(@"Could not release Power Assertion %i", assertionID);
+        }
+    }
 }
 
 

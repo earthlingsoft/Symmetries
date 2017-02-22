@@ -1210,12 +1210,8 @@
 		// Window resize widget
 		[[NSImage imageNamed:@"Resize Widget.png"] drawAtPoint:NSMakePoint(self.window.frame.size.width - 13.0,  1.0) fromRect:NSZeroRect operation:NSCompositeSourceOver fraction: 1.0];
 	}
-	
-	// make sure the screen doesn't dim while we are in the foreground or the demo is running, may keep the screen from sleeping while running AppleScript	
-	if ( NSApp.active || self.theDocument.runningDemo) {
-		UpdateSystemActivity(UsrActivity);
-	}
 }
+
 
 
 - (void) drawPoint: (NSPoint) pt {

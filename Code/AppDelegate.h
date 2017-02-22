@@ -20,6 +20,7 @@
 @property (readonly) BOOL demoIsRunning;
 @property (readwrite) BOOL useCoreAnimation;
 @property (readonly) NSString * payPalURL;
+@property (NS_NONATOMIC_IOSONLY, readonly) NSString * myVersionString;
 
 - (IBAction) demo:(id) sender;
 - (void) demoStarted;
@@ -28,7 +29,7 @@
 - (IBAction) bogusAction: (id) sender;
 
 - (void) readme:(id) sender;
-@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString *myVersionString;
 
 - (IBAction) orderFrontStandardAboutPanel:(id)sender;
+
 @end
