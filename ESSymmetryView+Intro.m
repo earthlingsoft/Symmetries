@@ -89,11 +89,11 @@
 #define DEMOPAGECOUNT 13
 
 - (void) startDemo:(id) sender {
-	NSLog(@"[ESSymmetryView+Intro startDemo:]");
+	// NSLog(@"[ESSymmetryView+Intro startDemo:]");
 	
 	// If demo is already running, stop it -- this shouldn't happen
 	if (self.currentDemoStep >= 0) {
-		NSLog(@"[ESSymmetryView+Intro startDemo:] demo already running! stopping it.");
+		// NSLog(@"[ESSymmetryView+Intro startDemo:] demo already running! stopping it.");
 		[self endDemo:nil];
 		return;
 	}
@@ -154,7 +154,7 @@
 
 
 - (void) endDemo: (id) sender {
-	NSLog(@"[ESSymmetryView+Intro endDemo:]");
+	// NSLog(@"[ESSymmetryView+Intro endDemo:]");
 	// clean up whatever may need to be cleaned up
 	for (NSAnimation* animation in self.lastAnimations) {
 		if (animation.isAnimating) {
@@ -190,7 +190,7 @@
 
 
 - (void) gotoDemoStep: (NSUInteger) nr {
-	NSLog(@"[ESSymmetryView+Intro gotoDemoStep:%i]", nr);
+	// NSLog(@"[ESSymmetryView+Intro gotoDemoStep:%i]", nr);
 	NSArray * sublayers = self.demoLayer.sublayers;
 	NSUInteger demoSteps = sublayers.count;
 	

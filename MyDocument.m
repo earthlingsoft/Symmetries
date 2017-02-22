@@ -513,7 +513,6 @@
 	}
 
 	// bitmaps for everyone
-	[pB declareTypes:[NSArray arrayWithObjects:NSTIFFPboardType, nil] owner: self];
 	[pB setData:[NSBezierPath TIFFDataForDictionary:self.dictionary size:self.bitmapSize] forType:NSTIFFPboardType];
 }
 

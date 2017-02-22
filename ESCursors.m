@@ -281,7 +281,8 @@
 
 
 
-#pragma mark ANGLED CURSORS
+
+#pragma mark ANGLE CURSORS
 
 
 + (NSBezierPath *) angleCursorBezierPathForAngle: (CGFloat) angle {

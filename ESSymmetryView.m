@@ -7,7 +7,7 @@
 //
 
 #import "ESSymmetryView.h"
-#import "NSBezierPath+Points.h"
+#import "NSBezierPath+ESPoints.h"
 #import "NSBezierPath+ESSymmetry.h"
 #import "NSImage+Extras.h"
 #import "ESSymmetryAnimation.h"
@@ -731,7 +731,7 @@
 		
 		if (myError) {
 			NSBeep();
-			NSLog(@"-namesOfPromisedFilesDroppedAtDestrination: image file writing failed (%@)", [myError description]);
+			// NSLog(@"-namesOfPromisedFilesDroppedAtDestrination: image file writing failed (%@)", [myError description]);
 			return nil;
 		}
 		else {

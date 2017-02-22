@@ -1,37 +1,44 @@
 //
-//  NSBezierPath+Points.m
-//  RoundRect
+//  NSBezierPath+ESPoints.m
+//	v1 (2008-07-27)
 //
 //  Created by  Sven on 24.05.08.
 //  Copyright 2008 earthlingsoft. All rights reserved.
 //
 
-#import "NSBezierPath+Points.h"
+#import "NSBezierPath+ESPoints.h"
+
 #define POINTSIZE 5.0
 #define HANDLESIZE 3.0
 #define HANDLELINEWIDTH 1.5
-#define DEFAULTLINECOLOR [NSColor redColor]
+#define DEFAULTPOINTCOLOR [NSColor redColor]
 #define DEFAULTHANDLECOLOR [NSColor greenColor]
 
 
 @implementation NSBezierPath (ESPoints)
 
-
+#pragma mark MAIN CONVENIENCE METHODS
 - (void) drawPointsAndHandles {
-	[self drawPointsInColor:DEFAULTLINECOLOR withHandlesInColor:DEFAULTHANDLECOLOR];
+	[self drawPointsInColor:DEFAULTPOINTCOLOR withHandlesInColor:DEFAULTHANDLECOLOR];
 }
+
 
 - (void) drawPointsInColor: (NSColor*) pointColor withHandlesInColor: (NSColor *) handleColor {
 	NSPoint previousPoint = NSMakePoint(0.0, 0.0);
+	
 	for (NSInteger i=0; i < [self elementCount]; i++) {
 		previousPoint = [self drawPathElement:i withPreviousPoint: previousPoint inColor:pointColor withHandlesInColor: handleColor];
 	}
 }
 
 
+
+#pragma mark DRAWING POINTS 
+
 - (void) drawPoint: (NSPoint) pt {
-	[self drawPoint:pt inColor: DEFAULTLINECOLOR];
+	[self drawPoint:pt inColor: DEFAULTPOINTCOLOR];
 }
+
 
 - (void) drawPoint: (NSPoint) pt inColor: (NSColor*) pointColor {
 	NSBezierPath * bp = [NSBezierPath bezierPathWithRect:NSMakeRect(pt.x - POINTSIZE * 0.5, pt.y - POINTSIZE * 0.5, POINTSIZE, POINTSIZE)];
@@ -39,9 +46,11 @@
 	[bp fill];
 }
 
+
 - (void) drawHandlePoint: (NSPoint) pt {
 	[self drawHandlePoint: pt inColor:DEFAULTHANDLECOLOR];
 }
+
 
 - (void) drawHandlePoint: (NSPoint) pt inColor: (NSColor*) pointColor {
 	NSBezierPath * bp = [NSBezierPath bezierPathWithRect:NSMakeRect(pt.x-HANDLESIZE * 0.5, pt.y - HANDLESIZE * 0.5, HANDLESIZE, HANDLESIZE)];
@@ -50,8 +59,11 @@
 }	
 
 
+
+#pragma mark DRAWING PATH ELEMENTS
+
 - (NSPoint) drawPathElement:(int) n withPreviousPoint: (NSPoint) previous {
-	return [self drawPathElement:n withPreviousPoint:previous inColor:DEFAULTLINECOLOR withHandlesInColor:DEFAULTHANDLECOLOR];
+	return [self drawPathElement:n withPreviousPoint:previous inColor:DEFAULTPOINTCOLOR withHandlesInColor:DEFAULTHANDLECOLOR];
 }
 
 
@@ -97,6 +109,7 @@
 			previousPoint = points[0];
 			break;
 	}
+	
 	return previousPoint;
 }
 

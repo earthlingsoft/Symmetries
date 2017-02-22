@@ -26,7 +26,7 @@
 		1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD582A0DA1D0D100B32029 /* MainMenu.xib */; };
 		6C129FE80E2A138C00C0FD35 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 6C129FE60E2A138C00C0FD35 /* Credits.html */; };
 		6C12A6140E2E913000C0FD35 /* ESLicense.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C12A6130E2E913000C0FD35 /* ESLicense.m */; };
-		6C3BE82B0DE8268D0064BCE7 /* NSBezierPath+Points.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+Points.m */; };
+		6C3BE82B0DE8268D0064BCE7 /* NSBezierPath+ESPoints.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+ESPoints.m */; };
 		6C3FE2190DE9762100EAB959 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C3FE2180DE9762100EAB959 /* QuartzCore.framework */; };
 		6C4DC32E0E336CFC00CFE539 /* MyDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58290DA1D0D100B32029 /* MyDocument.xib */; };
 		6C4DC3FA0E34EAF500CFE539 /* ESLicense.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6C4DC3F80E34EAF500CFE539 /* ESLicense.strings */; };
@@ -119,8 +119,8 @@
 		6C12A6130E2E913000C0FD35 /* ESLicense.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ESLicense.m; path = "../ESLicenser/ESLicense Class/ESLicense.m"; sourceTree = "<group>"; };
 		6C18A1C90E29104000A25A56 /* ESCursors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESCursors.h; sourceTree = "<group>"; };
 		6C18A1CA0E29104000A25A56 /* ESCursors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESCursors.m; sourceTree = "<group>"; };
-		6C3BE8290DE8268D0064BCE7 /* NSBezierPath+Points.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+Points.h"; sourceTree = "<group>"; };
-		6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+Points.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+Points.m"; sourceTree = "<group>"; };
+		6C3BE8290DE8268D0064BCE7 /* NSBezierPath+ESPoints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBezierPath+ESPoints.h"; sourceTree = "<group>"; };
+		6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+ESPoints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBezierPath+ESPoints.m"; sourceTree = "<group>"; };
 		6C3FE2180DE9762100EAB959 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
 		6C4DC3F90E34EAF500CFE539 /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = "../ESLicenser/ESLicense Class/en.lproj/ESLicense.strings"; sourceTree = SOURCE_ROOT; };
 		6C4DC3FB0E34EAFE00CFE539 /* de */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = de; path = "../ESLicenser/ESLicense Class/de.lproj/ESLicense.strings"; sourceTree = SOURCE_ROOT; };
@@ -174,7 +174,7 @@
 		6CDC23970E185DAA00772100 /* Resize Widget.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Resize Widget.png"; sourceTree = "<group>"; };
 		6CDC23C20E18DE6E00772100 /* Symmetries.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.sdef; path = Symmetries.sdef; sourceTree = "<group>"; };
 		6CE607150E0BA48300BFE3F3 /* Symmetries QuickLook.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Symmetries QuickLook.xcodeproj"; path = "QuickLook/Symmetries QuickLook.xcodeproj"; sourceTree = "<group>"; };
-		6CE60E820E0D54C800BFE3F3 /* SparkleGC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkleGC.framework; path = "../../../Shared/builds/Release (GC dual-mode; 10.5-only)/SparkleGC.framework"; sourceTree = SOURCE_ROOT; };
+		6CE60E820E0D54C800BFE3F3 /* SparkleGC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SparkleGC.framework; path = "../../../Shared/builds/Release GC/SparkleGC.framework"; sourceTree = SOURCE_ROOT; };
 		6CF369780E28E623003F1D67 /* net.earthlingsoft.symmetries.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = net.earthlingsoft.symmetries.plist; path = ../../Library/Preferences/net.earthlingsoft.symmetries.plist; sourceTree = SOURCE_ROOT; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* Symmetries.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Symmetries.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -258,8 +258,8 @@
 				6C73CF390E0B079C00749440 /* NSBezierPath+ESSymmetry.m */,
 				6C18A1C90E29104000A25A56 /* ESCursors.h */,
 				6C18A1CA0E29104000A25A56 /* ESCursors.m */,
-				6C3BE8290DE8268D0064BCE7 /* NSBezierPath+Points.h */,
-				6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+Points.m */,
+				6C3BE8290DE8268D0064BCE7 /* NSBezierPath+ESPoints.h */,
+				6C3BE82A0DE8268D0064BCE7 /* NSBezierPath+ESPoints.m */,
 				6C5A79B90E11B5D200A3D6E1 /* ESSymmetryAnimation.h */,
 				6C5A79BA0E11B5D200A3D6E1 /* ESSymmetryAnimation.m */,
 				6CDC1ED70E17935B00772100 /* ESSymmetryTotalAnimation.h */,
@@ -471,7 +471,7 @@
 		};
 		6CE60D6A0E0D4F8200BFE3F3 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
@@ -480,7 +480,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# remove Sparkle header files\ncd \"$BUILT_PRODUCTS_DIR\"\npwd\ncd \"Symmetries.app/Contents/\"\nfind . | grep classes.nib | xargs rm \nfind . | grep info.nib | xargs rm \ncd \"Frameworks/SparkleGC.framework/\"\nls | grep Headers | xargs rm\ncd \"Versions/A\"\nls | grep Headers | xargs rm -r \ncd \"../../../SSCrypto.framework\"\nls | grep Headers | xargs rm\ncd \"Versions/A\"\nls | grep Headers | xargs rm -r \ncd \"../../../SSCrypto.framework\"\n#lipo -remove pp64 \n#lipo -remove x86_64";
+			shellScript = "cd \"$BUILT_PRODUCTS_DIR\"\ncd \"Symmetries.app/Contents/\"\n\n# remove superfluous nib contents\nfind . | grep classes.nib | xargs rm \nfind . | grep info.nib | xargs rm \n\n# Sparkle cleanup\n# kill headers\ncd \"Frameworks/SparkleGC.framework/\"\nls | grep Headers | xargs rm\ncd \"Versions/A\"\nls | grep Headers | xargs rm -r \n# kill unused localisations\ncd \"Resources\"\nls | grep lproj | grep -v -E '(de|en|fr).lproj' | xargs rm -r\n# kill 64bit binary\ncd ..\nlipo -output SparkleGC -remove x86_64 SparkleGC\n\n# SSCrypto cleanup\ncd \"../../../SSCrypto.framework\"\nls | grep Headers | xargs rm\ncd \"Versions/A\"\nls | grep Headers | xargs rm -r \n\ncd ../..";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -491,7 +491,7 @@
 			files = (
 				8D15AC310486D014006FF6A4 /* MyDocument.m in Sources */,
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
-				6C3BE82B0DE8268D0064BCE7 /* NSBezierPath+Points.m in Sources */,
+				6C3BE82B0DE8268D0064BCE7 /* NSBezierPath+ESPoints.m in Sources */,
 				6C5935040DEA0441000B3428 /* NSImage+Extras.m in Sources */,
 				6CBC479C0DEAE2610073B214 /* ESSymmetryView.m in Sources */,
 				6C82F99D0DF7614F005CF008 /* AppDelegate.m in Sources */,
@@ -615,6 +615,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

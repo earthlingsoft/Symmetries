@@ -59,7 +59,7 @@
 	if ([documentType isEqualToString: ESSYM_SYMMETRY_UTI]) {	
 		// we are dealing with a document here => special handling
 		NSDocument *transientDoc = [self transientDocumentToReplace];
-		NSLog([absoluteURL description]);
+		// NSLog([absoluteURL description]);
 		if (transientDoc) {
 			[transientDoc readFromURL:absoluteURL ofType:[[NSDocumentController sharedDocumentController] typeForContentsOfURL:absoluteURL error:outError] error:outError];
 			doc = transientDoc;

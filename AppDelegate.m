@@ -85,11 +85,11 @@
 		// demo menu item, change text to reflect current state
 		if (![self demoIsRunning]) {
 			menuItem.title = NSLocalizedString(@"Start Demo", @"Show Demo");
-			NSLog(@"[AppDelegate validateMenuItem:] new name is %@",  NSLocalizedString(@"Start Demo", @"Show Demo"));
+			// NSLog(@"[AppDelegate validateMenuItem:] new name is %@",  NSLocalizedString(@"Start Demo", @"Show Demo"));
 		}
 		else {
 			menuItem.title = NSLocalizedString(@"Stop Demo", @"Stop Demo");
-			NSLog(@"[AppDelegate validateMenuItem:] new name is %@",  NSLocalizedString(@"Stop Demo", @"Stop Demo"));
+			// NSLog(@"[AppDelegate validateMenuItem:] new name is %@",  NSLocalizedString(@"Stop Demo", @"Stop Demo"));
 		}
 	}
 	return [NSApp validateMenuItem:menuItem];
@@ -112,7 +112,7 @@
 
 - (IBAction) demo:(id) sender {
 	if (self.demoIsRunning) {
-		NSLog(@"[AppDelegate demo:] stopping Demo");
+		// NSLog(@"[AppDelegate demo:] stopping Demo");
 		// stop demo
 		
 		MyDocument * doc;
@@ -124,7 +124,7 @@
 		}
 	}
 	else {
-		NSLog(@"[AppDelegate demo:] starting Demo");
+		// NSLog(@"[AppDelegate demo:] starting Demo");
 		// start demo
 				
 		NSDocumentController * dC = [NSDocumentController sharedDocumentController];
