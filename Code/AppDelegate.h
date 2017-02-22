@@ -32,14 +32,3 @@
 
 - (IBAction) orderFrontStandardAboutPanel:(id)sender;
 @end
-
-
-@interface AppDelegate (ESLicensingKeyProvider)
-@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString *publicKey;
-@end
-
-@interface AppDelegate (ESLicensingErrorButtons)
-@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSArray *licenseFailureRecoveryButtons;
-@end
-
-
