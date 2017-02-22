@@ -757,16 +757,15 @@
 #pragma ATTRIBUTED STRINGS
 
 
-- (NSArray *) stringsFromFile {
+- (NSArray<NSAttributedString *> *) stringsFromFile {
 	if (!stringsFromFile) {
 		// load strings first
 		NSString * stringFilePath = [[NSBundle mainBundle] pathForResource:@"AttributedStrings" ofType:@"rtf"];
 		NSAttributedString * aS = [[NSAttributedString alloc] initWithPath:stringFilePath documentAttributes:NULL];
-		NSString * text = aS.string;
-		NSString * separator = @"\012\342\231\253\012\000";
-		NSArray * strings = [text componentsSeparatedByString:separator];
+        NSString * separator = [NSString stringWithUTF8String:"\012\342\231\253\012\000"]; // Don’t let Xcode »modernise« this to just @"".
+        NSArray<NSString *> * strings = [aS.string componentsSeparatedByString:separator];
 		
-		NSMutableArray * attributedStrings = [NSMutableArray arrayWithCapacity:strings.count];
+		NSMutableArray<NSAttributedString *> * attributedStrings = [NSMutableArray arrayWithCapacity:strings.count];
 		NSInteger firstIndex = 0;
 		for (NSString * s in strings) {
 			NSRange range = NSMakeRange(firstIndex, s.length);

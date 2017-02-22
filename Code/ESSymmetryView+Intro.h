@@ -11,7 +11,7 @@
 
 @interface ESSymmetryView (Intro) <CALayerDelegate, CAAnimationDelegate>
 
-@property (readonly) NSArray * stringsFromFile;
+@property (readonly) NSArray<NSAttributedString *> * stringsFromFile;
 @property (readonly) NSAttributedString * introString;
 
 
