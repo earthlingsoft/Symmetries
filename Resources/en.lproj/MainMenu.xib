@@ -25,12 +25,6 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="527"/>
-                            <menuItem title="Register…" tag="4" id="588">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="readme:" target="419" id="592"/>
-                                </connections>
-                            </menuItem>
                             <menuItem title="Check for Updates…" id="526">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -308,6 +302,12 @@
                                     <action selector="readme:" target="-1" id="554"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Symmetries github Repository" tag="6" id="OW4-EV-yaj">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="readme:" target="-1" id="NbG-um-LhK"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Send E-Mail" tag="3" id="502">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -318,6 +318,7 @@
                     </menu>
                 </menuItem>
             </items>
+            <point key="canvasLocation" x="44" y="-15"/>
         </menu>
         <customObject id="419" customClass="AppDelegate">
             <connections>

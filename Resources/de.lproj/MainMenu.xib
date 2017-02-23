@@ -327,6 +327,7 @@
                     </menu>
                 </menuItem>
             </items>
+            <point key="canvasLocation" x="78" y="-50"/>
         </menu>
         <customObject id="419" customClass="AppDelegate">
             <connections>

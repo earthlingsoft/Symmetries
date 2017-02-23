@@ -15,7 +15,7 @@
 
 #define EARTHLINGSOFTWEBPAGE @"https://earthlingsoft.net/"
 #define SYMMETRIESWEBPAGE @"https://earthlingsoft.net/Symmetries/"
-#define GITHUBURL @"https://github.com/ssp/Symmetries"
+#define GITHUBURL @"https://github.com/earthlingsoft/Symmetries"
 
 
 @interface AppDelegate () {
@@ -242,7 +242,9 @@
 
 // return version string
 - (NSString*) myVersionString {
-	return [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    return [NSString stringWithFormat:@"%@ (%@)",
+            [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"],
+            [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"]];
 }
 
 
@@ -271,7 +273,9 @@
 }
 
 - (NSString *) emailURL {
-	return [NSString stringWithFormat:@"mailto:earthlingsoft%%40earthlingsoft.net?subject=Symmetries%%20%@", [self myVersionString]];
+    NSURLComponents * components = [NSURLComponents componentsWithString:@"mailto:earthlingsoft@earthlingsoft.net"];
+    components.queryItems = @[[NSURLQueryItem queryItemWithName:@"subject" value:[NSString stringWithFormat:@"Symmetries %@", [self myVersionString]]]];
+    return components.string;
 }
 
 @end
