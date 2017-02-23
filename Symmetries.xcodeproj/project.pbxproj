@@ -52,6 +52,7 @@
 		6CDBC9381E5E450B00983CD9 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CDBC9371E5E450B00983CD9 /* IOKit.framework */; };
 		6CDBC93A1E5E456F00983CD9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CDBC9391E5E456F00983CD9 /* QuartzCore.framework */; };
 		6CDBC93C1E5E46AF00983CD9 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CDBC93B1E5E46AF00983CD9 /* AppKit.framework */; };
+		6CDBC93F1E5E5FBF00983CD9 /* Readme.md in Sources */ = {isa = PBXBuildFile; fileRef = 6CDBC93E1E5E5FBF00983CD9 /* Readme.md */; };
 		6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */; };
 		6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC20D00E17E4AC00772100 /* MyDocument+Animation.m */; };
 		6CDC23980E185DAA00772100 /* Resize Widget.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CDC23970E185DAA00772100 /* Resize Widget.png */; };
@@ -210,6 +211,7 @@
 		6CDBC9371E5E450B00983CD9 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		6CDBC9391E5E456F00983CD9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		6CDBC93B1E5E46AF00983CD9 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		6CDBC93E1E5E5FBF00983CD9 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
 		6CDC1ED70E17935B00772100 /* ESSymmetryTotalAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESSymmetryTotalAnimation.h; sourceTree = "<group>"; };
 		6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESSymmetryTotalAnimation.m; sourceTree = "<group>"; };
 		6CDC209D0E17E2D400772100 /* PLANS */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PLANS; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				6CDC209D0E17E2D400772100 /* PLANS */,
+				6CDBC93E1E5E5FBF00983CD9 /* Readme.md */,
 				6CF369780E28E623003F1D67 /* net.earthlingsoft.symmetries.plist */,
 				6CE607150E0BA48300BFE3F3 /* Symmetries QuickLook.xcodeproj */,
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
@@ -607,6 +610,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CDBC93F1E5E5FBF00983CD9 /* Readme.md in Sources */,
 				6CB3FBD01E551C77004ACF19 /* main.m in Sources */,
 				8D15AC310486D014006FF6A4 /* MyDocument.m in Sources */,
 				6C5935040DEA0441000B3428 /* NSImage+Extras.m in Sources */,
