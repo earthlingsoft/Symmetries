@@ -52,7 +52,6 @@
 		6CDBC9381E5E450B00983CD9 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CDBC9371E5E450B00983CD9 /* IOKit.framework */; };
 		6CDBC93A1E5E456F00983CD9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CDBC9391E5E456F00983CD9 /* QuartzCore.framework */; };
 		6CDBC93C1E5E46AF00983CD9 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CDBC93B1E5E46AF00983CD9 /* AppKit.framework */; };
-		6CDBC93F1E5E5FBF00983CD9 /* Readme.md in Sources */ = {isa = PBXBuildFile; fileRef = 6CDBC93E1E5E5FBF00983CD9 /* Readme.md */; };
 		6CDC1ED90E17935B00772100 /* ESSymmetryTotalAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC1ED80E17935B00772100 /* ESSymmetryTotalAnimation.m */; };
 		6CDC20D10E17E4AC00772100 /* MyDocument+Animation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6CDC20D00E17E4AC00772100 /* MyDocument+Animation.m */; };
 		6CDC23980E185DAA00772100 /* Resize Widget.png in Resources */ = {isa = PBXBuildFile; fileRef = 6CDC23970E185DAA00772100 /* Resize Widget.png */; };
@@ -63,6 +62,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		6C8F1EC11E5FB47D00C690D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6CE607150E0BA48300BFE3F3 /* Symmetries QuickLook.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D57630D048677EA00EA77CD;
+			remoteInfo = Symmetries;
+		};
+		6C8F1ECF1E5FB48300C690D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6CB3FBAB1E55169C004ACF19 /* Sparkle.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8DC2EF4F0486A6940098B216;
+			remoteInfo = Sparkle;
+		};
 		6CB3FBB91E55169D004ACF19 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6CB3FBAB1E55169C004ACF19 /* Sparkle.xcodeproj */;
@@ -399,13 +412,15 @@
 			buildPhases = (
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC2B0486D014006FF6A4 /* Resources */,
+				6CE607320E0BA4AD00BFE3F3 /* CopyFiles */,
 				6CE60C660E0D493800BFE3F3 /* CopyFiles */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
-				6CE607320E0BA4AD00BFE3F3 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				6C8F1ED01E5FB48300C690D2 /* PBXTargetDependency */,
+				6C8F1EC21E5FB47D00C690D2 /* PBXTargetDependency */,
 			);
 			name = Symmetries;
 			productInstallPath = "$(HOME)/Applications";
@@ -610,7 +625,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CDBC93F1E5E5FBF00983CD9 /* Readme.md in Sources */,
 				6CB3FBD01E551C77004ACF19 /* main.m in Sources */,
 				8D15AC310486D014006FF6A4 /* MyDocument.m in Sources */,
 				6C5935040DEA0441000B3428 /* NSImage+Extras.m in Sources */,
@@ -630,6 +644,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		6C8F1EC21E5FB47D00C690D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Symmetries;
+			targetProxy = 6C8F1EC11E5FB47D00C690D2 /* PBXContainerItemProxy */;
+		};
+		6C8F1ED01E5FB48300C690D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Sparkle;
+			targetProxy = 6C8F1ECF1E5FB48300C690D2 /* PBXContainerItemProxy */;
+		};
 		6CE60D580E0D4E1800BFE3F3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 8D15AC270486D014006FF6A4 /* Symmetries */;
